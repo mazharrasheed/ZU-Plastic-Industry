@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load balance %}
+{% load custom_filters %}
+{% block title %}Balance Sheet{% endblock title %}
+
+{% block content %}
+
+<div class="container mt-5">
+  <div class="row">
+    
+    <h1>Account Details:   </h1>
+
+    <h2>Account Name : {{ account.name }} , Type: {{ account.account_type }}</h2>
+    <h2>Debit Transactions</h2>
+    <ul>
+      {% for transaction in debit_transactions %}
+   
+        <li>{{ transaction.date }} - {{ transaction.description }} - Amount: {{ transaction.amount }}</li>
+      {% endfor %}
+    </ul>
+    
+    <h2>Credit Transactions</h2>
+    <ul>
+      {% for transaction in credit_transactions %}
+        <li>{{ transaction.date }} - {{ transaction.description }} - Amount: {{ transaction.amount }}</li>
+      {% endfor %}
+    </ul>
+
+    <h2> Balance </h2>
+    <ul>
+      {{ balance }} 
+    </ul>
+    <h2> Initial Balance </h2>
+    <ul>
+      {{ account.balance }} 
+    </ul>
+</div>
+</div>
+
+{% endblock content %}

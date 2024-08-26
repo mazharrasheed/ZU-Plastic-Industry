@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Nozels{% endblock title %}
+
+{% block content %}
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-4 ">
+      <h2 class="text-center alert alert-info">{% if update %} Update Sale {% else %} Add Sale {% endif %}</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{form|crispy}}
+
+        <input type="submit" class="btn btn-info" {% if update %} value="Update Sale" {% else %} value= "Add Sale" {% endif %}> 
+      </form>
+
+      {% if messages %} {% for message in messages %}
+      <small class="m-5" id="msg" {% if message.tags %} class="{{message.tags}}" {% endif %}>
+        <h5 class="alert alert-{{message.tags}}"> {{message}}</h5>
+      </small>
+      {% endfor %}
+
+      {% endif %}
+    </div>
+    <div class="col-8 ">
+      <h2 class="text-center alert alert-info">{% if update %} Update Sale {% else %} Select Nozzle {% endif %}</h2>
+      
+     
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% for nozzle in nozzles  %}
+        <li class="nav-item">
+          <a  class="nav-link {% if request.path == "?nozzle={{nozzle.id}}" %} active {%endif%}}" aria-current="page" href="?nozzle={{nozzle.id}}">{{nozzle.name}}</a>
+        </li>
+        {% endfor %}
+        </ul>
+
+      </nav>
+      </nav>
+    </div>
+    </div>
+    <div class="col-12 mt-5">
+      <h2 class="text-center alert alert-success">Sales Data</h2>
+      {% if form %}
+      <table class="table table-stripped table-bordered" id="petrol-table">
+        <colgroup>
+          <col width="5%">
+          <col width="12%">
+          <col width="10%">
+          <col width="12%">
+          <col width="12%">
+          <col width="8%">
+          <col width="8%">
+          <col width="8%">
+          <col width="15%">       
+          {% if update %} {% else %}<col width="12%"> {% endif %}
+      </colgroup>
+      <tr class="bg-primary bg-gradient text-light">
+            <th class="text-center"py>#</th>
+            <th class="text-center">Nozel</th>
+            <th class="text-center">Tank</th>
+            <th class="text-center">Previous Reading</th>
+            <th class="text-center">Present Reading</th>            
+            <th class="text-center">Quantity</th>
+            <th class="text-center">Sale Price</th>
+            <th class="text-center">Amount</th>
+            <th class="text-center">Date</th>            
+            {% if update %}  {% else %}  <th class="text-center">Actions</t> {% endif %}       
+          </tr>
+        </thead>
+        <tbody>
+
+          {% if update %}
+          <tr>
+            <td class="text-center">{{mydata.id}}</td>
+            <td>{{mydata.nozel}}</td>
+            <td>{{mydata.nozel.tank}}</td>
+            <td>{{mydata.previous_reading}}</td>
+            <td>{{mydata.present_reading}}</td>
+            <td>{{mydata.quantity}}</td>
+            <td>{{mydata.sale_price}}</td>
+            <td>{{mydata.amount}}</td>
+            <td>{{mydata.date}}</td>
+          </tr>
+          {% else %}
+          
+          {% for data in mydata %}
+          <tr>
+            <td class="text-center">{{forloop.counter}}</td>
+            <td>{{data.nozel}}</td>
+            <td>{{data.nozel.tank}}</td>
+            <td>{{data.previous_reading}}</td>
+            <td>{{data.present_reading}}</td>
+            <td>{{data.quantity}}</td>
+            <td>{{data.sale_price}}</td>
+            <td>{{data.amount}}</td>        
+            <td>{{data.date}}</td>
+            {% if perms.home.change_blog %}
+            <td class="text-center"><a class="btn btn-sm btn-warning" href={% url 'editsale' id=data.id %}>Edit</a>   
+              {% endif %}
+              {% if perms.home.delete_nozel %}
+              <a class=" btn btn-sm btn-danger" href={% url 'deletesale' id=data.id %}>Delete</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+          {% endif %}
+        </tbody>
+      </table>
+      {% else %}
+      <h4 class="text-center alert alert-warning">No Record Found</h4>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function(){
+    console.log("i m jqurey");
+
+    // Wait for 10 seconds and then hide the element with id "myElement"
+    setTimeout(function(){
+        $("#msg").hide();
+    }, 10000); // 10000 milliseconds = 10 seconds
+});
+   
+</script>
+
+
+
+{% endblock content %}

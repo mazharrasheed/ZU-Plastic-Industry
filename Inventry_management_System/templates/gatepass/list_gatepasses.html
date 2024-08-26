@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content  %}
+    <div class="container mt-3">
+        <h1>Gate Passes</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Returnable</th>
+                    <th class="text-center">Date/Time</th>
+                    <th class="text-center">Vehicle No.</th>
+                    <th class="text-center">Dispatch For</th>
+                    <th class="text-center">Name of Site</th>
+                    <th class="text-center">No of Items</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for gatepass in gatepasses %}
+                {{gatepass.gatepass_products}}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td class="text-center">{% if  gatepass.returnable   %}
+                        Returnable {% else %} Non-returnable
+                    {% endif %}</td>
+                    <td class="text-center">{{ gatepass.date_created }}</td>
+                    <td class="text-center">{{ gatepass.vehicle }}</td>
+                    <td class="text-center">{{ gatepass.dispatch_for }}</td>
+                    <td class="text-center">{{ gatepass.name_of_site }}</td>
+                    <td class="text-center"> {{ gatepass_items_pro|get_item:gatepass.id }}
+                  </td>
+                    <td class="text-center">
+                        <a class="btn btn-success" href="{% url 'print_gatepass' gatepass.id %}">Print</a>
+                        <a class="btn btn-warning" href="{% url 'edit_gatepass' gatepass.id %}">Edit</a>
+                        <a class="btn btn-danger" href="{% url 'delete_gatepass' gatepass.id %}">Delete</a>
+                        
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'create_gatepass' %}" class="btn btn-primary m-3">Create New Gate Pass</a>
+    </div>
+    {% endblock content  %}

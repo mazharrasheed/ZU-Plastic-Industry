@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block title %}Products{% endblock title %}
+
+{% load custom_filters %}
+
+{% block content %}
+
+
+<div class="container mt-3">
+
+
+  <div class="row">
+    <div class="col-lg-3">
+      <h2 class="text-center alert alert-info">Main Menue</h2>
+      <div class="list-group">
+
+        <h4><a href="/product/" class="list-group-item">All Products</a></h4>
+        {% for category in categories %}
+        <h4><a href="?category={{category.id}}" class="list-group-item">{{category.name}}</a></h4>
+        {% endfor %}
+        <h4><a href="/add_product/" class="list-group-item">Add Product</a></h4>
+      </div>
+    </div>
+
+    <div id="product" class="col-lg-9 ">
+      <h2 class="text-center alert alert-info">Products List</h2>
+      <div class="row">
+        {% if products %}
+
+        {% for product in products %}
+
+        <div class="card mx-auto mb-3" id="{{product.id}}" style="width: 18rem">
+
+          <img src="{{product.pro_img.url}}" class="card-img-top mt-2" alt="..." />
+
+          <div class="card-body p-0">
+            <h5 class="card-title mt-2">Prodcut Name:{{product.productname|title}}</h5>
+            <p class="card-text">Sizes: {{product.product_size}}</p>
+          </div>
+        </div>
+
+
+
+        {% endfor %}
+      </div>
+      {% else %}
+
+
+      <h3 class="alert alert-light border rounded">Curruntly No Item to Show</h3>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

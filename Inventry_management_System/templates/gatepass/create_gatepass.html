@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Create Gatepass
+{% endblock title %}
+
+{% block content %}
+
+ 
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .table-container {
+        width: 80%;
+        margin: 0 auto;
+        border: 1px solid #000;
+        padding: 20px;
+        margin-top: 50px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th, td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .footer-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .col-1 {
+        width: 5%;
+    }
+
+    .col-2 {
+        width: 35%;
+    }
+
+    .tbcol-3 {
+        width: 10%;
+    }
+
+    .col-4 {
+        width: 10%;
+    }
+
+    .col-5 {
+        width: 15%;
+    }
+
+    .col-6 {
+        width: 25%;
+    }
+</style>
+</head>
+<body>
+<div class="table-container">
+    <h1 class="text-center">Please Allow The Material Outside</h1>
+
+    <form id="gatepass-form"  method="POST" {% if  gatepass.id %}
+    action={% url 'create_gatepass' gatepass.id %} {% else %}
+    action={% url 'create_gatepass' %}{% endif %}>
+    
+    {% csrf_token %}
+
+    <div class="header-section">
+        <div >
+            <p>
+                {{ form_gatepass.returnable }}
+               
+              </p>
+            <p><strong>Date:</strong> Auto</p>
+            <p  class="d-flex"><strong>Vehicle:</strong></p>
+            <p><strong>Time:</strong> Auto</p>
+        </div>
+        <div style="margin-top: 115px;">
+           
+            
+           <span >{{ form_gatepass.vehicle}}</span>
+           
+           
+        </div>
+
+        <div style="margin-left:250px;width:120px">
+            <p style="margin-top:5px" ><strong>Dispatch For:</strong> </p>
+            <p style="margin-top:15px"><strong>Name of Site:</strong></p>
+            <p  style="margin-top:20px"><strong>Per. Name:</strong></p>
+            <p style="margin-top:25px"><strong>Ph. No:</strong></p>
+        </div>
+        <div style="margin-right:50px">
+            <p > <span class="">{{ form_gatepass.dispatch_for }}</span></p>
+            <p ><span class="">{{ form_gatepass.name_of_site }}</span></p>
+            <p  ><span class="">{{ form_gatepass.person_name }}</span></p>
+            <p ><span class=""> {{ form_gatepass.phone_number }}</span></p>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <td>Auto</td>
+                <td>{{ form.product|as_crispy_field }}</td>
+                <td>{{ form.quantity|as_crispy_field  }}</td>
+                <td>Auto</td>
+                <td>Auto</td>
+                <td>{{ form.remarks|as_crispy_field  }}</td>
+                <th class="col-5 text-center">
+                    <button class="btn btn-primary" type="submit" name="add_product">Add Product</button>
+                </th>
+                
+            </tr>
+            <tr>
+                <th class="col-1 text-center">Sr#</th>
+                <th class="col-6 text-center">Description</th>
+                <th class="tbcol-3 text-center">Qty.</th>
+                <th class="col-5 text-center">Unit</th>
+                <th class="tbcol-3 text-center">Weight (Kgs)</th>
+                <th class="col-5 text-center">Remarks</th>
+                <th class="col-5 text-center">Actions</th>
+                
+            </tr>
+        </thead>
+
+        <tbody id="product-list">
+            {% include 'gatepass/gatepass_product_list.html' %}
+        </tbody>
+    </table>
+
+    <div class="footer-section">
+        <div>
+            <p>Prepared By</p>
+            <p>Name: {{request.user}}</p>
+            <p>Sign: ___________________</p>
+        </div>
+        <div>
+            <p>Authorized By</p>
+            <p>Name: ___________________</p>
+            <p>Sign: ___________________</p>
+        </div>
+        <div>
+            <p>Received By</p>
+            <p>Name: ___________________</p>
+            <p>Sign: ___________________</p>
+        </div>
+    </div>
+
+</form>
+
+</div>
+<div class="container mt-5 mb-5 text-center">
+    <a href="{% url 'list_gatepasses' %}" class="btn btn-success m-3">Finalize Gate Pass</a>
+    {% if gatepass.id %}
+    <a href="{% url 'cancel_gatepass' gatepass.id %}" class="btn btn-danger m-3">Cancel</a>
+    {% endif %}
+   
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+$('#gatepass-form').on('submit', function(event) {
+    event.preventDefault();  // Prevent the default form submission (page refresh)
+
+    $.ajax({
+        type: "POST",
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(response) {
+           
+            if (response.success) {
+                // Update the product list in the DOM with the new data
+                $('#product-list').html(response.rendered_products);
+                console.log(response.rendered_products)
+               
+                // Optionally, clear the form fields after successful submission
+                // replace 'product_field_name' with the specific field you want to clear
+                // $('#gatepass-form select[name="product"]').val(''); // This should reset to the placeholder
+
+                // If the above doesn't work, you can explicitly target the first option
+                $('#gatepass-form select[name="product"] option:first').prop('selected', true);
+                $('#gatepass-form input[name="quantity"]').val('1'); 
+                $('#gatepass-form input[name="remarks"]').val('');
+               
+            } else {
+                alert('Failed to add product to gate pass.');
+            }
+        },
+        error: function() {
+            alert('An error occurred. Please try again.');
+        }
+    });
+});
+});
+</script>
+
+
+
+
+{% endblock content %}

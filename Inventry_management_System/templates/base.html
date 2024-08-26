@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZU Plastic Industry| {% block title %}
+    {% endblock title %}</title>
+    <link
+    rel="shortcut icon"
+    href="{% static 'assets/default/img/monogram1.jpg' %}"
+    type="image/x-icon"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <link
+    rel="stylesheet"
+    href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}"
+  />
+
+  <link
+    rel="stylesheet"
+    href="{% static 'assets/DataTables/datatables.min.css' %}"
+  />
+  <link
+    rel="stylesheet"
+    href="{% static 'assets/select2/dist/css/select2.min.css' %}"
+  />
+  <link rel="stylesheet" href="{% static 'assets/default/css/style.css' %}" />
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"
+    integrity="sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script src="{% static 'assets/default/js/jquery-3.6.0.min.js' %}"></script>
+  <script src="{% static 'assets/bootstrap/js/popper.min.js' %}"></script>
+  <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/DataTables/datatables.min.js' %}"></script>
+  <script src="{% static 'assets/select2/dist/js/select2.min.js' %}"></script>
+  <script
+    type="text/javascript"
+    src="{% static 'assets/default/js/script.js' %}"
+  ></script>
+
+</head>
+
+<body >
+
+  {% if messages %} {% for message in messages %}
+        <small {% if message.tags %} class="{{message.tags}}" {% endif %}>
+            <h5 id='msg' class="alert alert-success"> {{message}}</h5>
+        </small>
+        {% endfor %}
+        {% endif %}
+
+
+  <div style="background-color:#ffe3c2">
+      <h1 class=" text-center">
+        <img style="height:70px" src="{% static 'assets/default/img/monogram1.jpg' %}" alt="Monogram">
+
+        ZU Plastic Industry Management System</h1>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid ">
+      <a class="navbar-brand d-flex align-items-center px-5 " href="/">
+        <i style="height: 30px;" class="fa fa-home"></i> 
+        <h4 class="mb-0 s-2" style="margin-left: 10px;padding-top: 10px;">MU Plastic Industry</h4>
+    </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/' %} active {%endif%}}" aria-current="page" href="/"><h5>Home</h5></a>
+          </li>
+          
+          <li class="nav-item">
+            <a  class="nav-link {% if request.path == '/category/' %} active {%endif%}}" aria-current="page" href="/category/"><h5>Category</h5></a>
+          </li>
+
+          <li class="nav-item">
+            <a  class="nav-link {% if request.path == '/product/' %} active {%endif%}}" aria-current="page" href="/product/"><h5>Products</h5></a>
+          </li>
+          <li class="nav-item">
+            <a  class="nav-link {% if request.path == '/list-gatepasses/' %} active {%endif%}}" aria-current="page" href="/list-gatepasses/"><h5>Gate Pass</h5></a>
+          </li>
+          <li class="nav-item">
+            <a  class="nav-link {% if request.path == '/sale/' %} active {%endif%}}" aria-current="page" href="/sale/"><h5>Sales</h5></a>
+          </li>
+          <li class="nav-item">
+            <a  class="nav-link {% if request.path == '/inventory/' %} active {%endif%}}" aria-current="page" href="/inventory/"><h5>Inventory</h5></a>
+          </li>
+          <li class="nav-item">
+            <a  class="nav-link {% if request.path == '/accounts/' %} active {%endif%}}" aria-current="page" href="/accounts/"><h5>Accounts</h5></a>
+          </li>
+          <li class="nav-item">
+            <a  class="nav-link {% if request.path == '/transaction/' %} active {%endif%}}" aria-current="page" href="/transaction/"><h5>Transaction</h5></a>
+          </li>
+          <li class="nav-item">
+            <a  class="nav-link {% if request.path == '/Balance/' %} active {%endif%}}" aria-current="page" href="/balance/"><h5>Balance</h5></a>
+          </li>
+      
+      
+
+          {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/dashboard/' %} active {%endif%}}"
+              href="/dashboard/"><h5>My Profile</h5></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/dashboard/' %} active {%endif%}}" href="/logout/"><h5>Logout</h5></a>
+          </li>
+          {% else %}
+
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/signup/' %} active {%endif%}}" href="/signup/"><h5>SignUp</h5></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/signin/' %} active {%endif%}}" href="/signin/"><h5>SignIn</h5></a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+
+  {% block content %}
+
+  {% endblock content %}
+
+  <script>
+    $(document).ready(function(){
+  
+      // Wait for 4 seconds and then hide the element with id "msg"
+      setTimeout(function(){
+          $("#msg").hide();
+      }, 4000); // 10000 milliseconds = 10 seconds
+  });
+     
+  </script>
+  
+</body>
+
+
+
+</html>

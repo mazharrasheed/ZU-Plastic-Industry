@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+  <div class="row">
+
+    <div class="col-12">
+      <h2 class="text-center alert alert-success">Fuel Inventory</h2>
+
+      <table class="table table-stripped table-bordered" id="petrol-table">
+        <colgroup>
+          <col width="5%">
+          <col width="25%">
+          <col width="15%">
+          <col width="15%">
+
+        </colgroup>
+        <thead>
+          <tr class="bg-primary bg-gradient text-light text-center">
+            <td>Sr.No.</td>
+            <td>Title</td>
+            <td>Fuel</td>
+            <td>In_stock(Ltrs)</td>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for data in mydata %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{data.name}}</td>
+            <td>{{data.fuel}}</td>
+            <td>{{data.in_stock}}</td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+
+    </div>
+    <div class="col-12">
+      <h2 class="text-center alert alert-success">Lubricant Inventory</h2>
+
+      <table class="table table-stripped table-bordered" id="petrol-table">
+        <colgroup>
+          <col width="5%">
+          <col width="25%">
+          <col width="15%">
+          <col width="15%">
+
+        </colgroup>
+        <thead>
+          <tr class="bg-primary bg-gradient text-light text-center">
+            <td>Sr.No.</td>
+            <td>Title</td>
+            <td>Lubricatn</td>
+            <td>In_stock</td>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for data in mydata %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
