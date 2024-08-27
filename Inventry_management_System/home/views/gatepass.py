@@ -147,6 +147,15 @@ def edit_gatepass(request, gatepass_id=None):
     })
 
 def delete_gatepass_item(request,id):
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and request.method == 'POST':
+        product = get_object_or_404(GatePassProduct, id=id)
+        gatepass_id = request.POST.get('gatepass_id')
+        product.delete()
+        
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
+def delete_gatepass_item1(request,id):
     print('i m delete item')
     gatepass_id=(request.GET.get('gatepass_id'))
     gatepass=get_object_or_404(GatePass,id=gatepass_id)
