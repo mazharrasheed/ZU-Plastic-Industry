@@ -1,8 +1,6 @@
 
 {% load custom_filters %}
 
-{% if update %}
-
 {% if gatepass_products %}
 {% for product in gatepass_products %}
 <tr>
@@ -12,7 +10,7 @@
     <td>{{ product.product.unit }}</td>
     <td>{{ product.quantity|multiply:product.product.product_weight}}</td>
     <td>{{ product.remarks }}</td>
-    <td>
+    <td class="text-center">
         <a href="#" 
            class="btn btn-danger m-3 delete-item" 
            data-product-id="{{ product.id }}" 
@@ -24,27 +22,3 @@
 {% endfor %} 
 {% endif %}
     
-{% else %}
-
-{% if gatepass_products %}
-{% for product in gatepass_products %}
-<tr>
-    <td>{{ forloop.counter }}</td>
-    <td>{{ product.product.productname }}</td>
-    <td>{{ product.quantity }}</td>
-    <td>{{ product.product.unit }}</td>
-    <td>{{ product.quantity|multiply:product.product.product_weight }}</td>
-    <td>{{ product.remarks }}</td>
-    <td>
-        <a href="#" 
-           class="btn btn-danger m-3 delete-item" 
-           data-product-id="{{ product.id }}" 
-           data-gatepass-id="{% if gatepass.id %}{{gatepass.id}}{% else %}{{gatepass_id}}{% endif %}">
-           X
-        </a>
-    </td>
-</tr>
-{% endfor %} 
-{% endif %}
-
-{% endif %}

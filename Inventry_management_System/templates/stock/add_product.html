@@ -3,9 +3,9 @@
 
 {% block content %}
 <!-- add_stock.html -->
-<div class="container mt-3 mb-5 ">
+
+<div class="container mb-5 ">
 <div class="row">
-  
     <div class="col-3 ">
       <h2 class="text-center alert alert-info">Add Product</h2>
       <form method="post" enctype="multipart/form-data">
@@ -14,11 +14,7 @@
 
         <input type="submit" class="btn btn-success" {% if update %} value="Update Product" {% else %} value="Add Product" {%endif %}>
       </form>
-      {% if messages %} {% for message in messages %}
-      <small class="m-5" id="msg" {% if message.tags %} class="{{message.tags}}" {% endif %}>
-        <h5 class="alert alert-{{message.tags}}"> {{message}}</h5>
-      </small>
-      {% endfor %} {% endif %}
+
     </div>
     <div class="col-9 ">
       <h2 class="text-center alert alert-info">Products</h2>
@@ -83,7 +79,6 @@
     </div>
   </div>
 </div>
-
 <script>
   $(document).ready(function(){
 

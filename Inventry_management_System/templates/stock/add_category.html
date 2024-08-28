@@ -5,7 +5,7 @@
 {% block content %}
 
 <!-- add_stock.html -->
-<div class="container mt-3 mb-5 ">
+<div class="container mb-5 ">
   <div class="row">
     <div class="col-3 ">
       <h2 class="text-center alert alert-info">Add Category</h2>
@@ -15,11 +15,7 @@
 
         <input type="submit" class="btn btn-success" {% if update %} value="Update Category" {% else %} value="Add Category" {%endif %}>
       </form>
-      {% if messages %} {% for message in messages %}
-      <small class="m-5" id="msg" {% if message.tags %} class="{{message.tags}}" {% endif %}>
-        <h5 class="alert alert-{{message.tags}}"> {{message}}</h5>
-      </small>
-      {% endfor %} {% endif %}
+  
     </div>
     <div class="col-9  ">
       <h2 class="text-center alert alert-info">Categories</h2>
@@ -71,15 +67,13 @@
   </div>
 </div>
 
-<script>
-  $(document).ready(function(){
 
-    // Wait for 4 seconds and then hide the element with id "msg"
-    setTimeout(function(){
-        $("#msg").hide();
-    }, 4000); // 10000 milliseconds = 10 seconds
-});
-   
-</script>
-  
+  <script>
+     $(document).ready(function () {
+        // Wait for 4 seconds and then hide the element with id "msg"
+        setTimeout(function () {
+          $("#msg").hide();
+        }, 4000); // 10000 milliseconds = 10 seconds
+      })
+  </script>
 {% endblock content %}

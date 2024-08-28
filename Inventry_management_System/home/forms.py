@@ -51,6 +51,18 @@ class ProductForm(forms.ModelForm):
         self.fields['category'].empty_label = "Select"
         # self.fields['product_status'].choices = [('', 'Select')] + list(self.fields['product_status'].choices)
 
+
+
+
+
+
+
+
+
+
+
+
+
 class GatePassForm(forms.ModelForm):
 
     RETURNABLE_CHOICES = (
@@ -71,7 +83,21 @@ class GatePassProductForm(forms.ModelForm):
     class Meta:
         model = GatePassProduct
         fields = ['product', 'quantity','remarks']
-    
+
+    def __init__(self, *args, **kwargs):
+        self.gatepass = kwargs.pop('gatepass', None)
+        super(GatePassProductForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        product = cleaned_data.get('product')
+
+        if product and self.gatepass:
+            if GatePassProduct.objects.filter(gatepass=self.gatepass, product=product).exists():
+                self.add_error('product', f'The product "{product}" has already been added to this gate pass.')
+
+        return cleaned_data
+
 class Sign_Up(UserCreationForm):
 
     username=UsernameField()

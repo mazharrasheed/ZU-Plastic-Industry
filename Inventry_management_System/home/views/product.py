@@ -27,7 +27,7 @@ def add_product(request):
         if form.is_valid():
           form.save()
           messages.success(request,"Product Added successfully !!")
-          return redirect('product')
+          return redirect('addproduct')
     else:
         mydata=Product.objects.filter(is_deleted=False)
         form = ProductForm()
@@ -45,7 +45,7 @@ def edit_product(request,id):
       if form.is_valid():
         form.save()
         messages.success(request,"Product Updated successfully !!")
-        return redirect('product')
+        return redirect('addproduct')
     else:
       mydata=Product.objects.get(id=id)
       form = ProductForm(instance=mydata)
@@ -63,7 +63,7 @@ def delete_product(request,id):
     mydata.is_deleted=True
     mydata.save()
     messages.success(request,"Product Deleted successfully !!")
-    return redirect('product')
+    return redirect('addproduct')
 
   else:
 

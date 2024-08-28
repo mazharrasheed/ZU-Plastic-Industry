@@ -39,7 +39,6 @@ urlpatterns = [
     path('cancel_gatepass/<int:id>/', gatepass.cancel_gatepass, name='cancel_gatepass'),
     path('delete_gatepass/<int:id>/', gatepass.delete_gatepass, name='delete_gatepass'),
     path('delete_gatepass_item/<int:id>/', gatepass.delete_gatepass_item, name='delete_gatepass_item'),
-    path('update_delete_gatepass_item/<int:id>/', gatepass.update_delete_gatepass_item, name='update_delete_gatepass_item'),
     path('list-gatepasses/', gatepass.list_gatepasses, name='list_gatepasses'),
     path('print-gatepass/<int:gatepass_id>/', gatepass.print_gatepass, name='print_gatepass'),
 
