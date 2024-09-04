@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZU Plastic Industry| {% block title %}
+  <title>ZU Traders| {% block title %}
     {% endblock title %}</title>
   <link rel="shortcut icon" href="{% static 'assets/default/img/monogram1.jpg' %}" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
@@ -27,16 +27,32 @@
   <script src="{% static 'assets/DataTables/datatables.min.js' %}"></script>
   <script src="{% static 'assets/select2/dist/js/select2.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'assets/default/js/script.js' %}"></script>
+  <!-- added later -->
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no" />
+    <link type="text/css" href="{% static 'css/volt.css' %}" rel="stylesheet" />
+   
+    <style>
+        .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+            width: 100% !important;
+        }
+
+        .dropdown-toggle {
+            padding: 0rem !important;
+        }
+    </style>
 
 </head>
 
 <body>
 
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THQTXJ7" height="0" width="0"
+    style="display: none; visibility: hidden;"></iframe></noscript>
+
   <div style="background-color:#ffe3c2">
     <h1 class=" text-center mt-2">
       <img style="height:70px" src="{% static 'assets/default/img/monogram1.jpg' %}" alt="Monogram">
 
-      ZU Plastic Industry Management System
+      ZU Traders
     </h1>
   </div>
 
@@ -44,7 +60,7 @@
     <div class="container-fluid ">
       <a class="navbar-brand d-flex align-items-center px-5 " href="/">
         <i style="height: 30px;" class="fa fa-home"></i>
-        <h4 class="mb-0 s-2" style="margin-left: 10px;padding-top: 10px;">MU Plastic Industry</h4>
+        <h4 class="mb-0 s-2" style="margin-left: 10px;padding-top: 10px;">ZU Traders</h4>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,83 +69,76 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/' %} active {%endif%}}" aria-current="page" href="/">
-              <h5>Home</h5>
+            <a class="nav-link {% if request.path == '/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" aria-current="page" href="/">
+              <h5 class="{% if request.path == '/' %} text-light {%endif%}}">Home</h5>
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/category/' %} active {%endif%}}" aria-current="page"
-              href="/category/">
-              <h5>Category</h5>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link {% if request.path == '/product/' %} active {%endif%}}" aria-current="page"
+            <a class="nav-link {% if request.path == '/product/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" aria-current="page"
               href="/product/">
-              <h5>Products</h5>
+              <h5 class="{% if request.path == '/product/' %} text-light {%endif%}}">Products</h5>
             </a>
           </li>
+
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/list-gatepasses/' %} active {%endif%}}" aria-current="page"
+            <a class="nav-link {% if request.path == '/list-sales/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" aria-current="page" href="/list-sales/">
+              <h5 class="{% if request.path == '/list-sales/' %} text-light {%endif%}}">Sales</h5>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/list-gatepasses/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" aria-current="page"
               href="/list-gatepasses/">
-              <h5>Gate Pass</h5>
+              <h5 class="{% if request.path == '/list-gatepasses/' %} text-light {%endif%}}">Gate Pass</h5>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.path == '/sale/' %} active {%endif%}}" aria-current="page" href="/sale/">
-              <h5>Sales</h5>
-            </a>
+          
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/inventory/' %} active {%endif%}}" aria-current="page"
-              href="/inventory/">
-              <h5>Inventory</h5>
+            <a class="nav-link {% if request.path == '/cutomers/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" aria-current="page"
+              href="/#/">
+              <h5 class="{% if request.path == '/cutomers/' %} text-light {%endif%}}">Cutomers</h5>
             </a>
           </li>
+          </li>
+          </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/accounts/' %} active {%endif%}}" aria-current="page"
+            <a class="nav-link {% if request.path == '/suppliers/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" aria-current="page"
+              href="/suppliers/">
+              <h5 class="{% if request.path == '/suppliers/' %} text-light {%endif%}}">Suppliers</h5>
+            </a>
+          </li>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/accounts/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" aria-current="page"
               href="/accounts/">
-              <h5>Accounts</h5>
+              <h5 class="{% if request.path == '/accounts/' %} text-light {%endif%}}">Accounts</h5>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.path == '/transaction/' %} active {%endif%}}" aria-current="page"
-              href="/transaction/">
-              <h5>Transaction</h5>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.path == '/Balance/' %} active {%endif%}}" aria-current="page"
-              href="/balance/">
-              <h5>Balance</h5>
-            </a>
-          </li>
-
-
+    
 
           {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/dashboard/' %} active {%endif%}}" href="/dashboard/">
-              <h5>My Profile</h5>
+            <a class="nav-link {% if request.path == '/dashboard/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" href="/dashboard/">
+              <h5 class="{% if request.path == '/dashboard/' %} text-light {%endif%}}">My Profile</h5>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/dashboard/' %} active {%endif%}}" href="/logout/">
-              <h5>Logout</h5>
+            <a class="nav-link {% if request.path == '/logout/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" href="/logout/">
+              <h5 class="{% if request.path == '/logout/' %} text-light {%endif%}}">Logout</h5>
             </a>
           </li>
           {% else %}
 
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/signup/' %} active {%endif%}}" href="/signup/">
-              <h5>SignUp</h5>
+            <a class="nav-link {% if request.path == '/signup/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" href="/signup/">
+              <h5 class="{% if request.path == '/signup/' %} text-light {%endif%}}">SignUp</h5>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/signin/' %} active {%endif%}}" href="/signin/">
-              <h5>SignIn</h5>
+            <a class="nav-link {% if request.path == '/signin/' %} bg-secondary bg-gradient text-light rounded {%endif%}}" href="/signin/">
+              <h5 class="{% if request.path == '/signin/' %} text-light {%endif%}}">SignIn</h5>
             </a>
           </li>
           {% endif %}
@@ -155,9 +164,31 @@
 
   {% endblock content %}
 
-  <script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
 
-  </script>
+  <script src="{% static 'vendor/%40popperjs/core/dist/umd/popper.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendor/onscreen/dist/on-screen.umd.min.js' %}"></script>
+  <script src="{% static 'vendor/nouislider/distribute/nouislider.min.js' %}"></script>
+  <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
+  <script src="{% static 'vendor/countup.js/dist/countUp.umd.js' %}"></script>
+  <script src="{% static 'vendor/apexcharts/dist/apexcharts.min.js' %}"></script>
+  <script src="{% static 'vendor/vanillajs-datepicker/dist/js/datepicker.min.js' %}"></script>
+  <script src="{% static 'vendor/simple-datatables/dist/umd/simple-datatables.js' %}"></script>
+  <script src="{% static 'vendor/sweetalert2/dist/sweetalert2.min.js' %}"></script>
+  <script src="{% static 'vendor/vanillajs-datepicker/dist/js/datepicker.min.js' %}"></script>
+  <script src="{% static 'vendor/fullcalendar/main.min.js' %}"></script>
+  <script src="{% static 'vendor/dropzone/dist/min/dropzone.min.js' %}"></script>
+  <script src="{% static 'vendor/notyf/notyf.min.js' %}"></script>
+  <script src="{% static 'vendor/leaflet/dist/leaflet.js' %}"></script>
+  <script src="{% static 'vendor/svgmap/dist/svgMap.min.js' %}"></script>
+  <script src="{% static 'vendor/simplebar/dist/simplebar.min.js' %}"></script>
+  <script src="{% static 'vendor/sortablejs/Sortable.min.js' %}"></script>
+  <script src="{% static 'assets/js/volt.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
 

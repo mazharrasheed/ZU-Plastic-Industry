@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<!-- add_stock.html -->
+
+<div class="container-fluid mb-5 ">
+<div class="row">
+    <div class="col-3 ">
+      <h2 class="text-center alert alert-info">Add Product</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form|crispy}}
+
+        <input type="submit" class="btn btn-success" {% if update %} value="Update Supplier" {% else %} value="Add Supplier" {%endif %}>
+        <a href= "/suppliers/" class="btn btn-warning" >Supplier</a>
+      </form>
+
+    </div>
+    <div class="col-9 ">
+      <h2 class="text-center alert alert-info">Suppliers List</h2>
+
+      {% if mydata %}
+      <table class="table table-stripped table-bordered" id="petrol-table">
+        <colgroup>
+          <col width="10%">
+          <col width="15%">    
+          <col width="15%">    
+          <col width="15%">    
+          <col width="15%">    
+          <col width="15%">    
+             
+          {% if update %} {% else %}<col width="25%"> {% endif %}
+      </colgroup>
+        <thead>
+          <tr class="bg-primary bg-gradient text-light text-center">
+            <td>Sr.No.</td>
+            <td>Firt Name</td>
+            <td>Last Name</td>
+            <td>Description</td>
+            <td>Contact</td>
+            <td>Adress</td>
+           
+            {% if update %} {% else %}<td>Action</td> {% endif %}
+            
+          </tr>
+        </thead>
+        <tbody>
+
+          {% if update %}
+          <tr>
+            <td class="text-center" >{{mydata.id}}</td>
+            <td>{{mydata.name}}</td>
+          </tr>
+          {% else %}
+          {% for data in mydata %}
+          <tr>
+            <td class="text-center" >{{forloop.counter}}</td>
+            <td class="text-center">{{data.firstname}}</td>
+            <td class="text-center">{{data.lastname}}</td>
+            <td class="text-center">{{data.description}}</td>
+            <td class="text-center">{{data.contact}}</td>
+            <td class="text-center">{{data.adress}}</td>
+         
+            <td  class="text-center">
+              <a class="btn btn-sm btn-warning" href={% url 'editsupplier' id=data.id %}>Edit</a>
+              <a class=" btn btn-sm btn-danger" href={% url 'deletesupplier' id=data.id %}>Delete</a> 
+            </td>
+          </tr>
+          {% endfor %} 
+          {% endif %}
+        </tbody>
+      </table>
+      {% else %}
+      <h4 class="text-center alert alert-warning">No Record Found</h4>
+      {% endif %}
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function(){
+
+    // Wait for 4 seconds and then hide the element with id "msg"
+    setTimeout(function(){
+        $("#msg").hide();
+    }, 4000); // 10000 milliseconds = 10 seconds
+});
+   
+</script>
+  
+{% endblock content %}

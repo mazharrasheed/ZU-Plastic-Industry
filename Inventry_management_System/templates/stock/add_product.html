@@ -4,7 +4,7 @@
 {% block content %}
 <!-- add_stock.html -->
 
-<div class="container mb-5 ">
+<div class="container-fluid mb-5 ">
 <div class="row">
     <div class="col-3 ">
       <h2 class="text-center alert alert-info">Add Product</h2>
@@ -13,6 +13,7 @@
         {{form|crispy}}
 
         <input type="submit" class="btn btn-success" {% if update %} value="Update Product" {% else %} value="Add Product" {%endif %}>
+        <a href= "/product/" class="btn btn-warning" >Products</a>
       </form>
 
     </div>
@@ -49,7 +50,11 @@
           {% if update %}
           <tr>
             <td class="text-center" >{{mydata.id}}</td>
-            <td>{{mydata.name}}</td>
+            <td class="text-center">{{mydata.category}}</td>
+            <td class="text-center">{{mydata.productname}}</td>
+            <td class="text-center">{{mydata.product_size}}</td>
+            <td class="text-center">{{mydata.product_quantity}}</td>
+            <td class="text-center">{% if mydata.product_status %} Active {% else %} Inactive {% endif %} </td>
           </tr>
           {% else %}
           {% for data in mydata %}

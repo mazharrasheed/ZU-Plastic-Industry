@@ -2,41 +2,53 @@
 {% load custom_filters %}
 {% block content %}
 
-<div class="container ">
-  <h1>Gate Passes</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th class="text-center">ID</th>
-        <th class="text-center">Returnable</th>
-        <th class="text-center">Date/Time</th>
-        <th class="text-center">Vehicle No.</th>
-        <th class="text-center">Dispatch For</th>
-        <th class="text-center">Name of Site</th>
-        <th class="text-center">No of Items</th>
-        <th class="text-center">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for gatepass in gatepasses %}
-      <tr id="gatepass-{{ gatepass.id }}">
-        <td class="text-center">{{ forloop.counter }}</td>
-        <td class="text-center">{% if gatepass.returnable %}Returnable{% else %}Non-returnable{% endif %}</td>
-        <td class="text-center">{{ gatepass.date_created }}</td>
-        <td class="text-center">{{ gatepass.vehicle }}</td>
-        <td class="text-center">{{ gatepass.dispatch_for }}</td>
-        <td class="text-center">{{ gatepass.name_of_site }}</td>
-        <td class="text-center">{{ gatepass_items_pro|get_item:gatepass.id }}</td>
-        <td class="text-center">
-          <a class="btn btn-success" href="{% url 'print_gatepass' gatepass.id %}">Print</a>
-          <a class="btn btn-warning" href="{% url 'edit_gatepass' gatepass.id %}">Edit</a>
-          <button class="btn btn-danger delete-gatepass" data-gatepass-id="{{ gatepass.id }}">Delete</button>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <a href="{% url 'create_gatepass' %}" class="btn btn-primary m-3">Create New Gate Pass</a>
+<div class="row">
+
+<div class=" col-1"></div>
+<div class=" col-10 ">
+  <h2 class="text-center alert alert-info ">Gate Pass List</h2>
+  <div class="card py">
+    <div class="table-responsive py-4">
+      <a href="{% url 'create_gatepass' %}" class="btn btn-primary m-3">Create New Gate Pass</a>
+      {% if gatepasses%}
+      <table class="table table-flush" id="datatable">
+        <thead class="thead-light">
+          <tr>
+            <th class="border-bottom fw-bolder text-center" scope="col">Sr#</th>
+            <th class="border-bottom fw-bolder text-center" scope="col">Engineer Name</th>
+            <th class="border-bottom fw-bolder text-center" scope="col">Postcode Cover</th>
+            <th class="border-bottom fw-bolder text-center" scope="col">Job Type</th>
+            <th class="border-bottom fw-bolder text-center" scope="col">Available</th>
+            <th class="border-bottom fw-bolder text-center" scope="col">Rating</th>
+            <th class="border-bottom fw-bolder text-center" scope="col">Password</th>
+            <th class="border-bottom fw-bolder text-center" scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for gatepass in gatepasses %}
+          <tr id="gatepass-{{ gatepass.id }}">
+            <td class="text-center">{{ forloop.counter }}</td>
+            <td class="">{% if gatepass.returnable %}Returnable{% else %}Non-returnable{% endif %}</td>
+            <td class="text-center">{{ gatepass.date_created }}</td>
+            <td class="text-center">{{ gatepass.vehicle }}</td>
+            <td class="text-center">{{ gatepass.dispatch_for }}</td>
+            <td class="text-center">{{ gatepass.name_of_site }}</td>
+            <td class="text-center">{{ gatepass_items_pro|get_item:gatepass.id }}</td>
+            <td class="text-center">
+              <a class="btn btn-success" href="{% url 'print_gatepass' gatepass.id %}">Print</a>
+              <a class="btn btn-warning" href="{% url 'edit_gatepass' gatepass.id %}">Edit</a>
+              <button class="btn btn-danger delete-gatepass" data-gatepass-id="{{ gatepass.id }}">Delete</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <h4 class="text-center alert alert-warning">No Record Found</h4>
+      {% endif %}
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -74,4 +86,11 @@
     });
   });
 </script>
+
+
+
+
+
+
+
 {% endblock content %}

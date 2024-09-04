@@ -74,7 +74,11 @@ Create Gatepass
 
 <body>
     <div class="table-container">
-        <h1 class="text-center">Please Allow The Material Outside</h1>
+        <h1 class="text-center">
+
+            SunEngineer Gujranwala
+            
+            Please Allow The Material Outside</h1>
 
         <form id="gatepass-form" method="POST" {% if gatepass.id %} action={% url 'create_gatepass' gatepass.id %} {%
             else %} action={% url 'create_gatepass' %}{% endif %}>
@@ -85,18 +89,16 @@ Create Gatepass
                 <div>
                     <p>
                         {{ form_gatepass.returnable }}
-
                     </p>
-                    <p><strong>Date:</strong> Auto</p>
+                    
                     <p class="d-flex"><strong>Vehicle:</strong></p>
+                    <p class="d-flex"><strong>Phone Number:</strong></p>
+                    <p><strong>Date:</strong> Auto</p>
                     <p><strong>Time:</strong> Auto</p>
                 </div>
-                <div style="margin-top: 115px;">
-
-
+                <div class="row" style="margin-top: 100px;">
                     <span>{{ form_gatepass.vehicle}}</span>
-
-
+                    <span>{{ form_gatepass.driver_phone_number}}</span>
                 </div>
 
                 <div style="margin-left:250px;width:120px">
@@ -168,7 +170,7 @@ Create Gatepass
     <div class="container mt-5 mb-5 text-center">
         <a href="{% url 'list_gatepasses' %}" class="btn btn-success m-3">Finalize Gate Pass</a>
         {% if gatepass.id %}
-        <a href="{% url 'cancel_gatepass' gatepass.id %}" class="btn btn-danger m-3">Cancel</a>
+        <a href="{% url 'cancel_gatepass' gatepass.id %}" class="btn btn-danger m-3" style="margin-left: 100px;">Cancel</a>
         {% endif %}
 
     </div>
@@ -201,13 +203,13 @@ Create Gatepass
                             $('#gatepass-form input[name="remarks"]').val('');
 
                         } else {
-                        // Display form errors to the user
-                        let errors = response.errors;
-                        for (let field in errors) {
-                        let errorMsg = errors[field].join(', ');
-                        alert(`Error in ${field}: ${errorMsg}`);
-                    }
-                       // alert('Failed to add product to gate pass.');
+                            // Display form errors to the user
+                            let errors = response.errors;
+                            for (let field in errors) {
+                                let errorMsg = errors[field].join(', ');
+                                alert(`Error in ${field}: ${errorMsg}`);
+                            }
+                            // alert('Failed to add product to gate pass.');
                         }
                     },
                     error: function () {

@@ -1,0 +1,99 @@
+{% extends 'base.html' %} {% load custom_filters %} {% block content %}
+
+<div class="row">
+  <div class="col-1"></div>
+  <div class="col-10">
+    <h2 class="text-center alert alert-info">Sales Receipt List</h2>
+    <div class="card py">
+      <a href="{% url 'create_salereceipt' %}" class="btn btn-primary col-2 m-3">Create New Sale Receipt</a>
+      <div class="table-responsive py-2">
+        {% if salereceipts%}
+        <table class="table table-flush" id="datatable">
+          <thead class="thead-light">
+            <tr>
+              <th class="border-bottom fw-bolder text-center" scope="col">
+                Sr#
+              </th>
+              <th class="border-bottom fw-bolder text-center" scope="col">
+                Date
+              </th>
+              <th class="border-bottom fw-bolder text-center" scope="col">
+                Cutomer Name
+              </th>
+              <th class="border-bottom fw-bolder text-center" scope="col">
+                Number of Products
+              </th>
+              <th class="border-bottom fw-bolder text-center" scope="col">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for salereceipt in salereceipts %}
+            <tr id="salereceipt-{{ salereceipt.id }}">
+              <td class="text-center">{{ forloop.counter }}</td>
+              <td class="text-center">{{ salereceipt.date_created }}</td>
+              <td class="text-center">{{ salereceipt.customer_name }}</td>
+              <td class="text-center">
+                {{ salereceipt_items_pro|get_item:salereceipt.id }}
+              </td>
+              <td class="text-center">
+                <a class="btn btn-success" href="{% url 'print_salereceipt' salereceipt.id %}">Print</a>
+                <a class="btn btn-warning" href="{% url 'edit_salereceipt' salereceipt.id %}">Edit</a>
+                <button class="btn btn-danger delete-salereceipt" data-salereceipt-id="{{ salereceipt.id }}">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <h4 class="text-center alert alert-warning">No Record Found</h4>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    // Handle the delete button click
+    $(".delete-salereceipt").on("click", function (event) {
+      event.preventDefault();
+
+      var salereceiptId = $(this).data("salereceipt-id");
+      var url = "{% url 'delete_salereceipt' 0 %}".replace(
+        "0",
+        salereceiptId
+      );
+
+      if (confirm("Are you sure you want to delete this gate pass?")) {
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: {
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+          },
+          success: function (response) {
+            if (response.success) {
+              // Remove the gate pass row from the table
+              $("#salereceipt-" + salereceiptId).remove();
+              $("#display-msg").html(
+                `<h5 id= 'msg' class='alert alert-success'> ${response.message} </h5> `
+              );
+
+              // alert(response.message);
+            } else {
+              alert("Failed to delete the gate pass.");
+            }
+          },
+          error: function () {
+            alert("An error occurred. Please try again.");
+          },
+        });
+      }
+    });
+  });
+</script>
+
+{% endblock content %}

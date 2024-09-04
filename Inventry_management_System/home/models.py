@@ -61,6 +61,7 @@ class GatePass(models.Model):
     products = models.ManyToManyField(Product, through='GatePassProduct')
     date_created = models.DateTimeField(auto_now_add=True)
     vehicle = models.CharField(max_length=255)
+    driver_phone_number = models.CharField(max_length=20)
     dispatch_for = models.CharField(max_length=255)
     name_of_site = models.CharField(max_length=255)
     person_name = models.CharField(max_length=255)
@@ -72,8 +73,6 @@ class GatePass(models.Model):
     def __str__(self):
         return f"Gate Pass {self.id} - {self.date_created.strftime('%Y-%m-%d')}"
     
-
-
 class GatePassProduct(models.Model):
     gatepass = models.ForeignKey(GatePass, on_delete=models.RESTRICT)
     product = models.ForeignKey(Product, on_delete=models.RESTRICT)
@@ -82,8 +81,49 @@ class GatePassProduct(models.Model):
     
     def __str__(self):
         return f"{self.product.productname} (Qty: {self.quantity})"
+    
+    
+class Sales_Reciept(models.Model):
+    products = models.ManyToManyField(Product, through='Sales_Reciept_Product')
+    date_created = models.DateTimeField(auto_now_add=True)
+    customer_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=12)
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT,null=True)
 
-  
+    def __str__(self):
+        return f"Sale Reciept {self.id} - {self.date_created.strftime('%Y-%m-%d')}"
+     
+class Sales_Reciept_Product(models.Model):
+    salereceipt = models.ForeignKey(Sales_Reciept, on_delete=models.RESTRICT)
+    product = models.ForeignKey(Product, on_delete=models.RESTRICT)
+    quantity = models.PositiveIntegerField()
+    unit_price = models.FloatField(default=0)
+    amount = models.FloatField(default=0)
+    
+    def __str__(self):
+        return f"{self.product.productname} (Qty: {self.quantity})"
+    
+class Suppliers(models.Model):
+    firstname=models.CharField(max_length=255)
+    lastname=models.CharField(max_length=255)
+    adress=models.CharField(max_length=255)
+    contact=models.CharField(max_length=12,null=True,unique=True)
+    description=models.CharField(max_length=255)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.firstname} {self.lastname}"
+    
+class Customer(models.Model):
+    firstname=models.CharField(max_length=255)
+    lastname=models.CharField(max_length=255)
+    adress=models.CharField(max_length=255)
+    contact=models.CharField(max_length=12,null=True,unique=True)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.firstname} {self.lastname}"
+
 class Account(models.Model):
     ASSET = 'Asset'
     LIABILITY = 'Liability'
@@ -109,6 +149,8 @@ class Account(models.Model):
     is_deleted=models.BooleanField(default=False)
     def __str__(self):
         return self.name
+    
+
 
 class Transaction(models.Model):
     date = models.DateTimeField(auto_now_add=True)

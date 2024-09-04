@@ -2,8 +2,15 @@ from django.contrib import messages
 from django.shortcuts import redirect, render,get_object_or_404
 from home.forms import  AccountForm,TransactionForm
 from home.models import Account,Transaction
-
+from django.contrib.auth.decorators import login_required,permission_required
 # Create your views here.
+
+@login_required
+def accounts(request):
+
+    mydata = Account.objects.filter(is_deleted=False)
+    data={'mydata':mydata}
+    return render(request,'accounts/accounts_home.html',data)
 
 def add_account(request):
   if request.user.is_authenticated:

@@ -13,7 +13,7 @@
         }
 
         .table-container {
-            width: 80%;
+            width: 60%;
             margin: 0 auto;
             border: 1px solid #000;
             padding: 20px;
@@ -66,11 +66,29 @@
         .col-6 {
             width: 25%;
         }
+
+        /* Print-specific styles */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        .printableArea, .printableArea * {
+            visibility: visible;
+        }
+        .printableArea {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin: 0;
+            padding: 5px;
+        }
+    }
     </style>
 </head>
 <body>
-    <div class="table-container">
-        <h1>Please Allow The Material Outside</h1>
+    <div class="table-container printableArea" id="printableArea">
+        <h1 class="text-center">Please Allow The Material Outside</h1>
 
         <div class="header-section">
             <div>
@@ -96,24 +114,24 @@
         <table>
             <thead>
                 <tr>
-                    <th class="col-1">Sr#</th>
-                    <th class="col-2">Description</th>
-                    <th class="col-3">Qty.</th>
-                    <th class="col-4">Unit</th>
-                    <th class="col-5">Weight (Kgs)</th>
-                    <th class="col-6">Remarks</th>
+                    <th class="col-1 text-center">Sr#</th>
+                    <th class="col-2 text-center">Description</th>
+                    <th class="col-3 text-center">Qty.</th>
+                    <th class="col-4 text-center">Unit</th>
+                    <th class="col-5 text-center">Weight (Kgs)</th>
+                    <th class="col-6 text-center">Remarks</th>
                     
                 </tr>
             </thead>
             <tbody>
                 {% for item in gatepass_products %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
+                    <td class=" text-center">{{ forloop.counter }}</td>
                     <td>{{ item.product.productname }}</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ item.product.unit }}</td>
-                    <td>{{item.product.product_weight|multiply:item.quantity}}</td>
-                    <td>{{ item.remarks }}</td>
+                    <td class=" text-center">{{ item.quantity }}</td>
+                    <td class=" text-center">{{ item.product.unit }}</td>
+                    <td class=" text-center">{{item.product.product_weight|multiply:item.quantity}}</td>
+                    <td class=" text-center">{{ item.remarks }}</td>
                     
                 </tr>
                 {% endfor %}
@@ -125,22 +143,22 @@
             <div>
                 <p>Prepared By</p>
                 <p>Name: {{request.user}}</p>
-                <p>Sign: ___________________</p>
+                <p>Sign: _______</p>
             </div>
             <div>
                 <p>Authorized By</p>
-                <p>Name: ___________________</p>
-                <p>Sign: ___________________</p>
+                <p>Name: _______</p>
+                <p>Sign: _______</p>
             </div>
             <div>
                 <p>Received By</p>
-                <p>Name: ___________________</p>
-                <p>Sign: ___________________</p>
+                <p>Name: _______</p>
+                <p>Sign: _______</p>
             </div>
         </div>
     </div>
-    <div class="container mt-5 text-center">
-        <a href="{% url 'list_gatepasses' %}" class="btn btn-success">Print</a>
+    <div class="container mt-5 text-center mb-5">
+        <a href="#" onclick="window.print()" class="btn btn-success">Print</a>
         <a href="{% url 'list_gatepasses' %}" class="btn btn-warning">Cancel</a>
        
     </div>

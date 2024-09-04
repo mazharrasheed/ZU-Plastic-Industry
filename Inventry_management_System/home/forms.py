@@ -13,8 +13,8 @@ from .models import Blog
 # forms.py
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from .models import Category,Product,Account,Transaction,GatePassProduct,GatePass,Unit
-
+from .models import Category,Product,Account,Transaction,GatePassProduct,GatePass,Unit,Sales_Reciept
+from .models import Customer,Sales_Reciept_Product,Suppliers
 class CategoryForm(forms.ModelForm):
     
     class Meta:
@@ -54,15 +54,6 @@ class ProductForm(forms.ModelForm):
 
 
 
-
-
-
-
-
-
-
-
-
 class GatePassForm(forms.ModelForm):
 
     RETURNABLE_CHOICES = (
@@ -73,16 +64,18 @@ class GatePassForm(forms.ModelForm):
     returnable = forms.ChoiceField(choices=RETURNABLE_CHOICES, widget=forms.RadioSelect)
     class Meta:
         model = GatePass
-        fields = ['returnable','vehicle', 'dispatch_for', 'name_of_site', 'person_name', 'phone_number']
+        fields = ['returnable','vehicle', 'driver_phone_number','dispatch_for', 'name_of_site', 'person_name', 'phone_number']
+
 
 class GatePassProductForm(forms.ModelForm):
     product = forms.ModelChoiceField(queryset=Product.objects.filter(is_deleted=False), empty_label="Select Product")
     quantity = forms.IntegerField(min_value=1, initial=1, label='Quantity')
+    driver_phone_number = forms.IntegerField(min_value=1, initial=1, label='Driver Phone Number')
     remarks = forms.CharField( label='Remarks',required=False)
     
     class Meta:
         model = GatePassProduct
-        fields = ['product', 'quantity','remarks']
+        fields = ['product', 'quantity','driver_phone_number','remarks']
 
     def __init__(self, *args, **kwargs):
         self.gatepass = kwargs.pop('gatepass', None)
@@ -94,6 +87,35 @@ class GatePassProductForm(forms.ModelForm):
 
         if product and self.gatepass:
             if GatePassProduct.objects.filter(gatepass=self.gatepass, product=product).exists():
+                self.add_error('product', f'The product "{product}" has already been added to this gate pass.')
+
+        return cleaned_data
+
+
+class Sales_RecieptForm(forms.ModelForm):
+    class Meta:
+        model = Sales_Reciept
+        fields = [ 'customer_name', 'phone_number']
+
+class Sales_Reciept_ProductForm(forms.ModelForm):
+    product = forms.ModelChoiceField(queryset=Product.objects.filter(is_deleted=False), empty_label="Select Product")
+    quantity = forms.IntegerField(min_value=1, initial=1, label='Quantity')
+    unit_price = forms.FloatField( label='Unit Price',required=False)
+    
+    class Meta:
+        model = Sales_Reciept_Product
+        fields = ['product', 'quantity','unit_price']
+
+    def __init__(self, *args, **kwargs):
+        self.salereceipt = kwargs.pop('salereceipt', None)
+        super(Sales_Reciept_ProductForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        product = cleaned_data.get('product')
+
+        if product and self.salereceipt:
+            if Sales_Reciept_Product.objects.filter(salereceipt=self.salereceipt, product=product).exists():
                 self.add_error('product', f'The product "{product}" has already been added to this gate pass.')
 
         return cleaned_data
@@ -150,6 +172,61 @@ class AdminUserPrifoleForm(UserChangeForm):
         model=User
         fields='__all__'
         labels={'email':'Email'}
+
+class Suppliers_form(forms.ModelForm):
+   
+    class Meta:
+        model = Suppliers
+        fields = ['firstname', 'lastname','contact','adress','description']
+        labels={'firstname':'First Name','lastname':'Last Name',
+                'contact':'Contact','adress':'Adress','description':'Description',}
+        
+        widgets = {
+
+            # 'product_weight': forms.TextInput(attrs={'placeholder': 'Enter product weight'}),
+            # 'pro_img': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+            # 'product_status': forms.CheckboxInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(Suppliers_form, self).__init__(*args, **kwargs)
+        placeholders = {
+            'firstname': 'Enter first name',
+            'lastname': 'Enter last name',
+            'contact': '0000-0000000',
+            'adress':'Enter Adress here'
+        }
+        for field_name, placeholder in placeholders.items():
+            self.fields[field_name].widget.attrs.update({'placeholder': placeholder})
+
+class Customer_form(forms.ModelForm):
+   
+    class Meta:
+        model = Customer
+        fields = ['firstname', 'lastname','contact','adress']
+        labels={'firstname':'First Name','lastname':'Last Name',
+                'contact':'Contact','adress':'Adress',}
+        
+        widgets = {
+
+            # 'product_weight': forms.TextInput(attrs={'placeholder': 'Enter product weight'}),
+            # 'pro_img': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+            # 'product_status': forms.CheckboxInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(Suppliers_form, self).__init__(*args, **kwargs)
+        placeholders = {
+            'firstname': 'Enter first name',
+            'lastname': 'Enter last name',
+            'contact': '0000-0000000',
+            'adress':'Enter Adress here'
+        }
+        for field_name, placeholder in placeholders.items():
+            self.fields[field_name].widget.attrs.update({'placeholder': placeholder})
+            
+      
+    
 
 class AccountForm(forms.ModelForm):
     
