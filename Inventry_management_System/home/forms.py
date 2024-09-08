@@ -14,7 +14,9 @@ from .models import Blog
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from .models import Category,Product,Account,Transaction,GatePassProduct,GatePass,Unit,Sales_Reciept
-from .models import Customer,Sales_Reciept_Product,Suppliers
+from .models import Customer,Sales_Reciept_Product,Suppliers,Cheque
+
+
 class CategoryForm(forms.ModelForm):
     
     class Meta:
@@ -206,21 +208,35 @@ class Customer_form(forms.ModelForm):
         fields = ['firstname', 'lastname','contact','adress']
         labels={'firstname':'First Name','lastname':'Last Name',
                 'contact':'Contact','adress':'Adress',}
-        
-        widgets = {
-
-            # 'product_weight': forms.TextInput(attrs={'placeholder': 'Enter product weight'}),
-            # 'pro_img': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
-            # 'product_status': forms.CheckboxInput(),
-        }
-
     def __init__(self, *args, **kwargs):
-        super(Suppliers_form, self).__init__(*args, **kwargs)
+        super(Customer_form, self).__init__(*args, **kwargs)
         placeholders = {
             'firstname': 'Enter first name',
             'lastname': 'Enter last name',
             'contact': '0000-0000000',
             'adress':'Enter Adress here'
+        }
+        for field_name, placeholder in placeholders.items():
+            self.fields[field_name].widget.attrs.update({'placeholder': placeholder})
+
+class Cheques_form(forms.ModelForm):
+    customer = forms.ModelChoiceField(queryset=Customer.objects.filter(is_deleted=False), empty_label="Select Customer")
+    class Meta:
+        model = Cheque
+        fields = ['customer', 'cheque_number','cheque_date','bank_name']
+        labels={'customer':'Customer Name','cheuqe_Number':'Cheque Number','cheque_date':'Cheque Date','bank_name':'Bank Name/Party Name'
+             }
+        widgets = {
+            'cheque_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+  
+    def __init__(self, *args, **kwargs):
+        super(Cheques_form, self).__init__(*args, **kwargs)
+        self.fields['cheque_number'].required = False
+        self.fields['bank_name'].required = False
+        placeholders = {
+            'cheque_number': 'Enter cheque number',
+            'bank_name':'Enter bank name',
         }
         for field_name, placeholder in placeholders.items():
             self.fields[field_name].widget.attrs.update({'placeholder': placeholder})

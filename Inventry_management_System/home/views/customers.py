@@ -11,7 +11,7 @@ def customer(request):
 
     customers=Customer.objects.filter(is_deleted=False)
     data={'customers':customers}
-    return render(request,"customers/customers_home.html",data)   
+    return render(request,"customers/customer_home.html",data)   
 
 @login_required
 def add_customer(request):

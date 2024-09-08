@@ -37,4 +37,16 @@ def multiply(value, arg):
 
 @register.filter
 def get_item(dictionary, key):
+ 
     return dictionary.get(key)
+
+
+@register.filter
+def get_amount(dictionary, key):
+
+    result = dictionary.get(key)
+    # Check if the result is a dictionary and contains 'amount__sum'
+    if isinstance(result, dict) and 'amount__sum' in result:
+      
+        return result['amount__sum']
+    return result

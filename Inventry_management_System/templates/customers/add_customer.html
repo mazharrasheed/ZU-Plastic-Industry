@@ -7,18 +7,18 @@
 <div class="container-fluid mb-5 ">
 <div class="row">
     <div class="col-3 ">
-      <h2 class="text-center alert alert-info">Add Suppier</h2>
+      <h2 class="text-center alert alert-info">Add Customer</h2>
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{form|crispy}}
 
-        <input type="submit" class="btn btn-success" {% if update %} value="Update Supplier" {% else %} value="Add Supplier" {%endif %}>
-        <a href= "/suppliers/" class="btn btn-warning" >Supplier</a>
+        <input type="submit" class="btn btn-success" {% if update %} value="Update Customer" {% else %} value="Add Customer" {%endif %}>
+        <a href= "/customers/" class="btn btn-warning" >Customer</a>
       </form>
 
     </div>
     <div class="col-9 ">
-      <h2 class="text-center alert alert-info">Suppliers List</h2>
+      <h2 class="text-center alert alert-info">Customers List</h2>
 
       {% if mydata %}
       <table class="table table-stripped table-bordered" id="petrol-table">
@@ -28,7 +28,7 @@
           <col width="15%">    
           <col width="15%">    
           <col width="15%">    
-          <col width="15%">    
+          
              
           {% if update %} {% else %}<col width="25%"> {% endif %}
       </colgroup>
@@ -37,7 +37,6 @@
             <td>Sr.No.</td>
             <td>Firt Name</td>
             <td>Last Name</td>
-            <td>Description</td>
             <td>Contact</td>
             <td>Adress</td>
            
@@ -50,12 +49,11 @@
           {% if update %}
           <tr>
             <td class="text-center" >{{mydata.id}}</td>
-           
             <td class="text-center">{{mydata.firstname}}</td>
             <td class="text-center">{{mydata.lastname}}</td>
-            <td class="text-center">{{mydata.description}}</td>
             <td class="text-center">{{mydata.contact}}</td>
             <td class="text-center">{{mydata.adress}}</td>
+
           </tr>
           {% else %}
           {% for data in mydata %}
@@ -63,13 +61,12 @@
             <td class="text-center" >{{forloop.counter}}</td>
             <td class="text-center">{{data.firstname}}</td>
             <td class="text-center">{{data.lastname}}</td>
-            <td class="text-center">{{data.description}}</td>
             <td class="text-center">{{data.contact}}</td>
             <td class="text-center">{{data.adress}}</td>
          
             <td  class="text-center">
-              <a class="btn btn-sm btn-warning" href={% url 'editsupplier' id=data.id %}>Edit</a>
-              <a class=" btn btn-sm btn-danger" href={% url 'deletesupplier' id=data.id %}>Delete</a> 
+              <a class="btn btn-sm btn-warning" href={% url 'editcustomer' id=data.id %}>Edit</a>
+              <a class=" btn btn-sm btn-danger" href={% url 'deletecustomer' id=data.id %}>Delete</a> 
             </td>
           </tr>
           {% endfor %} 

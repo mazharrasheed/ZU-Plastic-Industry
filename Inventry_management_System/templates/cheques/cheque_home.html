@@ -3,11 +3,11 @@
 <div class="row">
   <div class="col-1"></div>
   <div class="col-10">
-    <h2 class="text-center alert alert-info">Suppliers List</h2>
+    <h2 class="text-center alert alert-info">Cheque List</h2>
     <div class="card py">
-      <a href="{% url 'addsupplier' %}" class="btn btn-primary col-2 m-3">Add Supplier</a>
+      <a href="{% url 'addcheque' %}" class="btn btn-primary col-2 m-3">Add Cheque/Receipt</a>
       <div class="table-responsive py-2">
-        {% if suppliers%}
+        {% if cheques%}
         <table class="table table-flush" id="datatable">
           <thead class="thead-light">
             <tr>
@@ -15,39 +15,37 @@
                 Sr#
               </th>
               <th class="border-bottom fw-bolder text-center" scope="col">
-                First Name
+                Customer Name
               </th>
               <th class="border-bottom fw-bolder text-center" scope="col">
-                Last Name
+                Cheque Number
               </th>
               <th class="border-bottom fw-bolder text-center" scope="col">
-                Adress
+                Cheque Date
               </th>
               <th class="border-bottom fw-bolder text-center" scope="col">
-                Contact
+                Bank Name
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
-                Description
-              </th>
+             
               <th class="border-bottom fw-bolder text-center" scope="col">
                 Action
               </th>
             </tr>
           </thead>
           <tbody>
-            {% for supplier in suppliers %}
-            <tr id="supplier-{{ supplier.id }}">
+            {% for cheque in cheques %}
+            <tr id="supplier-{{ cheque.id }}" class="{% if cheque.highlight_red %}  bg-info text-light {% endif %}">
               <td class="text-center">{{ forloop.counter }}</td>
-              <td class="text-center">{{ supplier.firstname }}</td>
-              <td class="text-center">{{ supplier.lastname }}</td>
-              <td class="text-center">{{ supplier.adress }}</td>
-              <td class="text-center">{{ supplier.contact }}</td>
-              <td class="text-center">{{ supplier.description }}</td>
+              <td class="text-center">{{ cheque.customer }}</td>
+              <td class="text-center">{{ cheque.cheque_name }}</td>
+              <td class="text-center">{{ cheque.cheque_date }}</td>
+              <td class="text-center">{{ cheque.bank_name }}</td>
+             
               
               <td class="text-center">
                
-                <a class="btn btn-warning" href="{% url 'editsupplier' supplier.id %}">Edit</a>
-                <button class="btn btn-danger delete-supplier" data-supplier-id="{{ supplier.id }}">
+                <a class="btn btn-warning" href="{% url 'editcheque' cheque.id %}">Edit</a>
+                <button class="btn btn-danger delete-cheque" data-cheque-id="{{ cheque.id }}">
                   Delete
                 </button>
               </td>
@@ -65,13 +63,13 @@
 <script>
   $(document).ready(function () {
     // Handle the delete button click
-    $(".delete-supplier").on("click", function (event) {
+    $(".delete-cheque").on("click", function (event) {
       event.preventDefault();
 
-      var supplierId = $(this).data("supplier-id");
-      var url = "{% url 'deletesupplier' 0 %}".replace("0",supplierId);
+      var chequeId = $(this).data("cheque-id");
+      var url = "{% url 'deletecheque' 0 %}".replace("0",chequeId);
 
-      if (confirm("Are you sure you want to delete this supplier?")) {
+      if (confirm("Are you sure you want to delete this cheque?")) {
         $.ajax({
           type: "POST",
           url: url,
@@ -81,14 +79,14 @@
           success: function (response) {
             if (response.success) {
               // Remove the gate pass row from the table
-              $("#supplier-" + supplierId).remove();
+              $("#cheque-" + chequeId).remove();
               $("#display-msg").html(
                 `<h5 id= 'msg' class='alert alert-success'> ${response.message} </h5> `
               );
 
               // alert(response.message);
             } else {
-              alert("Failed to delete the supplier.");
+              alert("Failed to delete the cheque.");
             }
           },
           error: function () {

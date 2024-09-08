@@ -15,16 +15,23 @@ from django.db.models import Avg,Min,Max,Count,Sum
 @login_required
 def list_sales(request):
     salereceipt_items_pro={}
+    total_amount={}
     salereceipts = Sales_Reciept.objects.all()
-    print(salereceipts)
+   
     salereceipts
     gatepass_products = Sales_Reciept_Product.objects.all().count()
     for x in salereceipts:
         salereceipt_items_pro[x.id] = Sales_Reciept_Product.objects.filter(salereceipt=x).count()
+        salereceipt_products = Sales_Reciept_Product.objects.filter(salereceipt=x)
+        total_amount[x.id]=salereceipt_products.aggregate(Sum('amount'))
+
+    total_amount1 = sum(item['amount__sum'] for item in total_amount.values())
+    print(total_amount1)
 
     return render(request, 'sale/list_sales.html', {
         'salereceipts': salereceipts,
         'salereceipt_items_pro': salereceipt_items_pro,
+        'total_amount':total_amount
         })
 
 @login_required

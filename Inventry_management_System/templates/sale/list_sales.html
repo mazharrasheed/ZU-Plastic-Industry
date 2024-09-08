@@ -24,6 +24,9 @@
                 Number of Products
               </th>
               <th class="border-bottom fw-bolder text-center" scope="col">
+                Bill Amount
+              </th>
+              <th class="border-bottom fw-bolder text-center" scope="col">
                 Action
               </th>
             </tr>
@@ -36,6 +39,9 @@
               <td class="text-center">{{ salereceipt.customer_name }}</td>
               <td class="text-center">
                 {{ salereceipt_items_pro|get_item:salereceipt.id }}
+              </td>
+              <td class="text-center">
+                {{ total_amount|get_amount:salereceipt.id}}
               </td>
               <td class="text-center">
                 <a class="btn btn-success" href="{% url 'print_salereceipt' salereceipt.id %}">Print</a>

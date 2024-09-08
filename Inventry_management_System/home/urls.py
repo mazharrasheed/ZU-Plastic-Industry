@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import  path
 from home.views import category,product
 from home.views import views,accounts
-from home.views import gatepass,sales,suppliers
+from home.views import gatepass,sales,suppliers,customers,cheques
 
 from django.conf.urls.static import static
 
@@ -36,6 +36,16 @@ urlpatterns = [
     path('add_supplier/', suppliers.add_supplier , name="addsupplier"),
     path('supplier/<int:id>', suppliers.edit_supplier , name="editsupplier"),
     path('deletesupplier/<int:id>', suppliers.delete_supplier , name="deletesupplier"),
+
+    path('customers/', customers.customer , name="customers"),
+    path('add_customer/', customers.add_customer , name="addcustomer"),
+    path('customer/<int:id>', customers.edit_customer , name="editcustomer"),
+    path('deletecustomer/<int:id>', customers.delete_customer , name="deletecustomer"),
+
+    path('cheques/', cheques.cheque , name="cheques"),
+    path('add_cheque/', cheques.add_cheque , name="addcheque"),
+    path('cheque/<int:id>', cheques.edit_cheque , name="editcheque"),
+    path('deletecheque/<int:id>', cheques.delete_cheque , name="deletecheque"),
     
     path('gatepass/', gatepass.gatepass , name="gatepass"),
     path('create-gatepass/', gatepass.create_gatepass, name='create_gatepass'),

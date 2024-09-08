@@ -123,6 +123,18 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"
+    
+
+class Cheque(models.Model):
+    customer=models.ForeignKey(Customer, on_delete=models.RESTRICT)
+    cheque_number=models.CharField(max_length=20,null=True)
+    cheque_date=models.DateField()
+    bank_name=models.CharField(max_length=50,null=True)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.customer} {self.cheque_number}"
+    
 
 class Account(models.Model):
     ASSET = 'Asset'
