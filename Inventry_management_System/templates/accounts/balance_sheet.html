@@ -1,14 +1,14 @@
 {% extends 'base.html' %} {% load crispy_forms_tags %} {% load custom_filters %}
 {% block title %}Balance Sheet{% endblock title %} {% block content %}
 
-
-<div class="container">
-
+<div class="container-fluid">
   <div class="row">
+    {% include 'accounts/accounts_manu.html' %}
 
-    <h1>Balance Sheet</h1>
+<div class="col-lg-9">
+    <h1 class="text-center alert alert-info ">Balance Sheet</h1>
     <ul>
-      <h2><li>Assets</li></h2>
+      <li><h2>Assets</h2></li>
       <h4><li>Assets Accounts Balance</li></h4>
 
       {% for account, balance in assets.items %}
@@ -18,7 +18,7 @@
     </ul>
 
     <ul>
-      <h2><li>Liabilities</li></h2>
+      <li><h2>Liabilities</h2></li>
       <h4><li>Liabilities Accounts Balance</li></h4>
 
       {% for account, balance in liabilities.items %}
@@ -29,7 +29,7 @@
     </ul>
 
     <ul>
-      <h2><li>Equity</li></h2>
+      <li><h2>Equity</h2></li>
       <h4><li>Equity Accounts Balance</li></h4>
       {% for account, balance in equity_account.items %}
       <li>{{ account.name }} = {{ balance }}</li>
@@ -40,7 +40,7 @@
     </ul>
 
     <ul>
-      <h2><li>Revenue</li></h2>
+      <li><h2>Revenue</h2></li>
       <h4><li>Revenue Accounts Balance</li></h4>
       {% for account, balance in revenue_account.items %}
       <li>{{ account.name }} Account = {{ balance }}</li>
@@ -52,7 +52,7 @@
       </h4>
     </ul>
     <ul>
-      <h2> <li>Expense</li></h2>
+       <li><h2>Expense</h2></li>
     <h4> <li>Expense Accounts Balance</li></h4>
       {% for account, balance in expenses_account.items %}
       <li>{{ account.name }} = {{ balance }}</li>
@@ -60,7 +60,7 @@
       <h4> <li>Total Expences : {{ expenses }} </li></h4>
     </ul>
     <ul>
-      <h2> <li>Gain</li></h2>
+       <li><h2>Gain</h2></li>
     <h4> <li>Gain Accounts Balance</li></h4>
       {% for account, balance in gain_account.items %}
       <li>{{ account.name }} = {{ balance }}</li>
@@ -68,7 +68,7 @@
       <h4> <li>Total Gain : {{ gain }} </li></h4>
     </ul>
     <ul>
-      <h2> <li>Loss</li></h2>
+       <li><h2>Loss</h2></li>
     <h4> <li>Lose Accounts Balance</li></h4>
       {% for account, balance in loss_account.items %}
       <li>{{ account.name }} = {{ balance }}</li>
@@ -77,15 +77,16 @@
     </ul>
 
 
-    <h2>Accounts Eqution</h2>
+    
     <ul>
+      <h2>Accounts Eqution</h2>
       <h4>Assets = Liabilities + Equity :</h4>
         <h4> {{asset}} = {{liabilitie}} + {{equity}} = {{liabilitie|plus:equity}} </h4>
         <h4>LHS = RHS<h4>
     </ul>
   </div>
 </div>
-
+</div>
 <script>
   $(document).ready(function () {
     console.log("i m jqurey");

@@ -1,8 +1,10 @@
 {% extends 'base.html' %} {% load custom_filters %} {% block content %}
 
+
+<div class="container-fluid">
 <div class="row">
-  <div class="col-1"></div>
-  <div class="col-10">
+  {% include 'accounts/accounts_manu.html' %}
+  <div class="col-9">
     <h2 class="text-center alert alert-info">Suppliers List</h2>
     <div class="card py">
       <a href="{% url 'addsupplier' %}" class="btn btn-primary col-2 m-3">Add Supplier</a>
@@ -61,6 +63,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 <script>
   $(document).ready(function () {

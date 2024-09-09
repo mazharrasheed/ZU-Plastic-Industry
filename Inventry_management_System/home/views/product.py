@@ -22,6 +22,7 @@ def products(request):
 def add_product(request):
   if request.user.is_authenticated:
     if request.method == 'POST':
+        categories=Category.objects.filter(is_deleted=False)
         mydata=Product.objects.filter(is_deleted=False)
         form = ProductForm(request.POST,request.FILES)
         if form.is_valid():
@@ -30,8 +31,9 @@ def add_product(request):
           return redirect('addproduct')
     else:
         mydata=Product.objects.filter(is_deleted=False)
+        categories=Category.objects.filter(is_deleted=False)
         form = ProductForm()
-    data={'form': form, 'mydata':mydata}
+    data={'form': form, 'mydata':mydata, 'categories':categories}
     return render(request, 'stock/add_Product.html', data)
   else:
     return redirect('signin')
@@ -41,6 +43,7 @@ def edit_product(request,id):
     data={}
     if request.method == 'POST':
       mydata=Product.objects.get(id=id)
+      categories=Category.objects.filter(is_deleted=False)
       form = ProductForm(request.POST,request.FILES,instance=mydata)
       if form.is_valid():
         form.save()
@@ -48,10 +51,11 @@ def edit_product(request,id):
         return redirect('addproduct')
     else:
       mydata=Product.objects.get(id=id)
+      categories=Category.objects.filter(is_deleted=False)
       form = ProductForm(instance=mydata)
   else:
     return redirect('signin')
-  data={'form': form, 'mydata':mydata,'update':True}
+  data={'form': form, 'mydata':mydata,'update':True,'categories':categories}
   return render(request, 'stock/add_Product.html', data)
 
 @login_required

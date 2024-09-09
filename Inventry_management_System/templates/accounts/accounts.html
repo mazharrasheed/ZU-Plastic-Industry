@@ -2,10 +2,17 @@
 {% load crispy_forms_tags %}
 {% block title %}Accounts{% endblock title %}
 
+
+
+
+
 {% block content %}
 
-<div class="container-fluid mt-5">
+<div class="container-fluid ">
+
+
   <div class="row">
+    {% include 'accounts/accounts_manu.html' %}
 
     <div class="col-3 ">
       <h2 class="text-center alert alert-info">Add Account</h2>
@@ -14,27 +21,25 @@
         {{form|crispy}}
         <input type="submit" class="btn btn-info" {% if update %} value="Update Account" {% else %} value="Add Account"
           {% endif %}>
+        <a class="btn btn-warning" href="/accounts/">Accounts</a>
       </form>
 
-    
+
     </div>
-    <div class="col-9">
+    <div class="col-6">
       <h2 class="text-center alert alert-info">Account Data</h2>
       <div class="table-responsive py-2">
         {% if mydata %}
         <table class="table table-flush" id="datatable">
           <thead class="thead-light">
             <tr class=" ">
-              
+
 
               {% if update %}
               <td class="text-center">Account Id</td>
               {% else %}
               <td class="text-center">Sr.No.</td>
               {% endif %}
-
-
-
 
               <td class="text-center">Name.</td>
 
@@ -50,20 +55,20 @@
           {{update}}
           <tbody>
             {% if update %}
-           
+
             <tr>
               <td class="text-center">{{mydata.id}}</td>
               <td class="text-center">{{mydata.name}}</td>
               <td class="text-center">{{mydata.account_type}}</td>
-             
+
             </tr>
-            
+
             {% else %}
             {% for data in mydata %}
             <tr>
               <td class="text-center">{{forloop.counter}}</td>
-              <td>{{data.name}}</td>
-              <td>{{data.account_type}}</td>
+              <td class="text-center">{{data.name}}</td>
+              <td class="text-center">{{data.account_type}}</td>
               <td class="text-center">
                 <a class=" btn btn-sm btn-info" href={% url 'accountreport' id=data.id %}>Details</a>
                 {% if perms.home.change_nozel %}

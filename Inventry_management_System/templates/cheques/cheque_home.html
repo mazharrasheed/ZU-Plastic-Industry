@@ -1,14 +1,15 @@
 {% extends 'base.html' %} {% load custom_filters %} {% block content %}
 
+<div class="container-fluid">
 <div class="row">
-  <div class="col-1"></div>
-  <div class="col-10">
+  {% include 'accounts/accounts_manu.html' %}
+  <div class="col-9">
     <h2 class="text-center alert alert-info">Cheque List</h2>
     <div class="card py">
       <a href="{% url 'addcheque' %}" class="btn btn-primary col-2 m-3">Add Cheque/Receipt</a>
       <div class="table-responsive py-2">
         {% if cheques%}
-        <table class="table table-flush" id="datatable">
+        <table class="table table-flush" id="datatable" >
           <thead class="thead-light">
             <tr>
               <th class="border-bottom fw-bolder text-center" scope="col">
@@ -32,12 +33,12 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="align-middle">
             {% for cheque in cheques %}
             <tr id="supplier-{{ cheque.id }}" class="{% if cheque.highlight_red %}  bg-info text-light {% endif %}">
-              <td class="text-center">{{ forloop.counter }}</td>
+              <td class="text-center" >{{ forloop.counter }}</td>
               <td class="text-center">{{ cheque.customer }}</td>
-              <td class="text-center">{{ cheque.cheque_name }}</td>
+              <td class="text-center ">{{ cheque.cheque_number }}</td>
               <td class="text-center">{{ cheque.cheque_date }}</td>
               <td class="text-center">{{ cheque.bank_name }}</td>
              
@@ -59,6 +60,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 <script>
   $(document).ready(function () {

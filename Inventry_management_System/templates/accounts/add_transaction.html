@@ -5,19 +5,23 @@
 {% block content %}
 
 
-<div class="container mb-5">
+<div class="container-fluid mb-5">
+  
   <div class="row">
-    <div class="col-4 ">
+    {% include 'accounts/accounts_manu.html' %}
+
+    <div class="col-3 ">
       <h2 class="text-center alert alert-info">Add Transaction</h2>
       <form method="post">
         {% csrf_token %}
         {{form|crispy}}
         <input type="submit" class="btn btn-success" {% if update %} value="Update Transaction" {% else %} value= "Add Transaction" {% endif %}> 
+        <a  class ="btn btn-warning"href="/accounts/">Accounts</a>
       </form>
 
     </div>
    
-    <div class="col-8">
+    <div class="col-6">
 
       <h2 class="text-center alert alert-info">Transaction Data</h2>
       {% if mydata %}

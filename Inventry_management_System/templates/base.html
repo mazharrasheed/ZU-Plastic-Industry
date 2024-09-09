@@ -66,31 +66,31 @@
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <div class=" ollapse navbar-collapse" id="navbarSupportedContent">
+        <ul class=" navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/' %} bg-secondary bg-gradient text-light rounded {%endif%}}"
+            <a class="nav-link {% if request.path == '/' %} bg-secondary bg-gradient text-light rounded {%endif%}"
               aria-current="page" href="/">
-              <h5 class="{% if request.path == '/' %} text-light {%endif%}}">Home</h5>
+              <h5 class="{% if request.path == '/' %} text-light {%endif%}">Home</h5>
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/product/' %} bg-secondary bg-gradient text-light rounded {%endif%}}"
+            <a class="nav-link {% if request.path == '/product/' %} bg-secondary bg-gradient text-light rounded {%endif%}"
               aria-current="page" href="/product/">
-              <h5 class="{% if request.path == '/product/' %} text-light {%endif%}}">Products</h5>
+              <h5 class="{% if request.path == '/product/' %} text-light {%endif%}">Products</h5>
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/list-sales/' %} bg-secondary bg-gradient text-light rounded {%endif%}}"
+            <a class="nav-link {% if request.path == '/list-sales/' %} bg-secondary bg-gradient text-light rounded {%endif%}"
               aria-current="page" href="/list-sales/">
-              <h5 class="{% if request.path == '/list-sales/' %} text-light {%endif%}}">Sales</h5>
+              <h5 class="{% if request.path == '/list-sales/' %} text-light {%endif%}">Sales</h5>
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/list-gatepasses/' %} bg-secondary bg-gradient text-light rounded {%endif%}}"
+            <a class="nav-link {% if request.path == '/list-gatepasses/' %} bg-secondary bg-gradient text-light rounded {%endif%}"
               aria-current="page" href="/list-gatepasses/">
               <h5 class="{% if request.path == '/list-gatepasses/' %} text-light {%endif%}}">Gate Pass</h5>
             </a>
@@ -98,24 +98,24 @@
 
        
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/accounts/' %} bg-secondary bg-gradient text-light rounded {%endif%}}"
+            <a class="nav-link {% if request.path == '/accounts/' %} bg-secondary bg-gradient text-light rounded {%endif%}"
               aria-current="page" href="/accounts/">
-              <h5 class="{% if request.path == '/accounts/' %} text-light {%endif%}}">Accounts</h5>
+              <h5 class="{% if request.path == '/accounts/' %} text-light {%endif%}">Accounts</h5>
             </a>
           </li>
 
 
           {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/dashboard/' %} bg-secondary bg-gradient text-light rounded {%endif%}}"
+            <a class="nav-link {% if request.path == '/dashboard/' %} bg-secondary bg-gradient text-light rounded {%endif%}"
               href="/dashboard/">
-              <h5 class="{% if request.path == '/dashboard/' %} text-light {%endif%}}">My Profile</h5>
+              <h5 class="{% if request.path == '/dashboard/' %} text-light {%endif%}">My Profile</h5>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link {% if request.path == '/logout/' %} bg-secondary bg-gradient text-light rounded {%endif%}}"
               href="/logout/">
-              <h5 class="{% if request.path == '/logout/' %} text-light {%endif%}}">Logout</h5>
+              <h5 class="{% if request.path == '/logout/' %} text-light {%endif%}">Logout</h5>
             </a>
           </li>
           {% else %}
@@ -123,13 +123,13 @@
           <li class="nav-item">
             <a class="nav-link {% if request.path == '/signup/' %} bg-secondary bg-gradient text-light rounded {%endif%}}"
               href="/signup/">
-              <h5 class="{% if request.path == '/signup/' %} text-light {%endif%}}">SignUp</h5>
+              <h5 class="{% if request.path == '/signup/' %} text-light {%endif%}">SignUp</h5>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/signin/' %} bg-secondary bg-gradient text-light rounded {%endif%}}"
+            <a class="nav-link {% if request.path == '/signin/' %} bg-secondary bg-gradient text-light rounded {%endif%}"
               href="/signin/">
-              <h5 class="{% if request.path == '/signin/' %} text-light {%endif%}}">SignIn</h5>
+              <h5 class="{% if request.path == '/signin/' %} text-light {%endif%}">SignIn</h5>
             </a>
           </li>
           {% endif %}

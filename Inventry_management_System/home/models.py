@@ -122,7 +122,7 @@ class Customer(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.firstname} {self.lastname}"
+        return f"{self.firstname.capitalize()} {self.lastname.capitalize()}"
     
 
 class Cheque(models.Model):
@@ -133,7 +133,7 @@ class Cheque(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.customer} {self.cheque_number}"
+        return f"{self.customer} {self.cheque_number}".capitalize()
     
 
 class Account(models.Model):

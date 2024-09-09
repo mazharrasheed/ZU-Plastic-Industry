@@ -1,0 +1,19 @@
+<div class="col-lg-3">
+    <h2 class="text-center alert alert-info">Accounts Menu</h2>
+    <div class="list-group">
+
+      <h4 class="bg-primary bg-gradient alert-info rounded {% if request.path == '/add_accounts/' %} bg-secondary bg-gradient text-light rounded {%endif%}  p-3 "><a class="text-light " href="/add_accounts/"
+          class="list-group-item">Create Account</a></h4>
+      <h4 class="bg-primary bg-gradient alert-info rounded {% if request.path == '/transaction/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3 "><a class="text-light" href="/transaction/"
+          class="list-group-item ">Transaction</a></h4>
+      <h4 class="bg-primary bg-gradient alert-info rounded {% if request.path == '/balance_sheet/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3 "><a class="text-light" href="/balance_sheet/"
+          class="list-group-item">Balance Sheet</a></h4>
+      <h4 class="bg-primary bg-gradient alert-info rounded {% if request.path == '/customers/' or request.path == '/add_customer/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3 "><a class="text-light" href="/customers/"
+          class="list-group-item">Customers</a></h4>
+      <h4 class="bg-primary bg-gradient alert-info rounded {% if request.path == '/suppliers/' or request.path == '/add_supplier/'  %} bg-secondary bg-gradient text-light rounded {%endif%} p-3 "><a class="text-light" href="/suppliers/"
+          class="list-group-item">Suppliers</a></h4>
+      <h4 class="bg-primary bg-gradient alert-info rounded {% if request.path == '/cheques/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3 "><a class="text-light" href="/cheques/"
+          class="list-group-item">Cheques and Riceipts</a></h4>
+
+    </div>
+  </div>

@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 def add_category(request):
   if request.user.is_authenticated:
     if request.method == 'POST':
+        categories=Category.objects.filter(is_deleted=False)
         mydata=Category.objects.filter(is_deleted=False)
         form = CategoryForm(request.POST)
         if form.is_valid():
@@ -16,8 +17,9 @@ def add_category(request):
           return redirect('category')
     else:
         mydata=Category.objects.filter(is_deleted=False)
+        categories=Category.objects.filter(is_deleted=False)
         form = CategoryForm()
-    data={'form': form, 'mydata':mydata}
+    data={'form': form, 'mydata':mydata,'categories':categories}
     return render(request, 'stock/add_category.html', data)
   else:
     return redirect('signin')
@@ -26,6 +28,7 @@ def edit_category(request,id):
   if request.user.is_authenticated:
     data={}
     if request.method == 'POST':
+      categories=Category.objects.filter(is_deleted=False)
       mydata=Category.objects.get(id=id)
       form = CategoryForm(request.POST,instance=mydata)
       if form.is_valid():
@@ -34,10 +37,11 @@ def edit_category(request,id):
         return redirect('category')
     else:
       mydata=Category.objects.get(id=id)
+      categories=Category.objects.filter(is_deleted=False)
       form = CategoryForm(instance=mydata)
   else:
     return redirect('signin')
-  data={'form': form, 'mydata':mydata,'update':True}
+  data={'form': form, 'mydata':mydata,'update':True ,'categories':categories}
   return render(request, 'stock/add_category.html', data)
 
 def delete_category(request,id):

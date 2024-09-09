@@ -6,6 +6,8 @@
 
 <div class="container-fluid mb-5 ">
 <div class="row">
+
+  {% include 'stock/product_manu.html' %}
     <div class="col-3 ">
       <h2 class="text-center alert alert-info">Add Product</h2>
       <form method="post" enctype="multipart/form-data">
@@ -17,7 +19,7 @@
       </form>
 
     </div>
-    <div class="col-9 ">
+    <div class="col-6 ">
       <h2 class="text-center alert alert-info">Products</h2>
 
       {% if mydata %}
