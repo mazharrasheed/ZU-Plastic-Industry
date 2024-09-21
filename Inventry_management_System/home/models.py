@@ -10,6 +10,18 @@ class Blog(models.Model):
     description=models.CharField(max_length=300)
     user=models.ForeignKey(User,on_delete=models.RESTRICT)
 
+    class Meta():
+        permissions = [
+            ("view_dashboard", "Can view dashboard"),
+            ("view_balance_sheet", "Can view balance sheet"),
+           
+            # Add more custom permissions here
+        ]
+
+           
+
+
+
 # models.py
 
 class Category(models.Model):
@@ -36,12 +48,12 @@ class Product(models.Model):
     ]
 
     category=models.ForeignKey(Category,on_delete=models.RESTRICT)
-    productname=models.CharField(max_length=255)
-    product_size=models.CharField(max_length=255,default="")
+    productname=models.CharField(max_length=255,unique=True)
+    product_size=models.CharField(max_length=255)
     # product_sale_price=models.CharField(max_length=255)
     product_quantity=models.CharField(max_length=255)
     unit=models.ForeignKey(Unit , on_delete=models.RESTRICT )
-    product_weight=models.CharField(max_length=255)
+  
     # product_status=models.CharField(max_length=50,choices=STATUS_TYPE_CHOICES)
     product_status=models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)
@@ -77,28 +89,28 @@ class GatePassProduct(models.Model):
     gatepass = models.ForeignKey(GatePass, on_delete=models.RESTRICT)
     product = models.ForeignKey(Product, on_delete=models.RESTRICT)
     quantity = models.IntegerField()
-    remarks=models.CharField(max_length=255,null=True)
+    remarks=models.CharField(max_length=255,null=True,blank=True)
     
     def __str__(self):
         return f"{self.product.productname} (Qty: {self.quantity})"
     
     
-class Sales_Reciept(models.Model):
-    products = models.ManyToManyField(Product, through='Sales_Reciept_Product')
+class Sales_Receipt(models.Model):
+    products = models.ManyToManyField(Product, through='Sales_Receipt_Product')
     date_created = models.DateTimeField(auto_now_add=True)
     customer_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=12)
     created_by = models.ForeignKey(User, on_delete=models.RESTRICT,null=True)
 
     def __str__(self):
-        return f"Sale Reciept {self.id} - {self.date_created.strftime('%Y-%m-%d')}"
+        return f"Sale Receipt {self.id} - {self.date_created.strftime('%Y-%m-%d')}"
      
-class Sales_Reciept_Product(models.Model):
-    salereceipt = models.ForeignKey(Sales_Reciept, on_delete=models.RESTRICT)
+class Sales_Receipt_Product(models.Model):
+    salereceipt = models.ForeignKey(Sales_Receipt, on_delete=models.RESTRICT)
     product = models.ForeignKey(Product, on_delete=models.RESTRICT)
     quantity = models.PositiveIntegerField()
-    unit_price = models.FloatField(default=0)
-    amount = models.FloatField(default=0)
+    unit_price = models.FloatField()
+    amount = models.FloatField()
     
     def __str__(self):
         return f"{self.product.productname} (Qty: {self.quantity})"
@@ -107,7 +119,7 @@ class Suppliers(models.Model):
     firstname=models.CharField(max_length=255)
     lastname=models.CharField(max_length=255)
     adress=models.CharField(max_length=255)
-    contact=models.CharField(max_length=12,null=True,unique=True)
+    contact=models.CharField(max_length=12,null=True,unique=True,blank=True)
     description=models.CharField(max_length=255)
     is_deleted = models.BooleanField(default=False)
 
@@ -118,7 +130,7 @@ class Customer(models.Model):
     firstname=models.CharField(max_length=255)
     lastname=models.CharField(max_length=255)
     adress=models.CharField(max_length=255)
-    contact=models.CharField(max_length=12,null=True,unique=True)
+    contact=models.CharField(max_length=12,null=True,unique=True,blank=True)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
@@ -127,9 +139,9 @@ class Customer(models.Model):
 
 class Cheque(models.Model):
     customer=models.ForeignKey(Customer, on_delete=models.RESTRICT)
-    cheque_number=models.CharField(max_length=20,null=True)
+    cheque_number=models.CharField(max_length=20,null=True,blank=True)
     cheque_date=models.DateField()
-    bank_name=models.CharField(max_length=50,null=True)
+    bank_name=models.CharField(max_length=50,null=True,blank=True)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
@@ -162,8 +174,6 @@ class Account(models.Model):
     def __str__(self):
         return self.name
     
-
-
 class Transaction(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     description = models.TextField()

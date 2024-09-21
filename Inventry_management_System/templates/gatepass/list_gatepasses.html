@@ -1,15 +1,21 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
+
+{% block title %}
+  Gatepas
+{% endblock title %}
+
 {% block content %}
 
+<div class="container-fluid">
 <div class="row">
+{% include 'gatepass/gatepass_menu.html' %}
 
-<div class=" col-1"></div>
-<div class=" col-10 ">
+<div class=" col-9 ">
   <h2 class="text-center alert alert-info ">Gate Pass List</h2>
   <div class="card py">
     <div class="table-responsive py-4">
-      <a href="{% url 'create_gatepass' %}" class="btn btn-primary m-3">Create New Gate Pass</a>
+     
       {% if gatepasses%}
       <table class="table table-flush" id="datatable">
         <thead class="thead-light">
@@ -49,6 +55,7 @@
     </div>
   </div>
 
+</div>
 </div>
 
 <script>

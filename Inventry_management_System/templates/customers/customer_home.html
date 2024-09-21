@@ -1,36 +1,46 @@
-{% extends 'base.html' %} {% load custom_filters %} {% block content %}
+{% extends 'base.html' %} {% load custom_filters %} 
+
+{% block title %}
+  Customers
+{% endblock title %}
+
+
+{% block content %}
 
 
 <div class="container-fluid">
 <div class="row">
-  {% include 'accounts/accounts_manu.html' %}
+  {% include 'accounts/accounts_menu.html' %}
 
   <div class="col-9">
     <h2 class="text-center alert alert-info">Customers List</h2>
     <div class="card py">
-      <a href="{% url 'addcustomer' %}" class="btn btn-primary col-2 m-3">Add Customer</a>
+      {% if perms.home.add_customer %}
+      <a href="{% url 'addcustomer' %}" class=" fs-5 btn btn-primary col-2 m-3">Add Customer</a>
+      {% endif %}
+      
       <div class="table-responsive py-2">
         {% if customers%}
         <table class="table table-flush" id="datatable">
           <thead class="thead-light">
             <tr>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                 Sr#
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                 First Name
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                 Last Name
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                 Adress
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                 Contact
               </th>
              
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                 Action
               </th>
             </tr>
@@ -38,17 +48,17 @@
           <tbody>
             {% for customer in customers %}
             <tr id="supplier-{{ supplier.id }}">
-              <td class="text-center">{{ forloop.counter }}</td>
-              <td class="text-center">{{ customer.firstname }}</td>
-              <td class="text-center">{{ customer.lastname }}</td>
-              <td class="text-center">{{ customer.adress }}</td>
-              <td class="text-center">{{ customer.contact }}</td>
+              <td class="text-center fs-5">{{ forloop.counter }}</td>
+              <td class="text-center fs-5">{{ customer.firstname }}</td>
+              <td class="text-center fs-5">{{ customer.lastname }}</td>
+              <td class="text-center fs-5">{{ customer.adress }}</td>
+              <td class="text-center fs-5">{{ customer.contact }}</td>
              
               
               <td class="text-center">
                
-                <a class="btn btn-warning" href="{% url 'editcustomer' customer.id %}">Edit</a>
-                <button class="btn btn-danger delete-customer" data-customer-id="{{ customer.id }}">
+                <a class="btn btn-warning fs-5" href="{% url 'editcustomer' customer.id %}">Edit</a>
+                <button class="btn btn-danger delete-customer fs-5" data-customer-id="{{ customer.id }}">
                   Delete
                 </button>
               </td>

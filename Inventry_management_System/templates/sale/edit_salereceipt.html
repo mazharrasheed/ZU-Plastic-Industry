@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block title %}
-Create Gatepass
+Edit Sale Receipt
 {% endblock title %}
 
 {% block content %}
@@ -74,6 +74,15 @@ Create Gatepass
 </head>
 
 <body>
+
+    <div class="container-fluid">
+
+        <div class="row">
+    
+        {% include 'sale/sale_menu.html' %}
+    
+    <div class="col-lg-10">
+
     <div class="table-container">
         <div class=" text-center  "><h3 class="  text-center bg-dark text-light p-3">Cash Sale Receipt</h3></div>
         
@@ -161,6 +170,8 @@ Create Gatepass
     <div class="container mt-5 mb-5 text-center">
         <a href="{% url 'list_sales' %}" class="btn btn-info m-3">All Sales Reciepts</a>
         <a href="{% url 'list_sales' %}" class="btn btn-success m-3">Update</a>
+    </div>
+    </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

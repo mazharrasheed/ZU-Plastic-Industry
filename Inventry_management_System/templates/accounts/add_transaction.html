@@ -8,7 +8,7 @@
 <div class="container-fluid mb-5">
   
   <div class="row">
-    {% include 'accounts/accounts_manu.html' %}
+    {% include 'accounts/accounts_menu.html' %}
 
     <div class="col-3 ">
       <h2 class="text-center alert alert-info">Add Transaction</h2>
@@ -22,7 +22,6 @@
     </div>
    
     <div class="col-6">
-
       <h2 class="text-center alert alert-info">Transaction Data</h2>
       {% if mydata %}
       <table class="table table-stripped table-bordered" id="petrol-table">
@@ -51,27 +50,28 @@
            
           {% if update %}
           <tr>
-            <td>{{mydata.id}}</td>
-            <td>{{mydata.description}}</td>
-            <td>{{mydata.debit_account}}</td>
-            <td>{{mydata.credit_account}}</td>
-            <td>{{mydata.amount}}</a></td>
-            <td>{{mydata.date}}</a></td>
+            <td class="text-center fs-5">{{mydata.id}}</td>
+            <td class="text-center fs-5">{{mydata.description}}</td>
+            <td class="text-center fs-5">{{mydata.debit_account}}</td>
+            <td class="text-center fs-5">{{mydata.credit_account}}</td>
+            <td class="text-center fs-5">{{mydata.amount}}</a></td>
+            <td class="text-center fs-5">{{mydata.date}}</a></td>
           </tr>
           {% else %}
 
           {% for data in mydata %}
           <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{data.date}}</td>
-            <td>{{data.debit_account}} <br>
+            <td class="text-center fs-5">{{forloop.counter}}</td>
+            <td class="text-center fs-5">{{data.date}}</td>
+            <td class="text-center fs-5">{{data.debit_account}} <br>
             {{data.credit_account}}</td>
-            <td>{{data.amount}}</a></td>
-            <td><br>{{data.amount}}</a></td>
-            {% if perms.home.change_blog %}
-            <td  class="text-center"><a class="btn btn-sm btn-warning" href={% url 'edittransaction' id=data.id %}>Edit</a>
+            <td class="text-center fs-5">{{data.amount}}</a></td>
+            <td class="text-center fs-5"><br>{{data.amount}}</a></td>
+
+            {% if perms.home.change_transaction %}
+            <td  class="text-center fs-5"><a class="btn btn-sm btn-warning" href={% url 'edittransaction' id=data.id %}>Edit</a>
               {% endif %}
-              {% if perms.home.delete_tank %}
+              {% if perms.home.delete_transaction %}
               <a class=" btn btn-sm btn-danger" href={% url 'deletetransaction' id=data.id %}>Delete</a>
               {% endif %}
             </td>

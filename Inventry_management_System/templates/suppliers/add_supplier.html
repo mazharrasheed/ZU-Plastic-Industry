@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
+{% block title %}
+  Add Supplier
+{% endblock title %}
 {% block content %}
 <!-- add_stock.html -->
 
 <div class="container-fluid mb-5 ">
 <div class="row">
-  {% include 'accounts/accounts_manu.html' %}
+  {% include 'accounts/accounts_menu.html' %}
     <div class="col-3 ">
       <h2 class="text-center alert alert-info">Add Suppier</h2>
       <form method="post" enctype="multipart/form-data">
@@ -34,13 +36,13 @@
           {% if update %} {% else %}<col width="25%"> {% endif %}
       </colgroup>
         <thead>
-          <tr class="bg-primary bg-gradient text-light text-center">
-            <td>Sr.No.</td>
-            <td>Firt Name</td>
-            <td>Last Name</td>
-            <td>Description</td>
-            <td>Contact</td>
-            <td>Adress</td>
+          <tr class="bg-primary bg-gradient text-light text-center fs-5">
+            <td class="text-center fs-5 fs-5">Sr.No.</td>
+            <td class="text-center fs-5 fs-5">Firt Name</td>
+            <td class="text-center fs-5 fs-5">Last Name</td>
+            <td class="text-center fs-5 fs-5">Description</td>
+            <td class="text-center fs-5 fs-5">Contact</td>
+            <td class="text-center fs-5 fs-5">Adress</td>
            
             {% if update %} {% else %}<td>Action</td> {% endif %}
             
@@ -50,27 +52,33 @@
 
           {% if update %}
           <tr>
-            <td class="text-center" >{{mydata.id}}</td>
+            <td class="text-center fs-5" >{{mydata.id}}</td>
            
-            <td class="text-center">{{mydata.firstname}}</td>
-            <td class="text-center">{{mydata.lastname}}</td>
-            <td class="text-center">{{mydata.description}}</td>
-            <td class="text-center">{{mydata.contact}}</td>
-            <td class="text-center">{{mydata.adress}}</td>
+            <td class="text-center fs-5">{{mydata.firstname}}</td>
+            <td class="text-center fs-5">{{mydata.lastname}}</td>
+            <td class="text-center fs-5">{{mydata.description}}</td>
+            <td class="text-center fs-5">{{mydata.contact}}</td>
+            <td class="text-center fs-5">{{mydata.adress}}</td>
           </tr>
           {% else %}
           {% for data in mydata %}
           <tr>
-            <td class="text-center" >{{forloop.counter}}</td>
-            <td class="text-center">{{data.firstname}}</td>
-            <td class="text-center">{{data.lastname}}</td>
-            <td class="text-center">{{data.description}}</td>
-            <td class="text-center">{{data.contact}}</td>
-            <td class="text-center">{{data.adress}}</td>
+            <td class="text-center fs-5" >{{forloop.counter}}</td>
+            <td class="text-center fs-5">{{data.firstname}}</td>
+            <td class="text-center fs-5">{{data.lastname}}</td>
+            <td class="text-center fs-5">{{data.description}}</td>
+            <td class="text-center fs-5">{{data.contact}}</td>
+            <td class="text-center fs-5">{{data.adress}}</td>
          
-            <td  class="text-center">
+            <td  class="text-center fs-5">
+              {% if perms.home.change_suppliers %}
               <a class="btn btn-sm btn-warning" href={% url 'editsupplier' id=data.id %}>Edit</a>
+              {% endif %}
+              
+              {% if perms.home.delete_suppliers %}
               <a class=" btn btn-sm btn-danger" href={% url 'deletesupplier' id=data.id %}>Delete</a> 
+              {% endif %}
+              
             </td>
           </tr>
           {% endfor %} 

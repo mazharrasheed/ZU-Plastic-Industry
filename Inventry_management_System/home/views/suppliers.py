@@ -3,10 +3,11 @@ from django.shortcuts import render, redirect
 from home.models import Suppliers
 from home.forms import ProductForm,Suppliers_form
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,permission_required
 from django.http import JsonResponse
 
 @login_required
+@permission_required('home.view_gatepass', login_url='/login/')
 def supplier(request):
 
     suppliers=Suppliers.objects.filter(is_deleted=False)
@@ -14,6 +15,7 @@ def supplier(request):
     return render(request,"suppliers/suppliers_home.html",data)   
 
 @login_required
+@permission_required('add.view_gatepass', login_url='/login/')
 def add_supplier(request):
  
     if request.method == 'POST':
@@ -29,7 +31,8 @@ def add_supplier(request):
     data={'form': form, 'mydata':mydata}
     return render(request, 'suppliers/add_supplier.html', data)
 
-
+@login_required
+@permission_required('home.add_gatepass', login_url='/login/')
 def edit_supplier(request,id):
 
     data={}
@@ -48,6 +51,7 @@ def edit_supplier(request,id):
     return render(request, 'suppliers/add_supplier.html', data)
 
 @login_required
+@permission_required('home.delete_gatepass', login_url='/login/')
 def delete_supplier(request,id):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and request.method == 'POST':
         mydata=Suppliers.objects.get(id=id)

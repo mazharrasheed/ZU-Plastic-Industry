@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from home.models import Cheque
 from home.forms import Cheques_form
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,permission_required
 from django.http import JsonResponse
 from datetime import datetime
 from datetime import date
@@ -11,14 +11,12 @@ from datetime import timedelta
 from django.utils import timezone
 
 @login_required
+@permission_required('home.view_cheque', login_url='/login/')
 def cheque(request):
-
     cheques=Cheque.objects.filter(is_deleted=False)
     for cheque in cheques:
-        if cheque.cheque_date:
-           
+        if cheque.cheque_date:  
             cheque_late = date.today() >= cheque.cheque_date
-
             print(date.today(),cheque_late)
             if cheque_late :
                 cheque.highlight_red= True
@@ -34,8 +32,8 @@ def cheque(request):
     return render(request,"cheques/cheque_home.html",data)   
 
 @login_required
+@permission_required('home.add_cheque', login_url='/login/')
 def add_cheque(request):
- 
     if request.method == 'POST':
         mydata=Cheque.objects.filter(is_deleted=False)
         form = Cheques_form(request.POST)
@@ -49,9 +47,9 @@ def add_cheque(request):
     data={'form': form, 'mydata':mydata}
     return render(request, 'cheques/add_cheque.html', data)
 
-
+@login_required
+@permission_required('home.change_cheque', login_url='/login/')
 def edit_cheque(request,id):
-
     data={}
     if request.method == 'POST':
       mydata=Cheque.objects.get(id=id)
@@ -63,11 +61,11 @@ def edit_cheque(request,id):
     else:
       mydata=Cheque.objects.get(id=id)
       form = Cheques_form(instance=mydata)
-
     data={'form': form, 'mydata':mydata,'update':True}
     return render(request, 'cheques/add_cheque.html', data)
 
 @login_required
+@permission_required('home.delete_cheque', login_url='/login/')
 def delete_cheque(request,id):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and request.method == 'POST':
         mydata=Cheque.objects.get(id=id)

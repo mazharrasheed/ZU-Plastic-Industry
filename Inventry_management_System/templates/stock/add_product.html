@@ -1,57 +1,67 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
+{% block title %}
+  Add Product
+{% endblock title %}
 {% block content %}
 <!-- add_stock.html -->
 
 <div class="container-fluid mb-5 ">
-<div class="row">
+  <div class="row">
 
-  {% include 'stock/product_manu.html' %}
-    <div class="col-3 ">
-      <h2 class="text-center alert alert-info">Add Product</h2>
+    {% include 'stock/product_menu.html' %}
+    <div class="col-2 ">
+      <h3 class="text-center alert alert-info">Add Product</h3>
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{form|crispy}}
+        <!-- <div class="form-group">
+          <label class="fs-5" for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
+          {{ form.category }}
+        </div> -->
 
-        <input type="submit" class="btn btn-success" {% if update %} value="Update Product" {% else %} value="Add Product" {%endif %}>
-        <a href= "/product/" class="btn btn-warning" >Products</a>
+        <input type="submit" class="btn btn-success" {% if update %} value="Update Product" {% else %}
+          value="Add Product" {%endif %}>
+        <a href="/product/" class="btn btn-warning">Products</a>
       </form>
 
     </div>
-    <div class="col-6 ">
-      <h2 class="text-center alert alert-info">Products</h2>
+    <div class="col-7 text-center">
+      <h3 class="text-center alert alert-info">Products List</h3>
 
       {% if mydata %}
       <table class="table table-stripped table-bordered" id="petrol-table">
         <colgroup>
-          <col width="10%">
-          <col width="15%">    
-          <col width="15%">    
-          <col width="15%">    
-          <col width="15%">    
-          <col width="15%">    
-             
-          {% if update %} {% else %}<col width="25%"> {% endif %}
-      </colgroup>
+          <col width="5%">
+          <col width="15%">
+          <col width="15%">
+          <col width="15%">
+          <col width="15%">
+          <col width="15%">
+          {% if perms.home.change_product or perms.home.delete_product %}
+          {% if update %} {% else %}
+          <col width="20%"> {% endif %}
+        {% endif %}
+        </colgroup>
         <thead>
           <tr class="bg-primary bg-gradient text-light text-center">
-            <td>Sr.No.</td>
-            <td>Product Category</td>
-            <td>Product Name</td>
-            <td>Product Size</td>
-            <td>Product Quantity</td>
-            <td>Product Status</td>
-           
-            {% if update %} {% else %}<td>Action</td> {% endif %}
-            
+            <td class="text-center fs-5">Sr.No.</td>
+            <td class="text-center fs-5">Category</td>
+            <td class="text-center fs-5">Name</td>
+            <td class="text-center fs-5">Size</td>
+            <td class="text-center fs-5">Quantity</td>
+            <td class="text-center fs-5">Product Status</td>
+            {% if perms.home.change_product or perms.home.delete_product %}
+            {% if update %} {% else %}<td class="text-center fs-5">Action</td> {% endif %}
+            {% endif %}
+
           </tr>
         </thead>
         <tbody>
 
           {% if update %}
           <tr>
-            <td class="text-center" >{{mydata.id}}</td>
+            <td class="text-center">{{mydata.id}}</td>
             <td class="text-center">{{mydata.category}}</td>
             <td class="text-center">{{mydata.productname}}</td>
             <td class="text-center">{{mydata.product_size}}</td>
@@ -61,22 +71,24 @@
           {% else %}
           {% for data in mydata %}
           <tr>
-            <td class="text-center" >{{forloop.counter}}</td>
-            <td class="text-center">{{data.category}}</td>
-            <td class="text-center">{{data.productname}}</td>
-            <td class="text-center">{{data.product_size}}</td>
-            <td class="text-center">{{data.product_quantity}}</td>
-            <td class="text-center">{% if data.product_status %} Active {% else %} Inactive {% endif %} </td>
-            {% if perms.home.change_blog %}
-            <td  class="text-center">
-              <a class="btn btn-sm btn-warning" href={% url 'editproduct' id=data.id %}>Edit</a>
+            <td class="text-center fs-5">{{forloop.counter}}</td>
+            <td class="text-center fs-5">{{data.category}}</td>
+            <td class="text-center fs-5">{{data.productname}}</td>
+            <td class="text-center fs-5">{{data.product_size}}</td>
+            <td class="text-center fs-5">{{data.product_quantity}}</td>
+            <td class="text-center fs-5">{% if data.product_status %} Active {% else %} Inactive {% endif %} </td>
+            
+            {% if perms.home.change_product %}
+            <td class="text-center">
+              <a class="btn btn-sm btn-warning fs-5" href={% url 'editproduct' id=data.id %}>Edit</a>        
               {% endif %}
-              {% if perms.home.delete_tank %}
-              <a class=" btn btn-sm btn-danger" href={% url 'deleteproduct' id=data.id %}>Delete</a>
+              
+              {% if perms.home.delete_product %}
+              <a class=" btn btn-sm btn-danger fs-5" href={% url 'deleteproduct' id=data.id %}>Delete</a>
               {% endif %}
             </td>
           </tr>
-          {% endfor %} 
+          {% endfor %}
           {% endif %}
         </tbody>
       </table>
@@ -87,14 +99,14 @@
   </div>
 </div>
 <script>
-  $(document).ready(function(){
+  $(document).ready(function () {
 
     // Wait for 4 seconds and then hide the element with id "msg"
-    setTimeout(function(){
-        $("#msg").hide();
+    setTimeout(function () {
+      $("#msg").hide();
     }, 4000); // 10000 milliseconds = 10 seconds
-});
-   
+  });
+
 </script>
-  
+
 {% endblock content %}

@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-
+{% block title %}
+  Add Category
+{% endblock title %}
 {% block content %}
 
 <!-- add_stock.html -->
 <div class="container-fluid mb-5">
   <div class="row">
-    {% include 'stock/product_manu.html' %}
+    {% include 'stock/product_menu.html' %}
     <div class="col-3 ">
       <h2 class="text-center alert alert-info">Add Category</h2>
       <form method="post">
@@ -31,9 +33,9 @@
       </colgroup>
         <thead>
           <tr class="bg-primary bg-gradient text-light text-center">
-            <td>Sr.No.</td>
-            <td>Name</td>
-            {% if update %} {% else %}<td>Action</td> {% endif %}
+            <td class="text-center fs-5">Sr.No.</td>
+            <td class="text-center fs-5">Name</td>
+            {% if update %} {% else %}<td class="text-center fs-5" >Action</td> {% endif %}
             
           </tr>
         </thead>
@@ -41,20 +43,20 @@
 
           {% if update %}
           <tr>
-            <td class="text-center" >{{mydata.id}}</td>
-            <td>{{mydata.name}}</td>
+            <td class="text-center fs-5" >{{mydata.id}}</td>
+            <td class="text-center fs-5">{{mydata.name}}</td>
           </tr>
           {% else %}
           {% for data in mydata %}
           <tr>
-            <td class="text-center" >{{forloop.counter}}</td>
-            <td>{{data.name}}</td>
+            <td class="text-center fs-5" >{{forloop.counter}}</td>
+            <td class="text-center fs-5">{{data.name}}</td>
             {% if perms.home.change_blog %}
-            <td  class="text-center">
-              <a class="btn btn-sm btn-warning" href={% url 'editcategory' id=data.id %}>Edit</a>
+            <td  class="text-center fs-5">
+              <a class="btn btn-sm btn-warning fs-5" href={% url 'editcategory' id=data.id %}>Edit</a>
               {% endif %}
               {% if perms.home.delete_tank %}
-              <a class=" btn btn-sm btn-danger" href={% url 'deletecategory' id=data.id %}>Delete</a>
+              <a class=" btn btn-sm btn-danger fs-5" href={% url 'deletecategory' id=data.id %}>Delete</a>
               {% endif %}
             </td>
           </tr>

@@ -3,10 +3,12 @@ from django.urls import  path
 from home.views import category,product
 from home.views import views,accounts
 from home.views import gatepass,sales,suppliers,customers,cheques
-
+from home.models import Category
 from django.conf.urls.static import static
 
 from Inventry_management_System import settings
+
+categories=Category.objects.filter(is_deleted=False)
 
 urlpatterns = [
    
@@ -22,12 +24,13 @@ urlpatterns = [
     path('delete/<int:id>', views.delete_data , name="deletedata"),
     path('edit/<int:id>', views.edit_data , name="editdata"),
     path('editprofile/<int:id>', views.editprofile , name="editprofile"),
-
+    
     path('category/', category.add_category , name="category"),
     path('category/<int:id>', category.edit_category , name="editcategory"),
     path('deletecategory/<int:id>', category.delete_category , name="deletecategory"),
 
     path('product/', product.products , name="product"),
+    path('add_product/<int:id>', product.add_product , name="addproduct1"),
     path('add_product/', product.add_product , name="addproduct"),
     path('product/<int:id>', product.edit_product , name="editproduct"),
     path('deleteproduct/<int:id>', product.delete_product , name="deleteproduct"),
@@ -57,7 +60,7 @@ urlpatterns = [
     path('list-gatepasses/', gatepass.list_gatepasses, name='list_gatepasses'),
     path('print-gatepass/<int:gatepass_id>/', gatepass.print_gatepass, name='print_gatepass'),
 
-
+    path('list-sales/', sales.list_sales, name='list_sales'),
     path('salereceipt/', sales.salereceipt , name="salereceipt"),
     path('create-salereceipt/', sales.create_salereceipt, name='create_salereceipt'),
     path('create-salereceipt/<int:salereceipt_id>/', sales.create_salereceipt, name='create_salereceipt'),
@@ -65,10 +68,7 @@ urlpatterns = [
     path('cancel_salereceipt/<int:id>/', sales.cancel_salereceipt, name='cancel_salereceipt'),
     path('delete_salereceipt/<int:id>/', sales.delete_salereceipt, name='delete_salereceipt'),
     path('delete_salereceipt_item/<int:id>/', sales.delete_salereceipt_item, name='delete_salereceipt_item'),
-    path('list-sales/', sales.list_sales, name='list_sales'),
     path('print-salereceipt/<int:salereceipt_id>/', sales.print_salereceipt, name='print_salereceipt'),
-
-
 
     path('accounts/', accounts.accounts , name="accounts"),
     path('add_accounts/', accounts.add_account , name="add_accounts"),

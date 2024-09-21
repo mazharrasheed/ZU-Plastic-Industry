@@ -1,52 +1,58 @@
-{% extends 'base.html' %} {% load custom_filters %} {% block content %}
+{% extends 'base.html' %} {% load custom_filters %}
+
+{% block title %}
+  Cheques & Receipts
+{% endblock title %}
+
+{% block content %}
 
 <div class="container-fluid">
 <div class="row">
-  {% include 'accounts/accounts_manu.html' %}
+  {% include 'accounts/accounts_menu.html' %}
   <div class="col-9">
     <h2 class="text-center alert alert-info">Cheque List</h2>
     <div class="card py">
-      <a href="{% url 'addcheque' %}" class="btn btn-primary col-2 m-3">Add Cheque/Receipt</a>
+      <a href="{% url 'addcheque' %}" class=" fs-5 btn btn-primary col-3 m-3">Add Cheque/Receipt</a>
       <div class="table-responsive py-2">
         {% if cheques%}
         <table class="table table-flush" id="datatable" >
           <thead class="thead-light">
             <tr>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
                 Sr#
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
                 Customer Name
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
                 Cheque Number
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
                 Cheque Date
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
                 Bank Name
               </th>
              
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
                 Action
               </th>
             </tr>
           </thead>
           <tbody class="align-middle">
             {% for cheque in cheques %}
-            <tr id="supplier-{{ cheque.id }}" class="{% if cheque.highlight_red %}  bg-info text-light {% endif %}">
-              <td class="text-center" >{{ forloop.counter }}</td>
-              <td class="text-center">{{ cheque.customer }}</td>
-              <td class="text-center ">{{ cheque.cheque_number }}</td>
-              <td class="text-center">{{ cheque.cheque_date }}</td>
-              <td class="text-center">{{ cheque.bank_name }}</td>
+            <tr id="supplier-{{ cheque.id }}" class="{% if cheque.highlight_red %}  bg-danger text-light {% else %} bg-primary text-light {% endif %}">
+              <td class="fs-5 text-center" >{{ forloop.counter }}</td>
+              <td class="fs-5 text-center">{{ cheque.customer }}</td>
+              <td class="fs-5 text-center ">{{ cheque.cheque_number }}</td>
+              <td class="fs-5 text-center">{{ cheque.cheque_date }}</td>
+              <td class="fs-5 text-center">{{ cheque.bank_name }}</td>
              
               
               <td class="text-center">
                
-                <a class="btn btn-warning" href="{% url 'editcheque' cheque.id %}">Edit</a>
-                <button class="btn btn-danger delete-cheque" data-cheque-id="{{ cheque.id }}">
+                <a class=" fs-5 btn btn-info" href="{% url 'editcheque' cheque.id %}">Edit</a>
+                <button class=" fs-5 btn btn-warning delete-cheque" data-cheque-id="{{ cheque.id }}">
                   Delete
                 </button>
               </td>

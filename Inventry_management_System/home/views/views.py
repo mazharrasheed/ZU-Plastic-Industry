@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import Group, User
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render,get_object_or_404
-
+from django.contrib.auth.decorators import login_required,permission_required
 from ..forms import Add_Blog, AdminUserPrifoleForm, EditUserPrifoleForm, GatePassProductForm,Sign_Up
 from ..models import Blog,GatePass, GatePassProduct
 
@@ -19,26 +19,28 @@ def index(request):
   data={'myblog':myblog}
   return render(request,'index.html',data)
 
+@login_required
 def detail(request,id):
-
   myblog=Blog.objects.get(id=id)
   data={'myblog':myblog}
   return render(request,'detail.html',data)
 
+@login_required
+@permission_required('home.change_blog',login_url='/login/')
 def edit_data(request,id): 
-    data={}
-    if request.method=='POST':
-        pst=Blog.objects.get(id=id)
-        form=Add_Blog(request.POST,instance=pst)
-        if form.is_valid():
-          form.save()
-          messages.success(request,"Blog Updated succesfuly !!")
-          # return redirect('dashboard')
-    else:
-        pst=Blog.objects.get(id=id)
-        form=Add_Blog(instance=pst)
-    data={'form':form,'pst':pst}
-    return render(request,'update.html',data)
+  data={}
+  if request.method=='POST':
+      pst=Blog.objects.get(id=id)
+      form=Add_Blog(request.POST,instance=pst)
+      if form.is_valid():
+        form.save()
+        messages.success(request,"Blog Updated succesfuly !!")
+        # return redirect('dashboard')
+  else:
+      pst=Blog.objects.get(id=id)
+      form=Add_Blog(instance=pst)
+  data={'form':form,'pst':pst}
+  return render(request,'update.html',data)
 '''
 def delete_data(request,id):
   print("dfsdfdsf")
@@ -53,6 +55,9 @@ def delete_data(request,id):
   else:
     return redirect('signin')'''
 
+
+@login_required
+@permission_required('home.delete_blog',login_url='/login/')
 def delete_data(request,id):
   if request.user.is_authenticated:
     if request.method=='POST':
@@ -65,39 +70,38 @@ def delete_data(request,id):
   else:
     return redirect('signin')
 
+@login_required
+@permission_required('home.add_blog',login_url='/login/')
 def post_blog(request):
-  if request.user.is_authenticated:
-    if request.method=='POST':
-      form=Add_Blog(request.POST)
-      title=request.POST['title']
-      desc=request.POST['description']
-      loginuser=request.user
-      pst=Blog(title=title,description=desc,user=loginuser)
-      pst.save()
-      messages.success(request,"Blog posted succesfuly !!")
-      # return redirect('dashboard')
-    else:
-      form=Add_Blog()
-    data={'form':form}
-    return render(request,'postblog.html',data)
+  
+  if request.method=='POST':
+    form=Add_Blog(request.POST)
+    title=request.POST['title']
+    desc=request.POST['description']
+    loginuser=request.user
+    pst=Blog(title=title,description=desc,user=loginuser)
+    pst.save()
+    messages.success(request,"Blog posted succesfuly !!")
+    # return redirect('dashboard')
   else:
-    return redirect('signin')
-
+    form=Add_Blog()
+  data={'form':form}
+  return render(request,'postblog.html',data)
+  
+@login_required
 def dashboard(request):
-  if request.user.is_authenticated:
-
-    if request.user.is_superuser==True:
-      myblog=Blog.objects.all()
-      data={'myblog':myblog}
-      pass
-    else:
-      user=request.user
-      myblog=Blog.objects.filter(user=user)
-      gps=user.groups.all()
-      data={'myblog':myblog,'groups':gps}
-    return render(request,'dashboard.html',data)
+  
+  if request.user.is_superuser==True:
+    myblog=Blog.objects.all()
+    data={'myblog':myblog}
+    pass
   else:
-    return redirect('signin')
+    user=request.user
+    myblog=Blog.objects.filter(user=user)
+    gps=user.groups.all()
+    data={'myblog':myblog,'groups':gps}
+  return render(request,'dashboard.html',data)
+
 
 def sign_up(request):
   if request.method=="POST":
@@ -106,8 +110,8 @@ def sign_up(request):
       form.save()
       user = form.save()
       # adding user in to a group on Signup
-      group = Group.objects.get(name='author')
-      user.groups.add(group)
+      # group = Group.objects.get(name='author')
+      # user.groups.add(group)
       form = Sign_Up()
       messages.success(request,"account created succesfuly !!")
       return redirect('signup')
@@ -141,31 +145,31 @@ def sign_in(request):
   else:
     return redirect("dashboard")
 
+@login_required
+# @permission_required('auth.change_user',login_url='/login/')
 def editprofile(request,id):
-  if request.user.is_authenticated:
-    if request.method=="POST":
-      if request.user.is_superuser==True:
-        form=AdminUserPrifoleForm(request.POST,instance=request.user)
-        form.is_valid()
-        messages.success(request,"Your profile Update successfuly")
-        form.save()
-        return redirect('dashboard')
-      else:
-        form=EditUserPrifoleForm(request.POST,instance=request.user)
-        form.is_valid()
-        messages.success(request,"Your profile Update successfuly")
-        form.save()
-        return redirect('dashboard')
+ 
+  if request.method=="POST":
+    if request.user.is_superuser==True:
+      form=AdminUserPrifoleForm(request.POST,instance=request.user)
+      form.is_valid()
+      messages.success(request,"Your profile Update successfuly")
+      form.save()
+      return redirect('dashboard')
+    else:
+      form=EditUserPrifoleForm(request.POST,instance=request.user)
+      form.is_valid()
+      messages.success(request,"Your profile Update successfuly")
+      form.save()
+      return redirect('dashboard')
+  else: 
+    if request.user.is_superuser==True:
+      form=AdminUserPrifoleForm(instance=request.user)
     else: 
-      if request.user.is_superuser==True:
-        form=AdminUserPrifoleForm(instance=request.user)
-      else: 
-        form=EditUserPrifoleForm(instance=request.user)
-      data={'form':form}
-      return render(request,"editprofile.html",data)
-  else:
-    return redirect("signin")
-  
+      form=EditUserPrifoleForm(instance=request.user)
+    data={'form':form}
+    return render(request,"editprofile.html",data)
+
 
 
 

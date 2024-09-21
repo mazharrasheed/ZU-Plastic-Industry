@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block title %}Products{% endblock title %}
+{% extends "base.html" %} 
+{% block title %}Products{% endblock title %}
 
 {% load custom_filters %}
 
@@ -9,12 +10,12 @@
 
   <div class="row">
 
-    {% include 'stock/product_manu.html' %}
+    {% include 'stock/product_menu.html' %}
 
 
     <div id="product" class="col-lg-9 ">
       <h2 class="text-center alert alert-info ">Products List</h2>
-      <div class="row">
+     
         {% if products %}
 
         {% for product in products %}
@@ -30,11 +31,9 @@
         </div>
 
         {% endfor %}
-      </div>
+     
       {% else %}
-
-
-      <h3 class="alert alert-light border rounded">Curruntly No Item to Show</h3>
+      <h4 class="text-center fs-5 alert alert-warning">No Record Found</h4>
       {% endif %}
     </div>
   </div>

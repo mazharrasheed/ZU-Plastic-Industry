@@ -3,8 +3,11 @@ from django.shortcuts import render, redirect
 from home.models import Category
 from home.forms import CategoryForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,permission_required
 
+
+@login_required
+@permission_required('home.add_category', login_url='/login/')
 def add_category(request):
   if request.user.is_authenticated:
     if request.method == 'POST':
@@ -23,7 +26,8 @@ def add_category(request):
     return render(request, 'stock/add_category.html', data)
   else:
     return redirect('signin')
-
+@login_required
+@permission_required('home.change_category', login_url='/login/')
 def edit_category(request,id):
   if request.user.is_authenticated:
     data={}
@@ -44,17 +48,15 @@ def edit_category(request,id):
   data={'form': form, 'mydata':mydata,'update':True ,'categories':categories}
   return render(request, 'stock/add_category.html', data)
 
+
+@login_required
+@permission_required('home.view_product', login_url='/login/')
+
 def delete_category(request,id):
  
-  if request.user.is_authenticated:
-
     mydata=Category.objects.get(id=id)
     mydata.is_deleted=True
     mydata.save()
     messages.success(request,"Category Deleted successfully !!")
     return redirect('category')
 
-  else:
-
-    return redirect('signin')
- 

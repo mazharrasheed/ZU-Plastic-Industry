@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% block title %}
+  Cheques & Receipts
+{% endblock title %}
+
 {% block content %}
 <!-- add_stock.html -->
 
 <div class="container-fluid mb-5 ">
 <div class="row">
-  {% include 'accounts/accounts_manu.html' %}
+  {% include 'accounts/accounts_menu.html' %}
     <div class="col-3 ">
       <h2 class="text-center alert alert-info">Add Cheque/Receipt</h2>
       <form method="post" enctype="multipart/form-data">

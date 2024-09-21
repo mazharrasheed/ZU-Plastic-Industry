@@ -13,8 +13,8 @@ from .models import Blog
 # forms.py
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from .models import Category,Product,Account,Transaction,GatePassProduct,GatePass,Unit,Sales_Reciept
-from .models import Customer,Sales_Reciept_Product,Suppliers,Cheque
+from .models import Category,Product,Account,Transaction,GatePassProduct,GatePass,Unit,Sales_Receipt
+from .models import Customer,Sales_Receipt_Product,Suppliers,Cheque
 
 
 class CategoryForm(forms.ModelForm):
@@ -28,9 +28,9 @@ class ProductForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Category.objects.filter(is_deleted=False), empty_label="Select Unit")
     class Meta:
         model = Product
-        fields = ['category', 'productname','product_size','product_quantity','product_weight','unit','product_status','pro_img']
+        fields = ['category', 'productname','product_size','product_quantity','unit','product_status','pro_img']
         labels={'productname':'Product Name','product_size':'Product Size',
-                'product_quantity':'Product_Quantity','product_status':'Product_Status','product_weight':'Product Weight','pro_img':'Product Image'}
+                'product_quantity':'Product_Quantity','product_status':'Product_Status','pro_img':'Product Image'}
         
         widgets = {
 
@@ -45,13 +45,20 @@ class ProductForm(forms.ModelForm):
             'productname': 'Enter product name',
             'product_size': 'Enter product size',
             'product_quantity': 'Enter quantity',
-            'product_weight':'Enter product weight'
+            
         }
         for field_name, placeholder in placeholders.items():
             self.fields[field_name].widget.attrs.update({'placeholder': placeholder})
+
+         # Add 'fs-5' class to all fields' labels
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs.update({'class': 'form-control'})  # Add class to widgets
+            self.fields[field_name].label_tag = lambda label, tag=None, attrs=None, *args, **kwargs: f'<label class="fs-5" for="{self[field_name].id_for_label}">{label}</label>'
             
         self.fields['category'].empty_label = "Select"
         # self.fields['product_status'].choices = [('', 'Select')] + list(self.fields['product_status'].choices)
+
+        
 
 
 
@@ -94,30 +101,30 @@ class GatePassProductForm(forms.ModelForm):
         return cleaned_data
 
 
-class Sales_RecieptForm(forms.ModelForm):
+class Sales_ReceiptForm(forms.ModelForm):
     class Meta:
-        model = Sales_Reciept
+        model = Sales_Receipt
         fields = [ 'customer_name', 'phone_number']
 
-class Sales_Reciept_ProductForm(forms.ModelForm):
+class Sales_Receipt_ProductForm(forms.ModelForm):
     product = forms.ModelChoiceField(queryset=Product.objects.filter(is_deleted=False), empty_label="Select Product")
     quantity = forms.IntegerField(min_value=1, initial=1, label='Quantity')
     unit_price = forms.FloatField( label='Unit Price',required=False)
     
     class Meta:
-        model = Sales_Reciept_Product
+        model = Sales_Receipt_Product
         fields = ['product', 'quantity','unit_price']
 
     def __init__(self, *args, **kwargs):
         self.salereceipt = kwargs.pop('salereceipt', None)
-        super(Sales_Reciept_ProductForm, self).__init__(*args, **kwargs)
+        super(Sales_Receipt_ProductForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         cleaned_data = super().clean()
         product = cleaned_data.get('product')
 
         if product and self.salereceipt:
-            if Sales_Reciept_Product.objects.filter(salereceipt=self.salereceipt, product=product).exists():
+            if Sales_Receipt_Product.objects.filter(salereceipt=self.salereceipt, product=product).exists():
                 self.add_error('product', f'The product "{product}" has already been added to this gate pass.')
 
         return cleaned_data

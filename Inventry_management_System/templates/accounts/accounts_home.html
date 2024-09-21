@@ -1,29 +1,27 @@
-{% extends "base.html" %} {% block title %}Products{% endblock title %}
-
+{% extends "base.html" %}
 {% load custom_filters %}
-
+{% block title %}
+  Accounts
+{% endblock title %}
 {% block content %}
 
 
 <div class="container-fluid">
-
   <div class="row">
-    {% include 'accounts/accounts_manu.html' %}
-
+    {% include 'accounts/accounts_menu.html' %}
     <div id="product" class="col-lg-9 ">
       <h2 class="text-center alert alert-info ">Accounts List</h2>
-
       <div class="table-responsive py-2">
         {% if mydata %}
         <table class="table table-flush" id="datatable">
           <thead class="thead-light">
             <tr class=" ">
-              <td class="text-center">Sr.No.</td>
-              <td class="text-center">Name.</td>
-              <td class="text-center">Account Type</td>
+              <td class="text-center fs-5 ">Sr.No.</td>
+              <td class="text-center fs-5">Name.</td>
+              <td class="text-center fs-5">Account Type</td>
               {% if update %}
               {% else %}
-              <td class="text-center">Actions</td>
+              <td class="text-center fs-5">Actions</td>
               {% endif %}
             </tr>
           </thead>
@@ -32,24 +30,24 @@
             {% if update %}
             {% for data in mydata %}
             <tr>
-              <td class="text-center">{{forloop.counter}}</td>
-              <td class="text-center">{{mydata.name}}</td>
-              <td class="text-center">{{mydata.account_type}}</td>
+              <td class="text-center fs-5">{{forloop.counter}}</td>
+              <td class="text-center fs-5">{{mydata.name}}</td>
+              <td class="text-center fs-5">{{mydata.account_type}}</td>
             </tr>
             {% endfor %}
             {% else %}
             {% for data in mydata %}
             <tr>
-              <td class="text-center">{{forloop.counter}}</td>
-              <td class="text-center">{{data.name}}</td>
-              <td class="text-center">{{data.account_type}}</td>
-              <td class="text-center">
-                <a class=" btn btn-sm btn-info" href={% url 'accountreport' id=data.id %}>Details</a>
-                {% if perms.home.change_nozel %}
-                <a class="btn btn-sm btn-warning" href={% url 'editaccount' id=data.id %}>Edit</a>
+              <td class="text-center fs-5">{{forloop.counter}}</td>
+              <td class="text-center fs-5">{{data.name}}</td>
+              <td class="text-center fs-5">{{data.account_type}}</td>
+              <td class="text-center fs-5">
+                <a class="fs-5 btn btn-sm btn-info" href={% url 'accountreport' id=data.id %}>Details</a>
+                {% if perms.home.change_account %}
+                <a class=" fs-5 btn btn-sm btn-warning" href={% url 'editaccount' id=data.id %}>Edit</a>
                 {% endif %}
-                {% if perms.home.delete_nozel %}
-                <a class=" btn btn-sm btn-danger" href={% url 'deleteaccount' id=data.id %}>Delete</a>
+                {% if perms.home.delete_account %}
+                <a class="fs-5 btn btn-sm btn-danger" href={% url 'deleteaccount' id=data.id %}>Delete</a>
                 {% endif %}
               </td>
             </tr>
@@ -59,13 +57,9 @@
         </table>
 
         {% else %}
-
-        <h4 class="text-center alert alert-warning">No Record Found</h4>
-
+        <h4 class="text-center fs-5 alert alert-warning">No Record Found</h4>
         {% endif %}
-
       </div>
-
     </div>
   </div>
 

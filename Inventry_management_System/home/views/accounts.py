@@ -6,12 +6,14 @@ from django.contrib.auth.decorators import login_required,permission_required
 # Create your views here.
 
 @login_required
+@permission_required('home.view_account', login_url='/login/')
 def accounts(request):
-
     mydata = Account.objects.filter(is_deleted=False)
     data={'mydata':mydata}
     return render(request,'accounts/accounts_home.html',data)
 
+@login_required
+@permission_required('home.add_account', login_url='/login/')
 def add_account(request):
   if request.user.is_authenticated:
     if request.method == 'POST':
@@ -29,6 +31,8 @@ def add_account(request):
   data={'mydata':mydata,'form':form}
   return render(request,'accounts/accounts.html',data)
 
+@login_required
+@permission_required('home.change_account', login_url='/login/')
 def edit_account(request,id):
   if request.user.is_authenticated: 
     data={}
@@ -47,6 +51,8 @@ def edit_account(request,id):
   else:
     return redirect('signin')
   
+@login_required
+@permission_required('home.delete_account', login_url='/login/')
 def delete_account(request,id):
   if request.user.is_authenticated:
     try:
@@ -62,7 +68,8 @@ def delete_account(request,id):
   
 # views.py
 
-
+@login_required
+@permission_required('home.add_transaction', login_url='/login/')
 def add_transaction(request):
     if request.user.is_authenticated: 
         transactions = Transaction.objects.all()
@@ -125,13 +132,17 @@ def add_transaction(request):
         return render(request, 'accounts/add_transaction.html', {'form': form,'mydata': transactions})
     else:
         return redirect('signin')
-    
+
+@login_required
+@permission_required('home.change_transaction', login_url='/login/')
 def edit_transaction(request,id):
     form = TransactionForm()
     transactions = Transaction.objects.filter(id=id)
     return render(request, 'accounts/add_transaction.html', {'form': form,'mydata': transactions})
     pass
 
+@login_required
+@permission_required('home.delete_transaction', login_url='/login/')
 def delete_transaction(request,id):
     transaction = Transaction.objects.filter(id=id)
     transaction.delete()
@@ -141,6 +152,8 @@ def delete_transaction(request,id):
 
 # views.py
 
+@login_required
+@permission_required('home.view_account', login_url='/login/')
 def account_report(request,id):
     if request.user.is_authenticated:
         equity_account = {}
@@ -212,6 +225,9 @@ def balance_sheet111(request):
     else:
         return redirect('signin')'''
 
+
+@login_required
+@permission_required('home.view_account', login_url='/login/')
 def laddger_balance(request): #not used its iddle
 
         accounts = Account.objects.filter(is_deleted=False)
@@ -358,7 +374,8 @@ def balance_sheet(request):
         return render(request, 'accounts/balance_sheet.html', mydata)
     else:
         return redirect('signin')
-
+@login_required
+@permission_required('home.view_account', login_url='/login/')
 def balance_sheet1111(request):
 
     if request.user.is_authenticated:

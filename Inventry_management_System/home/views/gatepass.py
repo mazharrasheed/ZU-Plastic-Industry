@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 
 @login_required
+@permission_required('home.view_gatepass', login_url='/login/')
 def gatepass(request):
     form = GatePassProductForm()
     form_gatepass=GatePassForm()
@@ -18,6 +19,7 @@ def gatepass(request):
     })
 
 @login_required
+@permission_required('home.add_gatepass', login_url='/login/')
 def create_gatepass(request, gatepass_id=None):
     if gatepass_id:
         gatepass = get_object_or_404(GatePass, id=gatepass_id)
@@ -64,6 +66,7 @@ def create_gatepass(request, gatepass_id=None):
     })
 
 @login_required
+@permission_required('home.edit_gatepass', login_url='/login/')
 def edit_gatepass(request, gatepass_id=None):
     update=True
     if gatepass_id:
@@ -112,6 +115,7 @@ def edit_gatepass(request, gatepass_id=None):
     })
 
 @login_required
+@permission_required('home.delete_gatepass', login_url='/login/')
 def delete_gatepass_item(request,id):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and request.method == 'POST':
         product = get_object_or_404(GatePassProduct, id=id)
