@@ -42,23 +42,27 @@
 </head>
 
 <body>
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THQTXJ7" height="0" width="0"
-      style="display: none; visibility: hidden"></iframe></noscript>
+  <div class="container-fluid">
+<div class="row">
+  <div class="col-lg-3">  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THQTXJ7" height="0" width="0"
+    style="display: none; visibility: hidden"></iframe></noscript>
 
-  <div style="background-color: #ffe3c2">
-    <h1 class="text-center mt-2 " >
-      <img style="height: 70px" src="{% static 'assets/default/img/monogram1.jpg' %}" alt="Monogram" />
+<div style="background-color: #ffe3c2">
+  <h1 class="text-center mt-2 " >
+    <img style="height: 150px" src="{% static 'assets/default/img/monogram1.jpg' %}" alt="Monogram" />
 
-      ZU Traders
-    </h1>
-  </div>
+    ZU Traders
+  </h1>
+</div></div>
+  <div class="col-lg-9 mt-2">
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffe3c2">
     <div class="container-fluid">
       <a class="navbar-brand d-flex align-items-center px-5" href="/">
         <i style="height: 30px" class="fa fa-home"></i>
         <h4 class="fs-2 mb-0 s-2" style="margin-left: 10px; padding-top: 10px">
-          ZU Traders
+          Home
         </h4>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -69,12 +73,6 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           {% if perms.home.view_dashboard %}
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/' %} bg-secondary bg-gradient text-light rounded {%endif%}"
-              aria-current="page" href="/">
-              <h5 class="fs-3 mb-0 {% if request.path == '/' %} text-light {%endif%}">
-                Home
-              </h5>
-            </a>
           </li>
           {% endif %} {% if perms.home.view_product %}
           <li class="nav-item">
@@ -161,7 +159,7 @@
     </div>
   </nav>
 
-  <div id="display-msg" class="text-center" style="min-height: 80px">
+  <div id="display-msg" class="text-center mt-2" style="min-height: 80px">
     {% if messages %} {% for message in messages %}
     <small id="msg" {% if message.tags %} class="{{message.tags}}" {% endif %}>
       <h5 class="alert alert-{{message.tags}}">{{message}}</h5>
@@ -170,7 +168,9 @@
     <!-- Prevent collapse when there are no messages -->
     {% endif %}
   </div>
-
+</div>
+</div>
+</div>
   {% block content %} {% endblock content %}
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

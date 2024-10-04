@@ -115,28 +115,37 @@ class Sales_Receipt_Product(models.Model):
     def __str__(self):
         return f"{self.product.productname} (Qty: {self.quantity})"
     
+class Employee(models.Model):
+    name=models.CharField(max_length=255)
+    adress=models.CharField(max_length=255,null=True,blank=True)
+    contact=models.CharField(max_length=12,null=True,unique=True,blank=True)
+    job=models.CharField(max_length=255)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.name.capitalize()}"
+    
 class Suppliers(models.Model):
-    firstname=models.CharField(max_length=255)
-    lastname=models.CharField(max_length=255)
+    coname=models.CharField(max_length=255)
+    name=models.CharField(max_length=255)
     adress=models.CharField(max_length=255)
     contact=models.CharField(max_length=12,null=True,unique=True,blank=True)
     description=models.CharField(max_length=255)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.firstname} {self.lastname}"
+        return f"{self.coname.capitalize()}"
     
 class Customer(models.Model):
-    firstname=models.CharField(max_length=255)
-    lastname=models.CharField(max_length=255)
+    coname=models.CharField(max_length=255)
+    name=models.CharField(max_length=255)
     adress=models.CharField(max_length=255)
     contact=models.CharField(max_length=12,null=True,unique=True,blank=True)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.firstname.capitalize()} {self.lastname.capitalize()}"
+        return f"{self.coname.capitalize()} "
     
-
 class Cheque(models.Model):
     customer=models.ForeignKey(Customer, on_delete=models.RESTRICT)
     cheque_number=models.CharField(max_length=20,null=True,blank=True)
@@ -166,13 +175,23 @@ class Account(models.Model):
         (GAIN, 'Gain'),
         (LOSS, 'Loss'),
     ]
-
-    name = models.CharField(max_length=100)
+    name=models.CharField(max_length=50,null=True ,blank=True)
+    employee=models.ForeignKey(Employee, on_delete=models.RESTRICT ,null=True,blank=True)
+    customer=models.ForeignKey(Customer, on_delete=models.RESTRICT ,null=True,blank=True)
+    supplier=models.ForeignKey(Suppliers, on_delete=models.RESTRICT,null=True,blank=True)
+    cheque=models.ForeignKey(Cheque, on_delete=models.RESTRICT,null=True,blank=True)
     balance = models.DecimalField(max_digits=10, decimal_places=2,default=0)
     account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE_CHOICES)
     is_deleted=models.BooleanField(default=False)
     def __str__(self):
-        return self.name
+        if self.name:
+            return f'{self.name}'
+        elif self.customer:
+            return f'{self.customer}'
+        elif self.supplier:
+            return f'{self.supplier}'
+        elif self.cheque:
+            return f'{self.cheque}'
     
 class Transaction(models.Model):
     date = models.DateTimeField(auto_now_add=True)

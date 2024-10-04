@@ -14,7 +14,7 @@ from .models import Blog
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from .models import Category,Product,Account,Transaction,GatePassProduct,GatePass,Unit,Sales_Receipt
-from .models import Customer,Sales_Receipt_Product,Suppliers,Cheque
+from .models import Customer,Sales_Receipt_Product,Suppliers,Cheque,Employee
 
 
 class CategoryForm(forms.ModelForm):
@@ -182,12 +182,39 @@ class AdminUserPrifoleForm(UserChangeForm):
         fields='__all__'
         labels={'email':'Email'}
 
+class Employee_form(forms.ModelForm):
+   
+    class Meta:
+        model = Employee
+        fields = [ 'name','contact','job','adress']
+        labels={'name':'Name',
+                'contact':'Contact','adress':'Adress','job':'Job Name',}
+        
+        widgets = {
+
+            # 'product_weight': forms.TextInput(attrs={'placeholder': 'Enter product weight'}),
+            # 'pro_img': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+            # 'product_status': forms.CheckboxInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(Employee_form, self).__init__(*args, **kwargs)
+        placeholders = {
+            
+            'name': 'Enter full name',
+            'contact': '0000-0000000',
+            'adress':'Enter Adress here',
+            'job':'Enter job name here',
+        }
+        for field_name, placeholder in placeholders.items():
+            self.fields[field_name].widget.attrs.update({'placeholder': placeholder})
+
 class Suppliers_form(forms.ModelForm):
    
     class Meta:
         model = Suppliers
-        fields = ['firstname', 'lastname','contact','adress','description']
-        labels={'firstname':'First Name','lastname':'Last Name',
+        fields = ['coname', 'name','contact','adress','description']
+        labels={'coname':'Company Name','name':'Name',
                 'contact':'Contact','adress':'Adress','description':'Description',}
         
         widgets = {
@@ -200,8 +227,8 @@ class Suppliers_form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(Suppliers_form, self).__init__(*args, **kwargs)
         placeholders = {
-            'firstname': 'Enter first name',
-            'lastname': 'Enter last name',
+            'coname': 'Enter company name',
+            'name': 'Enter full name',
             'contact': '0000-0000000',
             'adress':'Enter Adress here'
         }
@@ -212,14 +239,14 @@ class Customer_form(forms.ModelForm):
    
     class Meta:
         model = Customer
-        fields = ['firstname', 'lastname','contact','adress']
-        labels={'firstname':'First Name','lastname':'Last Name',
+        fields = ['coname', 'name','contact','adress']
+        labels={'coname':'Company Name','name':'Name',
                 'contact':'Contact','adress':'Adress',}
     def __init__(self, *args, **kwargs):
         super(Customer_form, self).__init__(*args, **kwargs)
         placeholders = {
-            'firstname': 'Enter first name',
-            'lastname': 'Enter last name',
+            'coname': 'Enter first name',
+            'name': 'Enter full name',
             'contact': '0000-0000000',
             'adress':'Enter Adress here'
         }
@@ -261,6 +288,61 @@ class AccountForm(forms.ModelForm):
         super(AccountForm, self).__init__(*args, **kwargs)
         
         self.fields['account_type'].choices = [('', 'Select')] + list(self.fields['account_type'].choices)
+        self.fields['name'].required = True
+
+class Employee_AccountForm(forms.ModelForm):
+    
+    class Meta:
+        model = Account
+        fields = ['employee','account_type']
+
+    def __init__(self, *args, **kwargs):
+        super(Employee_AccountForm, self).__init__(*args, **kwargs)
+        
+        self.fields['account_type'].choices = [('', 'Select')] + list(self.fields['account_type'].choices)
+        self.fields['employee'].empty_label = "Select"
+        self.fields['employee'].required = True
+
+class Customer_AccountForm(forms.ModelForm):
+    
+    class Meta:
+        model = Account
+        fields = ['customer','account_type']
+
+    def __init__(self, *args, **kwargs):
+        super(Customer_AccountForm, self).__init__(*args, **kwargs)
+        
+        self.fields['account_type'].choices = [('', 'Select')] + list(self.fields['account_type'].choices)
+        self.fields['customer'].empty_label = "Select"
+        self.fields['customer'].required = True
+
+class Supplier_AccountForm(forms.ModelForm):
+    
+    class Meta:
+        model = Account
+        fields = ['supplier','account_type']
+
+    def __init__(self, *args, **kwargs):
+        super(Supplier_AccountForm, self).__init__(*args, **kwargs)
+        
+        self.fields['account_type'].choices = [('', 'Select')] + list(self.fields['account_type'].choices)
+        self.fields['supplier'].empty_label = "Select"
+        self.fields['supplier'].required = True
+
+
+
+class Cheque_AccountForm(forms.ModelForm):
+    
+    class Meta:
+        model = Account
+        fields = ['cheque','account_type']
+
+    def __init__(self, *args, **kwargs):
+        super(Cheque_AccountForm, self).__init__(*args, **kwargs)
+        
+        self.fields['account_type'].choices = [('', 'Select')] + list(self.fields['account_type'].choices)
+        self.fields['cheque'].empty_label = "Select"
+        self.fields['cheque'].required = True
         
 
 class TransactionForm(forms.ModelForm):

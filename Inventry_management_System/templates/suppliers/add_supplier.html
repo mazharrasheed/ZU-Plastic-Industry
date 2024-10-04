@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+
+{% load custom_filters %}
+
 {% block title %}
   Add Supplier
 {% endblock title %}
@@ -9,8 +12,9 @@
 <div class="container-fluid mb-5 ">
 <div class="row">
   {% include 'accounts/accounts_menu.html' %}
-    <div class="col-3 ">
-      <h2 class="text-center alert alert-info">Add Suppier</h2>
+ 
+    <div class="col-5 ms-5 ">
+      <h2 class="text-center alert alert-info">Add Supplier</h2>
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{form|crispy}}
@@ -19,8 +23,10 @@
         <a href= "/suppliers/" class="btn btn-warning" >Supplier</a>
       </form>
 
+    </div> 
+  
     </div>
-    <div class="col-6 ">
+    <div class="col-12 mt-3 ">
       <h2 class="text-center alert alert-info">Suppliers List</h2>
 
       {% if mydata %}
@@ -37,14 +43,14 @@
       </colgroup>
         <thead>
           <tr class="bg-primary bg-gradient text-light text-center fs-5">
-            <td class="text-center fs-5 fs-5">Sr.No.</td>
-            <td class="text-center fs-5 fs-5">Firt Name</td>
-            <td class="text-center fs-5 fs-5">Last Name</td>
-            <td class="text-center fs-5 fs-5">Description</td>
-            <td class="text-center fs-5 fs-5">Contact</td>
-            <td class="text-center fs-5 fs-5">Adress</td>
+            <td class="text-center fs-5 ">Sr.No.</td>
+            <td class="text-center fs-5 ">Company Name</td>
+            <td class="text-center fs-5 ">Owner Name</td>
+            <td class="text-center fs-5 ">Description</td>
+            <td class="text-center fs-5 ">Contact</td>
+            <td class="text-center fs-5 ">Adress</td>
            
-            {% if update %} {% else %}<td>Action</td> {% endif %}
+            {% if update %} {% else %}<td class="text-center fs-5">Action</td> {% endif %}
             
           </tr>
         </thead>
@@ -54,8 +60,8 @@
           <tr>
             <td class="text-center fs-5" >{{mydata.id}}</td>
            
-            <td class="text-center fs-5">{{mydata.firstname}}</td>
-            <td class="text-center fs-5">{{mydata.lastname}}</td>
+            <td class="text-center fs-5">{{mydata.coname}}</td>
+            <td class="text-center fs-5">{{mydata.name}}</td>
             <td class="text-center fs-5">{{mydata.description}}</td>
             <td class="text-center fs-5">{{mydata.contact}}</td>
             <td class="text-center fs-5">{{mydata.adress}}</td>
@@ -64,21 +70,19 @@
           {% for data in mydata %}
           <tr>
             <td class="text-center fs-5" >{{forloop.counter}}</td>
-            <td class="text-center fs-5">{{data.firstname}}</td>
-            <td class="text-center fs-5">{{data.lastname}}</td>
-            <td class="text-center fs-5">{{data.description}}</td>
+            <td class="text-center fs-5">{{data.coname|capitalize_after_space}}</td>
+            <td class="text-center fs-5">{{data.name|capitalize_after_space}}</td>
+            <td class="text-center fs-5">{{data.description|title}}</td>
             <td class="text-center fs-5">{{data.contact}}</td>
-            <td class="text-center fs-5">{{data.adress}}</td>
+            <td class="text-center fs-5">{{data.adress|title}}</td>
          
             <td  class="text-center fs-5">
               {% if perms.home.change_suppliers %}
-              <a class="btn btn-sm btn-warning" href={% url 'editsupplier' id=data.id %}>Edit</a>
+              <a class="btn btn-sm btn-warning fs-5" href={% url 'editsupplier' id=data.id %}>Edit</a>
               {% endif %}
-              
               {% if perms.home.delete_suppliers %}
-              <a class=" btn btn-sm btn-danger" href={% url 'deletesupplier' id=data.id %}>Delete</a> 
+              <a class=" btn btn-sm btn-danger fs-5" href={% url 'deletesupplier' id=data.id %}>Delete</a> 
               {% endif %}
-              
             </td>
           </tr>
           {% endfor %} 

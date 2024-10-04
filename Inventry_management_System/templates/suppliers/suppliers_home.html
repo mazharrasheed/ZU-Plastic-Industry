@@ -1,4 +1,5 @@
 {% extends 'base.html' %} {% load custom_filters %} 
+{% load custom_filters %}
 
 {% block title %}
   Supplier
@@ -21,25 +22,27 @@
         <table class="table table-flush" id="datatable">
           <thead class="thead-light">
             <tr>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                 Sr#
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
-                First Name
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+                Company Name
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
-                Last Name
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+                Owner Name
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
-                Adress
-              </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
-                Contact
-              </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+               
                 Description
               </th>
-              <th class="border-bottom fw-bolder text-center" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+                Contact
+              </th>
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+               
+                Adress
+              </th>
+              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                 Action
               </th>
             </tr>
@@ -47,17 +50,19 @@
           <tbody>
             {% for supplier in suppliers %}
             <tr id="supplier-{{ supplier.id }}">
-              <td class="text-center">{{ forloop.counter }}</td>
-              <td class="text-center">{{ supplier.firstname }}</td>
-              <td class="text-center">{{ supplier.lastname }}</td>
-              <td class="text-center">{{ supplier.adress }}</td>
-              <td class="text-center">{{ supplier.contact }}</td>
-              <td class="text-center">{{ supplier.description }}</td>
+              <td class="text-center fs-5">{{ forloop.counter }}</td>
+              <td class=" fs-5">{{ supplier.coname|capitalize_after_space }}</td>
+              <td class="text-center fs-5">{{ supplier.name|capitalize_after_space }}</td>
+              <td class="text-center fs-5">{{ supplier.description|title }}</td>
+              <td class="text-center fs-5">{{ supplier.contact }}</td>
+              <td class="text-center fs-5">{{ supplier.adress|title }}</td>
+
               
-              <td class="text-center">
+              
+              <td class="text-center ">
                
-                <a class="btn btn-warning" href="{% url 'editsupplier' supplier.id %}">Edit</a>
-                <button class="btn btn-danger delete-supplier" data-supplier-id="{{ supplier.id }}">
+                <a class="btn btn-warning fs-5" href="{% url 'editsupplier' supplier.id %}">Edit</a>
+                <button class="btn btn-danger fs-5 delete-supplier" data-supplier-id="{{ supplier.id }}">
                   Delete
                 </button>
               </td>

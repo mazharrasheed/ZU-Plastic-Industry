@@ -17,7 +17,7 @@
         {% csrf_token %}
         {{form|crispy}}
 
-        <input type="submit" class="btn btn-success" {% if update %} value="Update Cheque" {% else %} value="Add Cheque" {%endif %}>
+        <input type="submit" class="btn btn-success" {% if update %} value="Update Cheque/Receipt" {% else %} value="Add Cheque/Receipt" {%endif %}>
         <a href= "/cheques/" class="btn btn-warning" >Cheques</a>
       </form>
 

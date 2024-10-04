@@ -3,8 +3,8 @@
     <div class="list-group">
         {% if perms.home.add_account %}
         <h4
-            class="bg-primary bg-gradient alert-info rounded {% if request.path == '/add_accounts/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
-            <a class="text-light" href="/add_accounts/" class="list-group-item">Create Account</a>
+            class="bg-primary bg-gradient alert-info rounded {% if request.path == '/create_accounts/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
+            <a class="text-light" href="/create_accounts/" class="list-group-item">Create Account</a>
         </h4>
         {% endif %} 
         
@@ -22,13 +22,22 @@
             <a class="text-light" href="/balance_sheet/" class="list-group-item">Balance Sheet</a>
         </h4>
         {% endif %}
+
+        {% if perms.home.view_employee %}
+        <h4
+            class="bg-primary bg-gradient alert-info rounded {% if request.path == '/employees/' or request.path == '/add_employee/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
+            <a class="text-light" href="/employees/" class="list-group-item">Employees</a>
+        </h4>
+        {% endif %} 
+        
+
         {% if perms.home.view_customer %}
         <h4
             class="bg-primary bg-gradient alert-info rounded {% if request.path == '/customers/' or request.path == '/add_customer/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
             <a class="text-light" href="/customers/" class="list-group-item">Customers</a>
         </h4>
         {% endif %} 
-        
+
         {% if perms.home.view_suppliers %}
         <h4
             class="bg-primary bg-gradient alert-info rounded {% if request.path == '/suppliers/' or request.path == '/add_supplier/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">

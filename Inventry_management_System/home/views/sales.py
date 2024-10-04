@@ -15,25 +15,29 @@ from django.db.models import Avg,Min,Max,Count,Sum
 @login_required
 @permission_required('home.view_sales_receipt', login_url='/login/')
 def list_sales(request):
-    salereceipt_items_pro={}
-    total_amount={}
+    salereceipt_items_pro = {}
+    total_amount = {}
     salereceipts = Sales_Receipt.objects.all()
    
-    salereceipts
     gatepass_products = Sales_Receipt_Product.objects.all().count()
+    
     for x in salereceipts:
+        # Count the number of products for each sale receipt
         salereceipt_items_pro[x.id] = Sales_Receipt_Product.objects.filter(salereceipt=x).count()
+        
+        # Get products for the sale receipt and aggregate the amount
         salereceipt_products = Sales_Receipt_Product.objects.filter(salereceipt=x)
-        total_amount[x.id]=salereceipt_products.aggregate(Sum('amount'))
+        total_amount[x.id] = salereceipt_products.aggregate(Sum('amount'))
 
-    total_amount1 = sum(item['amount__sum'] for item in total_amount.values())
+    # Handle None values by using 0 if 'amount__sum' is None
+    total_amount1 = sum(item['amount__sum'] or 0 for item in total_amount.values())
     print(total_amount1)
 
     return render(request, 'sale/list_sales.html', {
         'salereceipts': salereceipts,
         'salereceipt_items_pro': salereceipt_items_pro,
-        'total_amount':total_amount
-        })
+        'total_amount': total_amount
+    })
 
 @login_required
 @permission_required('home.add_sales_receipt', login_url='/login/')

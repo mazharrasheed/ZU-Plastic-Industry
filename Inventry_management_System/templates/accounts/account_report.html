@@ -6,12 +6,40 @@
 
 {% block content %}
 
-<div class="container mt-5">
+<div class="container-fluid">
   <div class="row">
-    
-    <h1>Account Details:   </h1>
 
-    <h2>Account Name : {{ account.name }} , Type: {{ account.account_type }}</h2>
+      {% include 'accounts/accounts_menu.html' %}
+    
+  <div class="col-lg-9">
+ 
+    <h1 class="text-center alert alert-info ">Account Details</h1>
+    <h2>Account Name : {% if account.name %}
+      {{account.name|capitalize_after_space}}
+      {% elif account.customer %}
+      {{account.customer|capitalize_after_space}}
+      {% elif  account.supplier %}
+      {{account.supplier|capitalize_after_space}}
+      {% elif account.cheque %}
+      {{account.cheque|capitalize_after_space}}
+      {% else %}
+          -
+      {% endif %} 
+      <br>
+      Account Category:
+      {% if account.name %}
+      General
+      {% elif account.customer %}
+      Customer
+      {% elif  account.supplier %}
+      Supplier
+      {% elif account.cheque %}
+      Cheque/Receipt
+      {% endif %} 
+<br>
+      Type: {{ account.account_type }}</h2>
+
+
     <h2>Debit Transactions</h2>
     <ul>
       {% for transaction in debit_transactions %}
@@ -35,6 +63,7 @@
     <ul>
       {{ account.balance }} 
     </ul>
+  </div>
 </div>
 </div>
 

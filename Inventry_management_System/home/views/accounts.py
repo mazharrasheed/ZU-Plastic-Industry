@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render,get_object_or_404
-from home.forms import  AccountForm,TransactionForm
+from home.forms import  AccountForm,Employee_AccountForm,Customer_AccountForm,Supplier_AccountForm,Cheque_AccountForm,TransactionForm
 from home.models import Account,Transaction
 from django.contrib.auth.decorators import login_required,permission_required
 # Create your views here.
@@ -8,65 +8,111 @@ from django.contrib.auth.decorators import login_required,permission_required
 @login_required
 @permission_required('home.view_account', login_url='/login/')
 def accounts(request):
-    mydata = Account.objects.filter(is_deleted=False)
+    mydata = Account.objects.filter(is_deleted=False).order_by("-id")
     data={'mydata':mydata}
     return render(request,'accounts/accounts_home.html',data)
 
 @login_required
 @permission_required('home.add_account', login_url='/login/')
+def create_accounts(request):
+    mydata = Account.objects.filter(is_deleted=False).order_by("-id")
+    data={'mydata':mydata}
+    return render(request,'accounts/create_accounts.html',data)
+
+@login_required
+@permission_required('home.add_account', login_url='/login/')
 def add_account(request):
-  if request.user.is_authenticated:
+
+    account_type=(request.GET.get('account_type'))
     if request.method == 'POST':
-      mydata = Account.objects.filter(is_deleted=False)
-      form = AccountForm(request.POST)
-      if form.is_valid():
-        form.save()
-        messages.success(request,"Accounts Added Succesfuly !!")
-        return redirect('accounts')
+            mydata = Account.objects.filter(is_deleted=False).order_by("-id")
+            if account_type=="employee":
+                form = Employee_AccountForm(request.POST)
+                mydata = Account.objects.filter(is_deleted=False,employee__isnull=False).order_by("-id")
+            elif account_type=="customer": 
+                mydata = Account.objects.filter(is_deleted=False,customer__isnull=False).order_by("-id")
+                form = Customer_AccountForm(request.POST)
+            elif account_type=="supplier":
+                mydata = Account.objects.filter(is_deleted=False,supplier__isnull=False).order_by("-id")
+                form = Supplier_AccountForm(request.POST)
+            elif account_type=="cheque":
+                mydata = Account.objects.filter(is_deleted=False,cheque__isnull=False).order_by("-id")
+                form = Cheque_AccountForm(request.POST)
+            else:
+                form = AccountForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request,"Accounts Added Succesfuly !!")
+                return redirect('createaccounts')
     else:
-      form = AccountForm()
-      mydata = Account.objects.filter(is_deleted=False)
-  else:
-    return redirect('signin')
-  data={'mydata':mydata,'form':form}
-  return render(request,'accounts/accounts.html',data)
+        mydata = Account.objects.filter(is_deleted=False).order_by("-id")
+        if account_type=="employee":
+            form = Employee_AccountForm()
+            mydata = Account.objects.filter(is_deleted=False,employee__isnull=False).order_by("-id")
+        elif account_type=="customer":
+            mydata = Account.objects.filter(is_deleted=False,customer__isnull=False).order_by("-id")
+            form = Customer_AccountForm()
+        elif account_type=="supplier":
+            mydata = Account.objects.filter(is_deleted=False,supplier__isnull=False).order_by("-id")
+            form = Supplier_AccountForm()
+        elif account_type=="cheque":
+            mydata = Account.objects.filter(is_deleted=False,cheque__isnull=False).order_by("-id")
+            form = Cheque_AccountForm()
+        else:
+            form = AccountForm()
+
+    data={'mydata':mydata,'form':form}
+    return render(request,'accounts/accounts.html',data)
 
 @login_required
 @permission_required('home.change_account', login_url='/login/')
 def edit_account(request,id):
-  if request.user.is_authenticated: 
+
+    mydata=Account.objects.get(id=id)
     data={}
+
     if request.method == 'POST':
-      mydata=Account.objects.get(id=id)
-      form = AccountForm(request.POST,instance=mydata)
-      if form.is_valid():
-        form.save()
-        messages.success(request,"Accounts Updated Succesfuly !!")
-        return redirect('accounts')
+        mydata=Account.objects.get(id=id)
+        if mydata.employee=="employee":
+            form = Employee_AccountForm(request.POST)
+        if mydata.customer:
+            form = Customer_AccountForm(request.POST,instance=mydata)
+        elif mydata.supplier:
+            form = Supplier_AccountForm(request.POST,instance=mydata)
+        elif mydata.cheque:
+            form = Cheque_AccountForm(request.POST,instance=mydata)
+        else:
+            form = AccountForm(request.POST,instance=mydata)
+        if form.is_valid():
+            form.save()
+            messages.success(request,"Accounts Updated Succesfuly !!")
+            return redirect('createaccounts')
     else:
         mydata=Account.objects.get(id=id)
-        form = AccountForm(instance=mydata)
+        if mydata=="employee":
+            form = Employee_AccountForm(instance=mydata)
+        if mydata.customer:
+            form = Customer_AccountForm(instance=mydata)
+        elif mydata.supplier:
+            form = Supplier_AccountForm(instance=mydata)
+        elif mydata.cheque:
+            form = Cheque_AccountForm(instance=mydata)
+        else:
+            form = AccountForm(instance=mydata)
     data={'form': form, 'mydata':mydata,'update':True}
     return render(request, 'accounts/accounts.html', data)
-  else:
-    return redirect('signin')
-  
+
 @login_required
 @permission_required('home.delete_account', login_url='/login/')
 def delete_account(request,id):
-  if request.user.is_authenticated:
     try:
-      mydata=Account.objects.get(id=id)
-      mydata.is_deleted=True
-      mydata.save()
-      messages.success(request,"Accounts Deleted Succesfuly !!")
-      return redirect('accounts')
+        mydata=Account.objects.get(id=id)
+        mydata.is_deleted=True
+        mydata.save()
+        messages.success(request,"Accounts Deleted Succesfuly !!")
+        return redirect('accounts')
     except:
-      pass
-  else:
-    return redirect('signin')
-  
-# views.py
+        pass
 
 @login_required
 @permission_required('home.add_transaction', login_url='/login/')

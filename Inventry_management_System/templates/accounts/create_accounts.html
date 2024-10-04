@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load custom_filters %}
 {% block title %}
-  Accounts
+Accounts
 {% endblock title %}
 {% block content %}
 
@@ -10,6 +10,31 @@
   <div class="row">
     {% include 'accounts/accounts_menu.html' %}
     <div id="product" class="col-lg-9 ">
+      <h2 class="text-center alert alert-info ">Select an Account Type to Create</h2>
+      <div class="text-center  mb-3 ">
+
+        <h4
+          class=" btn bg-success bg-gradient  rounded fs-4 {% if request.path == '/add_account/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
+          <a class="text-light" href="/add_account" class="list-group-item ">General</a>
+        </h4>
+        <h4
+          class=" btn bg-success bg-gradient  rounded fs-4 {% if request.path == '/add_account/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
+          <a class="text-light" href="/add_account?account_type=employee" class="list-group-item ">Employee</a>
+        </h4>
+
+        <h4
+          class=" btn bg-success bg-gradient  rounded fs-4 {% if request.path == '/add_account/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
+          <a class="text-light" href="/add_account?account_type=customer" class="list-group-item ">Customer</a>
+        </h4>
+        <h4
+          class=" btn bg-success bg-gradient rounded fs-4 {% if request.path == '/add_account/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
+          <a class="text-light" href="/add_account?account_type=supplier" class="list-group-item">Supplier</a>
+        </h4>
+        <h4
+          class=" btn bg-success bg-gradient rounded fs-4 {% if request.path == '/add_account/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
+          <a class="text-light" href="/add_account?account_type=cheque" class="list-group-item">Cheque/Reciept</a>
+        </h4>
+      </div>
       <h2 class="text-center alert alert-info ">Accounts List</h2>
       <div class="table-responsive py-2">
         {% if mydata %}
@@ -40,7 +65,6 @@
             {% for data in mydata %}
             <tr>
               <td class="text-center fs-5">{{forloop.counter}}</td>
-
               {% if data.name %}
               <td class=" fs-5">{{data.name|capitalize_after_space}}</td>
               {% elif data.customer %}
@@ -50,7 +74,7 @@
               {% elif data.cheque %}
               <td class=" fs-5">{{data.cheque|capitalize_after_space}}</td>
               {% else %}
-              <td class=" fs-5">-</td>
+              <td class="text-center fs-5">-</td>
               {% endif %}
 
               {% if data.name %}
@@ -64,7 +88,8 @@
               {% else %}
               <td class="text-center fs-5">-</td>
               {% endif %}
-             
+
+
               <td class="text-center fs-5">{{data.account_type}}</td>
               <td class="text-center fs-5">
                 <a class="fs-5 btn btn-sm btn-info" href={% url 'accountreport' id=data.id %}>Details</a>

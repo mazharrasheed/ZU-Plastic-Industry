@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import  path
 from home.views import category,product
 from home.views import views,accounts
-from home.views import gatepass,sales,suppliers,customers,cheques
+from home.views import gatepass,sales,suppliers,customers,cheques,employees
 from home.models import Category
 from django.conf.urls.static import static
 
@@ -11,7 +11,7 @@ from Inventry_management_System import settings
 categories=Category.objects.filter(is_deleted=False)
 
 urlpatterns = [
-   
+    
     path('', views.index,name="index"),
     path('dashboard/', views.dashboard,name="dashboard"),
     path('postblog/', views.post_blog,name="postblog"),
@@ -35,9 +35,14 @@ urlpatterns = [
     path('product/<int:id>', product.edit_product , name="editproduct"),
     path('deleteproduct/<int:id>', product.delete_product , name="deleteproduct"),
 
+    path('employees/', employees.employees , name="employees"),
+    path('add_employee/', employees.add_employee , name="addemployee"),
+    path('editemployee/<int:id>', employees.edit_employee , name="editemployee"),
+    path('deleteemployee/<int:id>', employees.delete_employee , name="deleteemployee"),
+
     path('suppliers/', suppliers.supplier , name="suppliers"),
     path('add_supplier/', suppliers.add_supplier , name="addsupplier"),
-    path('supplier/<int:id>', suppliers.edit_supplier , name="editsupplier"),
+    path('editsupplier/<int:id>', suppliers.edit_supplier , name="editsupplier"),
     path('deletesupplier/<int:id>', suppliers.delete_supplier , name="deletesupplier"),
 
     path('customers/', customers.customer , name="customers"),
@@ -71,7 +76,8 @@ urlpatterns = [
     path('print-salereceipt/<int:salereceipt_id>/', sales.print_salereceipt, name='print_salereceipt'),
 
     path('accounts/', accounts.accounts , name="accounts"),
-    path('add_accounts/', accounts.add_account , name="add_accounts"),
+    path('create_accounts/', accounts.create_accounts , name="createaccounts"),
+    path('add_account/', accounts.add_account , name="add_accounts"),
     path('editaccount/<int:id>', accounts.edit_account , name="editaccount"),
     path('deleteaccount/<int:id>', accounts.delete_account , name="deleteaccount"),
     path('accountreport/<int:id>', accounts.account_report , name="accountreport"),

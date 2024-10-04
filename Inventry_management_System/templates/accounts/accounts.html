@@ -34,10 +34,8 @@
               {% else %}
               <td class="text-center fs-5">Sr.No.</td>
               {% endif %}
-
-              <td class="text-center fs-5">Name.</td>
+              <td class="text-center fs-5">Name</td>
               <td class="text-center fs-5">Account Type</td>
-
               {% if update %}
               {% else %}
               <td class="text-center fs-5">Actions</td>
@@ -49,7 +47,17 @@
             {% if update %}
             <tr>
               <td class="text-center fs-5">{{mydata.id}}</td>
+              {% if mydata.name %}
               <td class="text-center fs-5">{{mydata.name}}</td>
+              {% elif mydata.customer %}
+              <td class="text-center fs-5">{{mydata.customer}}</td>
+              {% elif  mydata.supplier %}
+              <td class="text-center fs-5">{{mydata.supplier}}</td>
+              {% elif mydata.cheque %}
+              <td class="text-center fs-5">{{mydata.cheque}}</td>
+              {% else %}
+              <td class="text-center fs-5">-</td>
+              {% endif %}
               <td class="text-center fs-5">{{mydata.account_type}}</td>
             </tr>
             {% else %}
@@ -57,7 +65,19 @@
             {% for data in mydata %}
             <tr>
               <td class="text-center fs-5">{{forloop.counter}}</td>
+
+              {% if data.name %}
               <td class="text-center fs-5">{{data.name}}</td>
+              {% elif data.customer %}
+              <td class="text-center fs-5">{{data.customer}}</td>
+              {% elif  data.supplier %}
+              <td class="text-center fs-5">{{data.supplier}}</td>
+              {% elif data.cheque %}
+              <td class="text-center fs-5">{{data.cheque}}</td>
+              {% else %}
+              <td class="text-center fs-5">-</td>
+              {% endif %}
+
               <td class="text-center fs-5">{{data.account_type}}</td>
               <td class="text-center fs-5">
                 <a class=" btn btn-sm btn-info" href={% url 'accountreport' id=data.id %}>Details</a>
