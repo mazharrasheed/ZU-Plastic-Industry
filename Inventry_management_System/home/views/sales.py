@@ -5,7 +5,7 @@
 from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib.auth.decorators import login_required,permission_required
 from ..forms import  Sales_Receipt_ProductForm,Sales_ReceiptForm
-from ..models import Sales_Receipt, Sales_Receipt_Product,Product
+from ..models import Sales_Receipt, Sales_Receipt_Product,Product,Product_Price
 from django.contrib import messages
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -18,7 +18,6 @@ def list_sales(request):
     salereceipt_items_pro = {}
     total_amount = {}
     salereceipts = Sales_Receipt.objects.all()
-   
     gatepass_products = Sales_Receipt_Product.objects.all().count()
     
     for x in salereceipts:
@@ -65,11 +64,21 @@ def create_salereceipt(request, salereceipt_id=None):
             salercpt=form_salereceipt.save(commit=False)
             salercpt.created_by=request.user
             salercpt.save()
-            unit_price = form.cleaned_data.get('unit_price')
+
+
+            customer=form_salereceipt.cleaned_data.get('customer_name')
+            product=form.cleaned_data.get('product')
+            print(customer,product)
+            unit_price1=Product_Price.objects.get(is_deleted=False,customer=customer,product=product)
+            print(unit_price1.price)
+
+            unit_price = unit_price1.price
             qty = form.cleaned_data.get('quantity')
             amount=unit_price*qty
             salereceipt_product = form.save(commit=False)
             salereceipt_product.salereceipt = salereceipt
+            salereceipt_product.unit_price = unit_price1.price
+
             salereceipt_product.amount = amount
             salereceipt_product.save()
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':

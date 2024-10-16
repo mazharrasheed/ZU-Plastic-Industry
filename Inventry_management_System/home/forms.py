@@ -14,7 +14,7 @@ from .models import Blog
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from .models import Category,Product,Account,Transaction,GatePassProduct,GatePass,Unit,Sales_Receipt
-from .models import Customer,Sales_Receipt_Product,Suppliers,Cheque,Employee
+from .models import Customer,Sales_Receipt_Product,Suppliers,Cheque,Employee,Product_Price
 
 
 class CategoryForm(forms.ModelForm):
@@ -28,7 +28,7 @@ class ProductForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Category.objects.filter(is_deleted=False), empty_label="Select Unit")
     class Meta:
         model = Product
-        fields = ['category', 'productname','product_size','product_quantity','unit','product_status','pro_img']
+        fields = ['category', 'productname','product_size','product_quantity','product_status','pro_img']
         labels={'productname':'Product Name','product_size':'Product Size',
                 'product_quantity':'Product_Quantity','product_status':'Product_Status','pro_img':'Product Image'}
         
@@ -37,10 +37,13 @@ class ProductForm(forms.ModelForm):
             # 'product_weight': forms.TextInput(attrs={'placeholder': 'Enter product weight'}),
             # 'pro_img': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
             # 'product_status': forms.CheckboxInput(),
+            
         }
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
+        self.fields['pro_img'].required = False
+        self.fields['product_quantity'].required = False
         placeholders = {
             'productname': 'Enter product name',
             'product_size': 'Enter product size',
@@ -50,7 +53,7 @@ class ProductForm(forms.ModelForm):
         for field_name, placeholder in placeholders.items():
             self.fields[field_name].widget.attrs.update({'placeholder': placeholder})
 
-         # Add 'fs-5' class to all fields' labels
+        # Add 'fs-5' class to all fields' labels
         for field_name in self.fields:
             self.fields[field_name].widget.attrs.update({'class': 'form-control'})  # Add class to widgets
             self.fields[field_name].label_tag = lambda label, tag=None, attrs=None, *args, **kwargs: f'<label class="fs-5" for="{self[field_name].id_for_label}">{label}</label>'
@@ -58,10 +61,40 @@ class ProductForm(forms.ModelForm):
         self.fields['category'].empty_label = "Select"
         # self.fields['product_status'].choices = [('', 'Select')] + list(self.fields['product_status'].choices)
 
-        
+class Product_PriceForm(forms.ModelForm):
+    product = forms.ModelChoiceField(queryset=Product.objects.filter(is_deleted=False), empty_label="Select Product")
+    customer = forms.ModelChoiceField(queryset=Customer.objects.filter(is_deleted=False), empty_label="Select Customer")
 
+    class Meta:
+        model = Product_Price
+        fields = ['product', 'customer', 'price']
 
+    def __init__(self, *args, **kwargs):
+        category = kwargs.pop('category', None)  # Get the category from kwargs
+        super(Product_PriceForm, self).__init__(*args, **kwargs)
 
+        # Filter products based on the selected category
+        if category:
+            self.fields['product'].queryset = Product.objects.filter(category=category, is_deleted=False)
+
+        placeholders = {
+            'price': 'Enter product price here',
+        }
+
+        for field_name, placeholder in placeholders.items():
+            self.fields[field_name].widget.attrs.update({'placeholder': placeholder})
+
+class search_Product_PriceForm(forms.Form):
+    product = forms.ModelChoiceField(queryset=Product.objects.filter(is_deleted=False), empty_label="Select Product")
+    customer = forms.ModelChoiceField(queryset=Customer.objects.filter(is_deleted=False), empty_label="Select Customer")
+
+    def __init__(self, *args, **kwargs):
+        category = kwargs.pop('category', None)  # Get the category from kwargs
+        super(search_Product_PriceForm, self).__init__(*args, **kwargs)
+
+        # Filter products based on the selected category
+        if category:
+            self.fields['product'].queryset = Product.objects.filter(category=category, is_deleted=False)
 
 class GatePassForm(forms.ModelForm):
 
@@ -102,6 +135,7 @@ class GatePassProductForm(forms.ModelForm):
 
 
 class Sales_ReceiptForm(forms.ModelForm):
+    customer_name = forms.ModelChoiceField(queryset=Customer.objects.filter(is_deleted=False), empty_label="Select Customer")
     class Meta:
         model = Sales_Receipt
         fields = [ 'customer_name', 'phone_number']
@@ -109,11 +143,11 @@ class Sales_ReceiptForm(forms.ModelForm):
 class Sales_Receipt_ProductForm(forms.ModelForm):
     product = forms.ModelChoiceField(queryset=Product.objects.filter(is_deleted=False), empty_label="Select Product")
     quantity = forms.IntegerField(min_value=1, initial=1, label='Quantity')
-    unit_price = forms.FloatField( label='Unit Price',required=False)
+    # unit_price = forms.FloatField( label='Unit Price',required=False)
     
     class Meta:
         model = Sales_Receipt_Product
-        fields = ['product', 'quantity','unit_price']
+        fields = ['product', 'quantity']
 
     def __init__(self, *args, **kwargs):
         self.salereceipt = kwargs.pop('salereceipt', None)
@@ -122,11 +156,9 @@ class Sales_Receipt_ProductForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         product = cleaned_data.get('product')
-
         if product and self.salereceipt:
             if Sales_Receipt_Product.objects.filter(salereceipt=self.salereceipt, product=product).exists():
                 self.add_error('product', f'The product "{product}" has already been added to this gate pass.')
-
         return cleaned_data
 
 class Sign_Up(UserCreationForm):

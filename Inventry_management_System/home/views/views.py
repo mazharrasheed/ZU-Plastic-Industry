@@ -110,8 +110,8 @@ def sign_up(request):
       form.save()
       user = form.save()
       # adding user in to a group on Signup
-      # group = Group.objects.get(name='author')
-      # user.groups.add(group)
+      group = Group.objects.get(name='author')
+      user.groups.add(group)
       form = Sign_Up()
       messages.success(request,"account created succesfuly !!")
       return redirect('signup')

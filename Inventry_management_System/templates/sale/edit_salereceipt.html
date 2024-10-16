@@ -15,7 +15,7 @@ Edit Sale Receipt
     }
 
     .table-container {
-        width: 50%;
+        width: 80%;
         margin: 0 auto;
         border: 1px solid #000;
         padding: 20px;
@@ -81,7 +81,7 @@ Edit Sale Receipt
     
         {% include 'sale/sale_menu.html' %}
     
-    <div class="col-lg-10">
+    <div class="col-lg-9">
 
     <div class="table-container">
         <div class=" text-center  "><h3 class="  text-center bg-dark text-light p-3">Cash Sale Receipt</h3></div>
@@ -112,8 +112,8 @@ Edit Sale Receipt
                 </div>
                 <div style="width:230px">
                    
-                    <p style="margin-top:85px"><span class="">{{ form_salereceipt.customer_name }}</span></p>
-                    <p><span class=""> {{form_salereceipt.phone_number }}</span></p>
+                    <p style="margin-top:85px"><span class="">{{ form_salereceipt.customer_name|as_crispy_field }}</span></p>
+                    <p><span class=""> {{form_salereceipt.phone_number|as_crispy_field }}</span></p>
                 </div>
             </div>
 
@@ -123,7 +123,8 @@ Edit Sale Receipt
                         <td>Auto</td>
                         <td>{{ form.product|as_crispy_field }}</td>
                         <td>{{ form.quantity|as_crispy_field }}</td>
-                        <td>{{form.unit_price|as_crispy_field }}</td>
+                        
+                        <td>Unit Price Auto</td>
                         <td>Amount Auto</td>
                         <th class="col-5 text-center">
                             <button class="btn btn-primary" type="submit" name="add_product">Add Product</button>

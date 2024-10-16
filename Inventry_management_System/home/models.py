@@ -51,9 +51,8 @@ class Product(models.Model):
     productname=models.CharField(max_length=255,unique=True)
     product_size=models.CharField(max_length=255)
     # product_sale_price=models.CharField(max_length=255)
-    product_quantity=models.CharField(max_length=255)
-    unit=models.ForeignKey(Unit , on_delete=models.RESTRICT )
-  
+    product_quantity=models.CharField(max_length=255,null=True,blank=True )
+    unit=models.CharField(max_length=255,default="Nos")
     # product_status=models.CharField(max_length=50,choices=STATUS_TYPE_CHOICES)
     product_status=models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)
@@ -61,6 +60,15 @@ class Product(models.Model):
     product_slug=AutoSlugField(populate_from="productname",unique=True,null=True,default=None)
     def __str__(self):
         return f"{self.productname}"
+    
+    def get_price_for_customer(self, customer):
+        # Get the price for this product for a specific customer
+        try:
+            return self.product_price.get(customer=customer).price
+        except Product_Price.DoesNotExist:
+            return None
+    
+
     
 # class GatePass(models.Model):
 #     products = models.ManyToManyField(Product, through='GatePassProduct')
@@ -104,7 +112,7 @@ class Sales_Receipt(models.Model):
 
     def __str__(self):
         return f"Sale Receipt {self.id} - {self.date_created.strftime('%Y-%m-%d')}"
-     
+
 class Sales_Receipt_Product(models.Model):
     salereceipt = models.ForeignKey(Sales_Receipt, on_delete=models.RESTRICT)
     product = models.ForeignKey(Product, on_delete=models.RESTRICT)
@@ -156,6 +164,14 @@ class Cheque(models.Model):
     def __str__(self):
         return f"{self.customer} {self.cheque_number}".capitalize()
     
+class Product_Price(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.RESTRICT, related_name='product_price')
+    customer = models.ForeignKey(Customer, on_delete=models.RESTRICT)
+    price = models.FloatField()
+    is_deleted=models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('product', 'customer')  # Ensure each customer has one price per product
 
 class Account(models.Model):
     ASSET = 'Asset'

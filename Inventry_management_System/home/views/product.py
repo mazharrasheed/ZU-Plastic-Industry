@@ -46,7 +46,6 @@ def add_product(request,id=''):
         cat=Category.objects.get(is_deleted=False,id=id)
       else:
         cat=Category.objects.get(is_deleted=False,id=categoryID)
-
       mydata=Product.objects.filter(is_deleted=False,category=cat).order_by("-id")
       form = ProductForm(initial={'category': cat})
   data={'form': form, 'mydata':mydata,'categories':categories,'prod':True}
@@ -58,11 +57,12 @@ def edit_product(request,id):
   data={}
   if request.method == 'POST':
     mydata=Product.objects.get(id=id)
+    categoryID=mydata.category.id
     form = ProductForm(request.POST,request.FILES,instance=mydata)
     if form.is_valid():
       form.save()
       messages.success(request,"Product Updated successfully !!")
-      return redirect('addproduct')
+      return redirect('addproduct1',categoryID)
   else:
     mydata=Product.objects.get(id=id) 
     form = ProductForm(instance=mydata)
@@ -74,8 +74,8 @@ def edit_product(request,id):
 def delete_product(request,id):
   
   mydata=Product.objects.get(id=id)
+  categoryID=mydata.category.id
   mydata.is_deleted=True
   mydata.save()
   messages.success(request,"Product Deleted successfully !!")
-  return redirect('addproduct')
- 
+  return redirect('addproduct1',categoryID)

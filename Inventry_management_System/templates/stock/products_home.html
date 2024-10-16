@@ -5,36 +5,30 @@
 
 {% block content %}
 
-
 <div class="container-fluid">
-
   <div class="row">
-
     {% include 'stock/product_menu.html' %}
-
-
-    <div id="product" class="col-lg-9 ">
-      <h2 class="text-center alert alert-info ">Products List</h2>
-     
+    <div id="product" class="col-lg-9">
+      <h3 class="text-center alert alert-info">Products List</h3>
+      <div class="row">
         {% if products %}
-
-        {% for product in products %}
-
-        <div class="card mx-auto mb-3" id="{{product.id}}" style="width: 18rem">
-
-          <img src="{{product.pro_img.url}}" class="card-img-top mt-2" alt="..." />
-
-          <div class="card-body p-0">
-            <h5 class="card-title mt-2">Prodcut Name:{{product.productname|title}}</h5>
-            <p class="card-text">Sizes: {{product.product_size}}</p>
-          </div>
-        </div>
-
-        {% endfor %}
-     
-      {% else %}
-      <h4 class="text-center fs-5 alert alert-warning">No Record Found</h4>
-      {% endif %}
+          {% for product in products %}
+            <div class="col-lg-4 col-md-6 mb-3">
+              <div class="card mx-auto p-3" id="{{product.id}}" style="width: 25rem">
+                {% if product.pro_img %}
+                  <img src="{{product.pro_img.url}}" class="card-img-top mt-2" alt="Product Image">
+                {% endif %}
+                <div class="card-body p-0">
+                  <h5 class="card-title mt-2">Product Name: {{product.productname|title}}</h5>
+                  <p class="card-text">Sizes: {{product.product_size}}</p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <h4 class="text-center fs-5 alert alert-warning">No Record Found</h4>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>
