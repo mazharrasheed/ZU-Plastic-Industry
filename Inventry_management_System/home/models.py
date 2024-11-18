@@ -183,6 +183,7 @@ class Account(models.Model):
     GAIN = 'Gain'
     LOSS = 'Loss'
     COMMITMENT = 'Commitment'
+    COMMITMENT_RECEIVED = 'Commitment_Received'
 
     ACCOUNT_TYPE_CHOICES = [
         (ASSET, 'Asset'),
@@ -192,7 +193,8 @@ class Account(models.Model):
         (EXPENSE, 'Expense'),
         (GAIN, 'Gain'),
         (LOSS, 'Loss'),
-        (COMMITMENT , 'Commitment')
+        (COMMITMENT , 'Commitment'),
+        (COMMITMENT_RECEIVED,'Commitment_Received')
     ]
     name=models.CharField(max_length=50,null=True ,blank=True)
     employee=models.OneToOneField(Employee, on_delete=models.RESTRICT ,null=True,blank=True)
@@ -201,6 +203,7 @@ class Account(models.Model):
     cheque=models.OneToOneField(Cheque, on_delete=models.RESTRICT,null=True,blank=True)
     balance = models.DecimalField(max_digits=10, decimal_places=2,default=0)
     account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE_CHOICES)
+    date = models.DateTimeField(default=datetime.now())
     is_deleted=models.BooleanField(default=False)
     def __str__(self):
         if self.name:

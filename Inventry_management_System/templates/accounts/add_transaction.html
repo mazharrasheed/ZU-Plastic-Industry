@@ -37,6 +37,7 @@
         <thead>
           <tr class="bg-primary bg-gradient text-light text-center">
             <td >Sr.No.</td>
+            <td >Ref.No.</td>
             <td >Date</td>
             <td >Description</td>
             <td >Debit </td>
@@ -60,6 +61,7 @@
           {% for data in mydata %}
           <tr>
             <td class="text-center fs-5">{{forloop.counter}}</td>
+            <td class="text-center fs-5">{{data.id}}</td>
             <td class="text-center fs-5">{{data.date}}</td>
             <td class="text-center fs-5">{{data.debit_account}} <br>
             {{data.credit_account}}</td>
