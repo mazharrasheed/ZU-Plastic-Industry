@@ -370,10 +370,9 @@ def balance_sheet(request):
         gain = 0
         loss = 0
         commitment=0
-     
+
         for account in accounts:
             balance = account.balance  # Use the balance field as the initial balance
-
             # Get all transactions where the account is either debited or credited
             debit_transactions = Transaction.objects.filter(debit_account=account)
             credit_transactions = Transaction.objects.filter(credit_account=account)
@@ -381,22 +380,19 @@ def balance_sheet(request):
             # Calculate the net balance for the account
             for transaction in debit_transactions:
                 balance += transaction.amount  
-                print(balance)
             for transaction in credit_transactions:
                 balance -= transaction.amount
-                print(balance)
+                
             if balance != account.balance:  # Skip accounts with no transactions
                 if account.account_type == 'Asset':
                     asset+=balance
                     assets[account] = balance
-                    print("dfferre")
                 elif account.account_type == 'Liability':
                     liabilitie-=balance
                     liabilities[account] = -balance
                 elif account.account_type == 'Equity':
                     equity -= balance
                     equity_account[account] = -balance
-                    print("equty")
                 elif account.account_type == 'Revenue':
                     for transaction in credit_transactions:
                         revenue += transaction.amount 
@@ -404,15 +400,10 @@ def balance_sheet(request):
                     revenue_account[account] = -balance
                 elif account.account_type == 'Expense':
                     expenses += balance
-                    print("exp")
                     expenses_account[account] = balance
                 elif account.account_type == 'Commitment':
-                    print("Commitment")
-                    print(balance)
                     commitment += balance
-                    print(account.balance)
                     commitment_account[account] = balance
-
                 elif account.account_type == 'Gain':
                     gain += balance
                     gain_account[account] = balance
