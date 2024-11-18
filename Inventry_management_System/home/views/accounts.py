@@ -179,13 +179,25 @@ def add_transaction(request):
     else:
         return redirect('signin')
 
+from django.forms.models import model_to_dict
+
 @login_required
 @permission_required('home.change_transaction', login_url='/login/')
 def edit_transaction(request,id):
-    form = TransactionForm()
-    transactions = Transaction.objects.filter(id=id)
-    return render(request, 'accounts/add_transaction.html', {'form': form,'mydata': transactions})
-    pass
+    
+    if request.method=="POST":
+        transaction = Transaction.objects.get(id=id)
+        form = TransactionForm(request.POST,instance=transaction)
+        if form.is_valid():
+            form.save()
+            messages.success(request,"Transaction Updated successfully !!")
+            return redirect('transaction')
+    else:
+        transaction = Transaction.objects.get(id=id)
+        form = TransactionForm(instance=transaction)
+
+    return render(request, 'accounts/add_transaction.html', {'form': form,'mydata': transaction, 'update':True})
+
 
 @login_required
 @permission_required('home.delete_transaction', login_url='/login/')
@@ -229,6 +241,8 @@ def account_report(request,id):
             balance=int(debit_balance)-int(credit_balance)
         elif account.account_type=='Loss' :
             balance=int(credit_balance)-int(debit_balance)
+        elif account.account_type=='Commitment' :
+            balance=int(credit_balance)-int(debit_balance)+account.balance
 
         return render(request, 'accounts/account_report.html', {'account': account,
         'debit_transactions': debit_transactions,
@@ -272,68 +286,73 @@ def balance_sheet111(request):
         return redirect('signin')'''
 
 
-@login_required
-@permission_required('home.view_account', login_url='/login/')
-def laddger_balance(request): #not used its iddle
+# @login_required
+# @permission_required('home.view_account', login_url='/login/')
+# def laddger_balance(request): #not used its iddle
 
-        accounts = Account.objects.filter(is_deleted=False)
-        assets = {}
-        liabilities = {}
-        equity_account = {}
-        revenue_account = {}
-        expenses_account = {}
+#         accounts = Account.objects.filter(is_deleted=False)
+#         assets = {}
+#         liabilities = {}
+#         equity_account = {}
+#         revenue_account = {}
+#         expenses_account = {}
         
 
-        equity = 0
-        revenue = 0
-        expenses = 0
+#         equity = 0
+#         revenue = 0
+#         expenses = 0
      
-        for account in accounts:
-            balance = account.balance  # Use the balance field as the initial balance
+#         for account in accounts:
+#             balance = account.balance  # Use the balance field as the initial balance
             
-            # Get all transactions where the account is either debited or credited
-            debit_transactions = Transaction.objects.filter(debit_account=account)
-            credit_transactions = Transaction.objects.filter(credit_account=account)
+#             # Get all transactions where the account is either debited or credited
+#             debit_transactions = Transaction.objects.filter(debit_account=account)
+#             credit_transactions = Transaction.objects.filter(credit_account=account)
             
-            # Calculate the net balance for the account
-            for transaction in debit_transactions:
-                balance += transaction.amount  
-            for transaction in credit_transactions:
-                balance -= transaction.amount
-                   
-            if balance != account.balance:  # Skip accounts with no transactions
-                if account.account_type == 'Asset':
-                    assets[account] = balance
-                elif account.account_type == 'Liability':
-                    liabilities[account] = balance
-                elif account.account_type == 'Equity':
-                    equity -= balance
-                    equity_account[account] = -balance
-                elif account.account_type == 'Revenue':
-                    revenue -= balance
-                    revenue_account[account] = -balance
-                elif account.account_type == 'Expense':
-                    expenses += balance
-                    expenses_account[account] = balance
+#             # Calculate the net balance for the account
+#             for transaction in debit_transactions:
+#                 balance += transaction.amount  
+#             for transaction in credit_transactions:
+#                 balance -= transaction.amount
                 
+#             if balance != account.balance:  # Skip accounts with no transactions
+#                 if account.account_type == 'Asset':
+#                     assets[account] = balance
+#                 elif account.account_type == 'Liability':
+#                     liabilities[account] = balance
+#                 elif account.account_type == 'Equity':
+#                     equity -= balance
+#                     equity_account[account] = -balance
+#                 elif account.account_type == 'Revenue':
+#                     revenue -= balance
+#                     revenue_account[account] = -balance
+#                 elif account.account_type == 'Expense':
+#                     expenses += balance
+#                     expenses_account[account] = balance
 
-            # sum(for i in assets.values):
-        total_assets = int(sum(assets.values()))
-        total_liabilities = int(sum(liabilities.values()))
-        total_equity = int(sum(equity_account.values()))
 
-        if total_assets == total_liabilities+total_equity :
-            messages.success(request,"Balance Sheet is Balanced  !!")
+
+#             # sum(for i in assets.values):
+#         total_assets = int(sum(assets.values()))
+#         total_liabilities = int(sum(liabilities.values()))
+#         total_equity = int(sum(equity_account.values()))
+
+#         if total_assets == total_liabilities+total_equity :
+#             messages.success(request,"Balance Sheet is Balanced  !!")
             
-        else:
-            messages.error(request," Balance Sheet is not Balanced Please check !!")
+#         else:
+#             messages.error(request," Balance Sheet is not Balanced Please check !!")
 
 
 def balance_sheet(request):
 
     if request.user.is_authenticated:
-        
+       
         accounts = Account.objects.filter(is_deleted=False)
+        for ac in accounts:
+            if ac.account_type == "Commitment":
+                print(ac.balance)
+        print(accounts)
         assets = {}
         liabilities = {}
         equity_account = {}
@@ -341,6 +360,8 @@ def balance_sheet(request):
         expenses_account = {}
         gain_account = {}
         loss_account = {}
+        commitment_account = {}
+
         liabilitie = 0
         asset=0
         equity = 0
@@ -348,10 +369,11 @@ def balance_sheet(request):
         expenses = 0
         gain = 0
         loss = 0
+        commitment=0
      
         for account in accounts:
             balance = account.balance  # Use the balance field as the initial balance
-            
+
             # Get all transactions where the account is either debited or credited
             debit_transactions = Transaction.objects.filter(debit_account=account)
             credit_transactions = Transaction.objects.filter(credit_account=account)
@@ -359,19 +381,22 @@ def balance_sheet(request):
             # Calculate the net balance for the account
             for transaction in debit_transactions:
                 balance += transaction.amount  
+                print(balance)
             for transaction in credit_transactions:
                 balance -= transaction.amount
-                   
+                print(balance)
             if balance != account.balance:  # Skip accounts with no transactions
                 if account.account_type == 'Asset':
                     asset+=balance
                     assets[account] = balance
+                    print("dfferre")
                 elif account.account_type == 'Liability':
                     liabilitie-=balance
                     liabilities[account] = -balance
                 elif account.account_type == 'Equity':
                     equity -= balance
                     equity_account[account] = -balance
+                    print("equty")
                 elif account.account_type == 'Revenue':
                     for transaction in credit_transactions:
                         revenue += transaction.amount 
@@ -379,13 +404,24 @@ def balance_sheet(request):
                     revenue_account[account] = -balance
                 elif account.account_type == 'Expense':
                     expenses += balance
+                    print("exp")
                     expenses_account[account] = balance
+                elif account.account_type == 'Commitment':
+                    print("Commitment")
+                    print(balance)
+                    commitment += balance
+                    print(account.balance)
+                    commitment_account[account] = balance
+
                 elif account.account_type == 'Gain':
                     gain += balance
                     gain_account[account] = balance
+                    print("gain")
                 elif account.account_type == 'Loss':
                     loss += balance
                     loss_account[account] = balance
+                    print("gfgf")
+                
                     
         total_assets = int(sum(assets.values()))
         total_liabilities = int(sum(liabilities.values()))
@@ -405,6 +441,7 @@ def balance_sheet(request):
         'expenses_account':expenses_account,
         'gain_account':gain_account,
         'loss_account':loss_account,
+        'commitment_account':commitment_account,
         'asset':asset,
         'liabilitie':liabilitie,
         'equity': equity,
@@ -412,6 +449,7 @@ def balance_sheet(request):
         'expenses': expenses,
         'gain': gain,
         'loss': loss,
+        'commitment':commitment
         
         }
 

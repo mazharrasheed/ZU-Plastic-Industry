@@ -12,29 +12,38 @@
   <div class="col-9">
     <h2 class="text-center alert alert-info">Cheque List</h2>
     <div class="card py">
-      <a href="{% url 'addcheque' %}" class=" fs-5 btn btn-primary col-3 m-3">Add Cheque/Receipt</a>
+      <a href="{% url 'addcheque' %}" class=" fs-6 btn btn-primary col-3 m-3">Add Cheque/Receipt</a>
       <div class="table-responsive py-2">
         {% if cheques%}
         <table class="table table-flush" id="datatable" >
           <thead class="thead-light">
             <tr>
-              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
+              <th class=" fs-6 border-bottom fw-bolder text-center" scope="col">
                 Sr#
               </th>
-              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
+              <th class=" fs-6 border-bottom fw-bolder text-center" scope="col">
+                Ref#
+              </th>
+              <th class=" fs-6 border-bottom fw-bolder text-center" scope="col">
                 Customer Name
               </th>
-              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
+              <th class=" fs-6 border-bottom fw-bolder text-center" scope="col">
                 Cheque Number
               </th>
-              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
-                Cheque Date
+              <th class=" fs-6 border-bottom fw-bolder text-center" scope="col">
+                Amount
               </th>
-              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
-                Bank Name
+              <th class=" fs-6 border-bottom fw-bolder text-center" scope="col">
+                Due Date
+              </th>
+              <th class=" fs-6 border-bottom fw-bolder text-center" scope="col">
+                Bank
+              </th>
+              <th class=" fs-6 border-bottom fw-bolder text-center" scope="col">
+                Status
               </th>
              
-              <th class=" fs-5 border-bottom fw-bolder text-center" scope="col">
+              <th class=" fs-6 border-bottom fw-bolder text-center" scope="col">
                 Action
               </th>
             </tr>
@@ -42,17 +51,20 @@
           <tbody class="align-middle">
             {% for cheque in cheques %}
             <tr id="supplier-{{ cheque.id }}" class="{% if cheque.highlight_red %}  bg-danger text-light {% else %} bg-primary text-light {% endif %}">
-              <td class="fs-5 text-center" >{{ forloop.counter }}</td>
-              <td class="fs-5 text-center">{{ cheque.customer }}</td>
-              <td class="fs-5 text-center ">{{ cheque.cheque_number }}</td>
-              <td class="fs-5 text-center">{{ cheque.cheque_date }}</td>
-              <td class="fs-5 text-center">{{ cheque.bank_name }}</td>
+              <td class="fs-6 text-center" >{{ forloop.counter }}</td>
+              <td class="fs-6 text-center">{{ cheque.id }}</td>
+              <td class="fs-6 text-center">{{ cheque.customer }}</td>
+              <td class="fs-6 text-center ">{{ cheque.cheque_number }}</td>
+              <td class="fs-6 text-center ">{{ cheque.cheque_amount }}</td>
+              <td class="fs-6 text-center">{{ cheque.cheque_date }}</td>
+              <td class="fs-6 text-center">{{ cheque.bank_name }}</td>
+              <td class="fs-6 text-center">{% if data.status %} Cleared {% else %} Pendding {% endif %}</td>
              
               
               <td class="text-center">
                
-                <a class=" fs-5 btn btn-info" href="{% url 'editcheque' cheque.id %}">Edit</a>
-                <button class=" fs-5 btn btn-warning delete-cheque" data-cheque-id="{{ cheque.id }}">
+                <a class=" fs-6 btn btn-info" href="{% url 'editcheque' cheque.id %}">Edit</a>
+                <button class=" fs-6 btn btn-warning delete-cheque" data-cheque-id="{{ cheque.id }}">
                   Delete
                 </button>
               </td>

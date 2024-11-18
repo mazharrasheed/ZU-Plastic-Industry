@@ -157,13 +157,14 @@ class Customer(models.Model):
 class Cheque(models.Model):
     customer=models.ForeignKey(Customer, on_delete=models.RESTRICT)
     cheque_number=models.CharField(max_length=20,null=True,blank=True)
+    cheque_amount=models.CharField(max_length=20,null=True,blank=True)
     cheque_date=models.DateField()
     bank_name=models.CharField(max_length=50,null=True,blank=True)
+    status=models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
-
     def __str__(self):
         return f"{self.customer} {self.cheque_number}".capitalize()
-    
+
 class Product_Price(models.Model):
     product = models.ForeignKey(Product, on_delete=models.RESTRICT, related_name='product_price')
     customer = models.ForeignKey(Customer, on_delete=models.RESTRICT)
@@ -181,6 +182,7 @@ class Account(models.Model):
     EXPENSE = 'Expense'
     GAIN = 'Gain'
     LOSS = 'Loss'
+    COMMITMENT = 'Commitment'
 
     ACCOUNT_TYPE_CHOICES = [
         (ASSET, 'Asset'),
@@ -190,12 +192,13 @@ class Account(models.Model):
         (EXPENSE, 'Expense'),
         (GAIN, 'Gain'),
         (LOSS, 'Loss'),
+        (COMMITMENT , 'Commitment')
     ]
     name=models.CharField(max_length=50,null=True ,blank=True)
-    employee=models.ForeignKey(Employee, on_delete=models.RESTRICT ,null=True,blank=True)
-    customer=models.ForeignKey(Customer, on_delete=models.RESTRICT ,null=True,blank=True)
-    supplier=models.ForeignKey(Suppliers, on_delete=models.RESTRICT,null=True,blank=True)
-    cheque=models.ForeignKey(Cheque, on_delete=models.RESTRICT,null=True,blank=True)
+    employee=models.OneToOneField(Employee, on_delete=models.RESTRICT ,null=True,blank=True)
+    customer=models.OneToOneField(Customer, on_delete=models.RESTRICT ,null=True,blank=True)
+    supplier=models.OneToOneField(Suppliers, on_delete=models.RESTRICT,null=True,blank=True)
+    cheque=models.OneToOneField(Cheque, on_delete=models.RESTRICT,null=True,blank=True)
     balance = models.DecimalField(max_digits=10, decimal_places=2,default=0)
     account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE_CHOICES)
     is_deleted=models.BooleanField(default=False)

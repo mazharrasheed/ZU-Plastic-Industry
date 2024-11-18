@@ -15,7 +15,20 @@
       <h4><li>Assets Accounts Balance</li></h4>
 
       {% for account, balance in assets.items %}
+
+      {% if account.name %}
       <li>{{ account.name }} = {{ balance }}</li>
+      {% elif account.customer %}
+      <li>{{ account.customer.coname }} = {{ balance }}</li>
+      {% elif account.supplier %}
+      <li>{{ account.supplier.coname }} = {{ balance }}</li>
+      {% elif account.cheque %}
+      <li>{{ account.cheque }} = {{ balance }}</li>
+
+      {% endif %}
+     
+
+
       {% endfor %}
       <h4><li>Total Assets : {{ asset }}</li></h4>
     </ul>
@@ -77,6 +90,14 @@
       <li>{{ account.name }} = {{ balance }}</li>
       {% endfor %}
       <h4> <li>Total Loss : {{ loss }} </li></h4>
+    </ul>
+    <ul>
+       <li><h2>Commitments</h2></li>
+    <h4> <li>Commitments Accounts Balance</li></h4>
+      {% for account, balance in commitment_account.items %}
+      <li>{{ account.cheque }} = {{ balance }}</li>
+      {% endfor %}
+      <h4> <li>Total Commitment : {{ commitment }} </li></h4>
     </ul>
 
 

@@ -6,7 +6,7 @@
 
 
 <div class="container-fluid mb-5">
-  
+  {{update}}
   <div class="row">
     {% include 'accounts/accounts_menu.html' %}
 
@@ -41,8 +41,6 @@
             <td >Description</td>
             <td >Debit </td>
             <td >Credit</td>
-         
-            
             {% if update %}  {% else %}  <th >Actions</th> {% endif %} 
           </tr>
         </thead>
@@ -55,7 +53,7 @@
             <td class="text-center fs-5">{{mydata.debit_account}}</td>
             <td class="text-center fs-5">{{mydata.credit_account}}</td>
             <td class="text-center fs-5">{{mydata.amount}}</a></td>
-            <td class="text-center fs-5">{{mydata.date}}</a></td>
+          
           </tr>
           {% else %}
 

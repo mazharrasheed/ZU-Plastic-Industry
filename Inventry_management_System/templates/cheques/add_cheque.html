@@ -11,7 +11,7 @@
 <div class="container-fluid mb-5 ">
 <div class="row">
   {% include 'accounts/accounts_menu.html' %}
-    <div class="col-3 ">
+    <div class="col-5 ">
       <h2 class="text-center alert alert-info">Add Cheque/Receipt</h2>
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -22,7 +22,8 @@
       </form>
 
     </div>
-    <div class="col-6 ">
+    </div>
+    <div class="col-12 ">
       <h2 class="text-center alert alert-info">Cheque/Receipt List</h2>
 
       {% if mydata %}
@@ -40,10 +41,13 @@
         <thead>
           <tr class="bg-primary bg-gradient text-light text-center">
             <td>Sr.No.</td>
+            <td>Ref.No.</td>
             <td>Customer Name</td>
             <td>Cheque Number</td>
+            <td>Cheque Amount</td>
             <td>Cheque Date</td>
             <td>Bank Name</td>
+            <td>Status</td>
            
             {% if update %} {% else %}<td>Action</td> {% endif %}
             
@@ -56,19 +60,23 @@
             <td class="text-center" >{{mydata.id}}</td>
             <td class="text-center">{{mydata.customer}}</td>
             <td class="text-center">{{mydata.cheque_number}}</td>
+            <td class="text-center">{{mydata.cheque_amount}}</td>
             <td class="text-center">{{mydata.cheque_date}}</td>
             <td class="text-center">{{mydata.bank_name}}</td>
+            <td class="text-center">{% if data.status %} Cleared {% else %} Pendding {% endif %}</td>
 
           </tr>
           {% else %}
           {% for data in mydata %}
           <tr>
             <td class="text-center" >{{forloop.counter}}</td>
+            <td class="text-center" >{{data.id}}</td>
             <td class="text-center">{{data.customer}}</td>
             <td class="text-center">{{data.cheque_number}}</td>
+            <td class="text-center">{{data.cheque_amount}}</td>
             <td class="text-center">{{data.cheque_date}}</td>
             <td class="text-center">{{data.bank_name}}</td>
-         
+            <td class="text-center">{% if data.status %} Cleared {% else %} Pendding {% endif %}</td>
             <td  class="text-center">
               <a class="btn btn-sm btn-warning" href={% url 'editcheque' id=data.id %}>Edit</a>
               <a class=" btn btn-sm btn-danger" href={% url 'deletecheque' id=data.id %}>Delete</a> 

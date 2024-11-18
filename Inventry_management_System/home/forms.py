@@ -112,7 +112,7 @@ class GatePassForm(forms.ModelForm):
 class GatePassProductForm(forms.ModelForm):
     product = forms.ModelChoiceField(queryset=Product.objects.filter(is_deleted=False), empty_label="Select Product")
     quantity = forms.IntegerField(min_value=1, initial=1, label='Quantity')
-    driver_phone_number = forms.IntegerField(min_value=1, initial=1, label='Driver Phone Number')
+    driver_phone_number = forms.CharField(max_length=20 , label='Driver Phone Number')
     remarks = forms.CharField( label='Remarks',required=False)
     
     class Meta:
@@ -289,7 +289,7 @@ class Cheques_form(forms.ModelForm):
     customer = forms.ModelChoiceField(queryset=Customer.objects.filter(is_deleted=False), empty_label="Select Customer")
     class Meta:
         model = Cheque
-        fields = ['customer', 'cheque_number','cheque_date','bank_name']
+        fields = ['customer', 'cheque_number','cheque_amount','cheque_date','bank_name']
         labels={'customer':'Customer Name','cheuqe_Number':'Cheque Number','cheque_date':'Cheque Date','bank_name':'Bank Name/Party Name'
              }
         widgets = {
@@ -367,7 +367,7 @@ class Cheque_AccountForm(forms.ModelForm):
     
     class Meta:
         model = Account
-        fields = ['cheque','account_type']
+        fields = ['cheque','balance','account_type']
 
     def __init__(self, *args, **kwargs):
         super(Cheque_AccountForm, self).__init__(*args, **kwargs)
