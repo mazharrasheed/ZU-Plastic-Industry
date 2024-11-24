@@ -11,7 +11,7 @@
     {% include 'accounts/accounts_menu.html' %}
 
     <div class="col-3 ">
-      <h2 class="text-center  alert alert-info">Add Account</h2>
+      <h2 class="text-center  alert alert-info">Add {{account_type|title}} Account </h2>
       <form method="post">
         {% csrf_token %}
         {{form|crispy}}
@@ -22,7 +22,7 @@
     </div>
 
     <div class="col-6">
-      <h2 class="text-center  alert alert-info">Accounts List</h2>
+      <h2 class="text-center  alert alert-info">{{account_type|title}} Accounts List</h2>
       <div class="table-responsive py-2">
         {% if mydata %}
         <table class="table table-flush" id="datatable">

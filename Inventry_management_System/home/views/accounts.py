@@ -61,7 +61,7 @@ def add_account(request):
         else:
             form = AccountForm()
 
-    data={'mydata':mydata,'form':form}
+    data={'mydata':mydata,'form':form,'account_type':account_type}
     return render(request,'accounts/accounts.html',data)
 
 @login_required

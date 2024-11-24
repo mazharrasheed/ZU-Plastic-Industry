@@ -135,10 +135,21 @@ class GatePassProductForm(forms.ModelForm):
 
 
 class Sales_ReceiptForm(forms.ModelForm):
-    customer_name = forms.ModelChoiceField(queryset=Customer.objects.filter(is_deleted=False), empty_label="Select Customer")
+    customer_name = forms.ModelChoiceField(
+        queryset=Customer.objects.filter(is_deleted=False),
+        empty_label="Select Customer"
+    )
+
     class Meta:
         model = Sales_Receipt
-        fields = [ 'customer_name', 'phone_number']
+        fields = ['customer_name', 'phone_number']
+
+    def __init__(self, *args, **kwargs):
+        super(Sales_ReceiptForm, self).__init__(*args, **kwargs)
+        # Check if an instance is passed
+        if self.instance and self.instance.pk:
+            # Set the initial value of customer_name
+            self.fields['customer_name'].initial = self.instance.customer_name
 
 class Sales_Receipt_ProductForm(forms.ModelForm):
     product = forms.ModelChoiceField(queryset=Product.objects.filter(is_deleted=False), empty_label="Select Product")

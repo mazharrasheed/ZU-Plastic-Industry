@@ -237,7 +237,7 @@ def make_transaction(request,id):
         salereceipt_products = Sales_Receipt_Product.objects.filter(salereceipt=x)
         total_amount[x.id] = salereceipt_products.aggregate(Sum('amount'))
         
-    coname=salereceipt.customer_name.strip()
+    coname=salereceipt.customer_name
     print(coname,"eee")
     customer=Customer.objects.get(coname=coname, is_deleted=False)
     debit_account=Account.objects.get(customer=customer.id,is_deleted=False)

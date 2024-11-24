@@ -102,11 +102,21 @@ class GatePassProduct(models.Model):
     def __str__(self):
         return f"{self.product.productname} (Qty: {self.quantity})"
     
-    
+class Customer(models.Model):
+    coname=models.CharField(max_length=255)
+    name=models.CharField(max_length=255)
+    adress=models.CharField(max_length=255)
+    contact=models.CharField(max_length=12,null=True,unique=True,blank=True)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.coname
+        # return f"{self.coname.capitalize()} "
+
 class Sales_Receipt(models.Model):
     products = models.ManyToManyField(Product, through='Sales_Receipt_Product')
     date_created = models.DateTimeField(auto_now_add=True)
-    customer_name = models.CharField(max_length=255)
+    customer_name =  models.ForeignKey(Customer,on_delete=models.RESTRICT,null=True)
     phone_number = models.CharField(max_length=12)
     created_by = models.ForeignKey(User, on_delete=models.RESTRICT,null=True)
     make_transaction = models.BooleanField(default=False)
@@ -143,17 +153,8 @@ class Suppliers(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.coname.capitalize()}"
+        return self.coname
     
-class Customer(models.Model):
-    coname=models.CharField(max_length=255)
-    name=models.CharField(max_length=255)
-    adress=models.CharField(max_length=255)
-    contact=models.CharField(max_length=12,null=True,unique=True,blank=True)
-    is_deleted = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.coname.capitalize()} "
     
 class Cheque(models.Model):
     customer=models.ForeignKey(Customer, on_delete=models.RESTRICT)
@@ -164,7 +165,8 @@ class Cheque(models.Model):
     status=models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
     def __str__(self):
-        return f"{self.customer} {self.cheque_number}".capitalize()
+        return f"{self.customer} {self.cheque_number}"
+        # return f"{self.customer} {self.cheque_number}".capitalize()
 
 class Product_Price(models.Model):
     product = models.ForeignKey(Product, on_delete=models.RESTRICT, related_name='product_price')

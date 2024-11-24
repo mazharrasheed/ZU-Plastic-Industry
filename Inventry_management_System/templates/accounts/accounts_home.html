@@ -52,7 +52,6 @@
               {% else %}
               <td class=" fs-5">-</td>
               {% endif %}
-
               {% if data.name %}
               <td class="text-center fs-5">General</td>
               {% elif data.customer %}
@@ -64,7 +63,6 @@
               {% else %}
               <td class="text-center fs-5">-</td>
               {% endif %}
-             
               <td class="text-center fs-5">{{data.account_type}}</td>
               <td class="text-center fs-5">
                 <a class="fs-5 btn btn-sm btn-info" href={% url 'accountreport' id=data.id %}>Details</a>

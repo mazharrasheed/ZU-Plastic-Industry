@@ -12,8 +12,12 @@
 
   <div class="col-9">
     <h2 class="text-center alert alert-info">Sales Receipt List</h2>
+    {% if perms.home.add_sale_receipt %}
+       <a class="btn btn-primary mb-2 " href="{% url 'create_salereceipt' %}">Create Sale Receipt</a>
+
+    {% endif %}
     <div class="card py">
-     
+
       <div class="table-responsive py-2">
         {% if salereceipts%}
         <table class="table table-flush" id="datatable">
@@ -21,6 +25,9 @@
             <tr>
               <th class="border-bottom fw-bolder text-center" scope="col">
                 Sr#
+              </th>
+              <th class="border-bottom fw-bolder text-center" scope="col">
+                Ref#
               </th>
               <th class="border-bottom fw-bolder text-center" scope="col">
                 Date
@@ -43,8 +50,9 @@
             {% for salereceipt in salereceipts %}
             <tr id="salereceipt-{{ salereceipt.id }}">
               <td class="text-center">{{ forloop.counter }}</td>
+              <td class="text-center">{{ salereceipt.id }}</td>
               <td class="text-center">{{ salereceipt.date_created }}</td>
-              <td class="text-center">{{ salereceipt.customer_name }}</td>
+              <td class="text-center">{{ salereceipt.customer_name|title }}</td>
               <td class="text-center">
                 {{ salereceipt_items_pro|get_item:salereceipt.id }}
               </td>
@@ -58,7 +66,6 @@
                 {% else %}
                 <a class="btn btn-info" href="{% url 'maketransaction' salereceipt.id %}">Make Transacton</a>
                 {% endif %}
-               
                 {% endif %}
                 <a class="btn btn-success" href="{% url 'print_salereceipt' salereceipt.id %}">Print</a>
                 {% if perms.home.view_sale_receipt %}
@@ -85,13 +92,11 @@
     // Handle the delete button click
     $(".delete-salereceipt").on("click", function (event) {
       event.preventDefault();
-
       var salereceiptId = $(this).data("salereceipt-id");
       var url = "{% url 'delete_salereceipt' 0 %}".replace(
         "0",
         salereceiptId
       );
-
       if (confirm("Are you sure you want to delete this gate pass?")) {
         $.ajax({
           type: "POST",
@@ -106,7 +111,6 @@
               $("#display-msg").html(
                 `<h5 id= 'msg' class='alert alert-success'> ${response.message} </h5> `
               );
-
               // alert(response.message);
             } else {
               alert("Failed to delete the gate pass.");
