@@ -4,14 +4,14 @@
         {% if perms.home.add_account %}
         <h4
             class="bg-primary bg-gradient alert-info rounded {% if request.path == '/create_accounts/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
-            <a class="text-light" href="/create_accounts/" class="list-group-item">Create Account</a>
+            <a class="text-light" href="/create_accounts/" class="list-group-item">Create Accounts</a>
         </h4>
         {% endif %} 
         
         {% if perms.home.add_transaction %}
         <h4
             class="bg-primary bg-gradient alert-info rounded {% if request.path == '/transaction/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
-            <a class="text-light" href="/transaction/" class="list-group-item">Transaction</a>
+            <a class="text-light" href="/list_transactions/" class="list-group-item">Transactions</a>
         </h4>
         {% endif %}
 

@@ -5,11 +5,12 @@
 from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib.auth.decorators import login_required,permission_required
 from ..forms import  Sales_Receipt_ProductForm,Sales_ReceiptForm
-from ..models import Sales_Receipt, Sales_Receipt_Product,Product,Product_Price
+from ..models import Sales_Receipt, Sales_Receipt_Product,Product,Product_Price,Transaction,Account,Customer
 from django.contrib import messages
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.db.models import Avg,Min,Max,Count,Sum
+
 
 
 @login_required
@@ -23,7 +24,6 @@ def list_sales(request):
     for x in salereceipts:
         # Count the number of products for each sale receipt
         salereceipt_items_pro[x.id] = Sales_Receipt_Product.objects.filter(salereceipt=x).count()
-        
         # Get products for the sale receipt and aggregate the amount
         salereceipt_products = Sales_Receipt_Product.objects.filter(salereceipt=x)
         total_amount[x.id] = salereceipt_products.aggregate(Sum('amount'))
@@ -221,3 +221,45 @@ def print_salereceipt(request, salereceipt_id):
         'total_amount':total_amount
         
     })
+
+def make_transaction(request,id):
+
+    salereceipt_items_pro = {}
+    total_amount = {}
+    salereceipt = get_object_or_404(Sales_Receipt, id=id)
+    print(salereceipt.customer_name,"ddd")
+    salereceipts = Sales_Receipt.objects.all()
+
+    for x in salereceipts:
+        # Count the number of products for each sale receipt
+        salereceipt_items_pro[x.id] = Sales_Receipt_Product.objects.filter(salereceipt=x).count()
+        # Get products for the sale receipt and aggregate the amount
+        salereceipt_products = Sales_Receipt_Product.objects.filter(salereceipt=x)
+        total_amount[x.id] = salereceipt_products.aggregate(Sum('amount'))
+        
+    coname=salereceipt.customer_name.strip()
+    print(coname,"eee")
+    customer=Customer.objects.get(coname=coname, is_deleted=False)
+    debit_account=Account.objects.get(customer=customer.id,is_deleted=False)
+    credit_account=Account.objects.get(account_type="Revenue",name="Sales",is_deleted=False)
+    amt=total_amount[id]
+    print(amt)
+    amount=amt['amount__sum']
+    transaction=Transaction(description=f' sales receipt id = {salereceipt.id}',debit_account=debit_account,credit_account=credit_account,amount=amount)
+    transaction.save()
+    salereceipt.make_transaction=True
+    salereceipt.save()
+    salereceipts = Sales_Receipt.objects.all()
+    messages.success(request, "Transaction added successfully!")
+
+    return render(request, 'sale/list_sales.html', {
+        'salereceipts': salereceipts,
+        'salereceipt_items_pro': salereceipt_items_pro,
+        'total_amount': total_amount
+    })
+
+
+# description = models.TextField()
+# debit_account = models.ForeignKey(Account, related_name='debit_transactions', on_delete=models.RESTRICT)
+# credit_account = models.ForeignKey(Account, related_name='credit_transactions', on_delete=models.RESTRICT)
+# amount = models.DecimalField(max_digits=10, decimal_places=2)

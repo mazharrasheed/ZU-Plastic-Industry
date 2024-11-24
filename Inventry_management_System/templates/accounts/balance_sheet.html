@@ -9,7 +9,7 @@
     {% include 'accounts/accounts_menu.html' %}
 
     <div class="col-lg-9">
-      <h1 class="text-center alert alert-info ">Balance Sheet</h1>
+      <h2 class="text-center alert alert-info ">Balance Sheet - Net Profit:{{net_profit}}</h2>
       <div class="col-12 mt-5">
         <h2 class="text-center alert alert-info">Assets Accounts Balance : {{ asset }}</h2>
         {% if asset %}
@@ -367,21 +367,11 @@
         {% endif %}
       </div>
       <hr class="mt-4">
-
-
-  
-
       <ul>
         <h2>Accounts Eqution</h2>
         <h4>Assets = Liabilities + Equity :</h4>
         <h4> {{asset}} = {{liabilitie}} + {{equity}} = {{liabilitie|plus:equity}} </h4>
         <h4>LHS = RHS<h4>
-      </ul>
-      <ul>
-        <h2>Net Profit</h2>
-
-        <h4> {{net_profit}} </h4>
-
       </ul>
     </div>
   </div>

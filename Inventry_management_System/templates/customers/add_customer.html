@@ -49,9 +49,9 @@
             <td class="text-center fs-5" >Owner Name</td>
             <td class="text-center fs-5" >Contact</td>
             <td class="text-center fs-5" >Adress</td>
-            {% if perms.home.change_customer or perms.home.change_customer %}
+           
             {% if update %} {% else %}<td class="text-center fs-5" >Action</td> {% endif %}
-             {% endif %}
+             
             
           </tr>
         </thead>
@@ -77,10 +77,15 @@
          
             <td  class="text-center fs-5">
               {% if perms.home.change_customer %}
-              <a class="btn btn-sm btn-warning" href={% url 'editcustomer' id=data.id %}>Edit</a> {% endif %}
+              <a class="btn btn-sm btn-warning" href={% url 'editcustomer' id=data.id %}>Edit</a>
+              {% else %}
+                <p>No edit permission </p>
+                {% endif%}
               {% if perms.home.delete_customer %}
               <a class=" btn btn-sm btn-danger" href={% url 'deletecustomer' id=data.id %}>Delete</a>
-              {% endif %}
+              {% else %}
+              <p>No delete permission </p>
+              {% endif%}
               
             </td>
           </tr>

@@ -62,11 +62,24 @@
              
               
               <td class="text-center">
-               
+
+                
+                
+                
+                {% if perms.home.change_cheque %}
                 <a class=" fs-6 btn btn-info" href="{% url 'editcheque' cheque.id %}">Edit</a>
+                {% else %}
+                <p>No edit permission </p>
+                {% endif%}
+
+                {% if perms.home.change_cheque %}
                 <button class=" fs-6 btn btn-warning delete-cheque" data-cheque-id="{{ cheque.id }}">
                   Delete
                 </button>
+                {% else %}
+                <p>No delete permission </p>
+                {% endif%}
+
               </td>
             </tr>
             {% endfor %}

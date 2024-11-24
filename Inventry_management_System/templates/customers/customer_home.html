@@ -16,7 +16,7 @@
     <h2 class="text-center alert alert-info">Customers List</h2>
     <div class="card py">
       {% if perms.home.add_customer %}
-      <a href="{% url 'addcustomer' %}" class=" fs-5 btn btn-primary col-2 m-3">Add Customer</a>
+      <a href="{% url 'addcustomer' %}" class=" fs-6 btn btn-primary col-2 m-3">Add Customer</a>
       {% endif %}
       
       <div class="table-responsive py-2">
@@ -24,23 +24,23 @@
         <table class="table table-flush" id="datatable">
           <thead class="thead-light">
             <tr>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Sr#
               </th>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Company Name
               </th>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Owner Name
               </th>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Adress
               </th>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Contact
               </th>
              
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Action
               </th>
             </tr>
@@ -48,17 +48,26 @@
           <tbody>
             {% for customer in customers %}
             <tr id="supplier-{{ supplier.id }}">
-              <td class="text-center fs-5">{{ forloop.counter }}</td>
-              <td class="text-center fs-5">{{ customer.coname|capitalize_after_space }}</td>
-              <td class="text-center fs-5">{{ customer.name|capitalize_after_space }}</td>
-              <td class="text-center fs-5">{{ customer.adress|capitalize_after_space }}</td>
-              <td class="text-center fs-5">{{ customer.contact }}</td>  
+              <td class="text-center fs-6">{{ forloop.counter }}</td>
+              <td class="text-center fs-6">{{ customer.coname|capitalize_after_space }}</td>
+              <td class="text-center fs-6">{{ customer.name|capitalize_after_space }}</td>
+              <td class="text-center fs-6">{{ customer.adress|capitalize_after_space }}</td>
+              <td class="text-center fs-6">{{ customer.contact }}</td>  
               <td class="text-center">
                
-                <a class="btn btn-warning fs-5" href="{% url 'editcustomer' customer.id %}">Edit</a>
-                <button class="btn btn-danger delete-customer fs-5" data-customer-id="{{ customer.id }}">
+            
+                {% if perms.home.change_customer %}
+                <a class="btn btn-warning fs-6" href="{% url 'editcustomer' customer.id %}">Edit</a>
+                {% else %}
+                <p>No edit permission </p>
+                {% endif%}
+                {% if perms.home.delete_customer %}
+                <button class="btn btn-danger delete-customer fs-6" data-customer-id="{{ customer.id }}">
                   Delete
                 </button>
+                {% else %}
+                <p>No delete permission </p>
+                {% endif%}
               </td>
             </tr>
             {% endfor %}

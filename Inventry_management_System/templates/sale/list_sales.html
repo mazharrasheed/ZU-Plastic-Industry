@@ -52,10 +52,16 @@
                 {{ total_amount|get_amount:salereceipt.id}}
               </td>
               <td class="text-center">
+                {% if perms.home.add_transaction %}
+                {% if salereceipt.make_transaction %}
+                <a class="btn alert-success" href="#" disabled >Transacton Added </a>
+                {% else %}
+                <a class="btn btn-info" href="{% url 'maketransaction' salereceipt.id %}">Make Transacton</a>
+                {% endif %}
+               
+                {% endif %}
                 <a class="btn btn-success" href="{% url 'print_salereceipt' salereceipt.id %}">Print</a>
                 {% if perms.home.view_sale_receipt %}
-                  
-               
                 <a class="btn btn-warning" href="{% url 'edit_salereceipt' salereceipt.id %}">Edit</a>
                 {% endif %}
                 <button class="btn btn-danger delete-salereceipt" data-salereceipt-id="{{ salereceipt.id }}">

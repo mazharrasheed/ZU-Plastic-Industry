@@ -80,6 +80,8 @@ urlpatterns = [
     path('delete_salereceipt/<int:id>/', sales.delete_salereceipt, name='delete_salereceipt'),
     path('delete_salereceipt_item/<int:id>/', sales.delete_salereceipt_item, name='delete_salereceipt_item'),
     path('print-salereceipt/<int:salereceipt_id>/', sales.print_salereceipt, name='print_salereceipt'),
+    path('make_transaction/<int:id>/', sales.make_transaction, name='maketransaction'),
+
 
     path('accounts/', accounts.accounts , name="accounts"),
     path('create_accounts/', accounts.create_accounts , name="createaccounts"),
@@ -88,6 +90,7 @@ urlpatterns = [
     path('deleteaccount/<int:id>', accounts.delete_account , name="deleteaccount"),
     path('accountreport/<int:id>', accounts.account_report , name="accountreport"),
 
+    path('list_transactions/', accounts.list_transaction , name="listtransactions"),
     path('transaction/', accounts.add_transaction , name="transaction"),
     path('edittransaction/<int:id>', accounts.edit_transaction , name="edittransaction"),
     path('deletetransaction/<int:id>', accounts.delete_transaction , name="deletetransaction"),

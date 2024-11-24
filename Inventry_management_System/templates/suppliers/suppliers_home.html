@@ -14,7 +14,7 @@
     <h2 class="text-center alert alert-info">Suppliers List</h2>
     <div class="card py">
       {% if perms.home.add_suppliers %}
-      <a href="{% url 'addsupplier' %}" class=" fs-5 btn btn-primary col-2 m-3">Add Supplier</a>
+      <a href="{% url 'addsupplier' %}" class=" fs-6 btn btn-primary col-2 m-3">Add Supplier</a>
       {% endif %}
       
       <div class="table-responsive py-2">
@@ -22,27 +22,27 @@
         <table class="table table-flush" id="datatable">
           <thead class="thead-light">
             <tr>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Sr#
               </th>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Company Name
               </th>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Owner Name
               </th>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                
                 Description
               </th>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Contact
               </th>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                
                 Adress
               </th>
-              <th class="border-bottom fw-bolder text-center fs-5" scope="col">
+              <th class="border-bottom fw-bolder text-center fs-6" scope="col">
                 Action
               </th>
             </tr>
@@ -50,21 +50,25 @@
           <tbody>
             {% for supplier in suppliers %}
             <tr id="supplier-{{ supplier.id }}">
-              <td class="text-center fs-5">{{ forloop.counter }}</td>
-              <td class=" fs-5">{{ supplier.coname|capitalize_after_space }}</td>
-              <td class="text-center fs-5">{{ supplier.name|capitalize_after_space }}</td>
-              <td class="text-center fs-5">{{ supplier.description|title }}</td>
-              <td class="text-center fs-5">{{ supplier.contact }}</td>
-              <td class="text-center fs-5">{{ supplier.adress|title }}</td>
-
-              
-              
+              <td class="text-center fs-6">{{ forloop.counter }}</td>
+              <td class=" fs-6">{{ supplier.coname|capitalize_after_space }}</td>
+              <td class="text-center fs-6">{{ supplier.name|capitalize_after_space }}</td>
+              <td class="text-center fs-6">{{ supplier.description|title }}</td>
+              <td class="text-center fs-6">{{ supplier.contact }}</td>
+              <td class="text-center fs-6">{{ supplier.adress|title }}</td>
               <td class="text-center ">
-               
-                <a class="btn btn-warning fs-5" href="{% url 'editsupplier' supplier.id %}">Edit</a>
-                <button class="btn btn-danger fs-5 delete-supplier" data-supplier-id="{{ supplier.id }}">
+                {% if perms.home.change_supplier %}
+                <a class="btn btn-warning fs-6" href="{% url 'editsupplier' supplier.id %}">Edit</a>
+                {% else %}
+                <p>No Edit permission </p>
+                {% endif%}
+                {% if perms.home.change_supplier %}
+                <button class="btn btn-danger fs-6 delete-supplier" data-supplier-id="{{ supplier.id }}">
                   Delete
                 </button>
+                {% else %}
+                <p>No delete permission </p>
+                {% endif%}
               </td>
             </tr>
             {% endfor %}
