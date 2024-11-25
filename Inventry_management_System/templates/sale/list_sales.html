@@ -36,7 +36,7 @@
                 Cutomer Name
               </th>
               <th class="border-bottom fw-bolder text-center" scope="col">
-                Number of Products
+                Products Qty
               </th>
               <th class="border-bottom fw-bolder text-center" scope="col">
                 Bill Amount
@@ -62,7 +62,7 @@
               <td class="text-center">
                 {% if perms.home.add_transaction %}
                 {% if salereceipt.make_transaction %}
-                <a class="btn alert-success" href="#" disabled >Transacton Added </a>
+                <button class="btn alert-success" href="#" disabled >Transacton Added </button>
                 {% else %}
                 <a class="btn btn-info" href="{% url 'maketransaction' salereceipt.id %}">Make Transacton</a>
                 {% endif %}

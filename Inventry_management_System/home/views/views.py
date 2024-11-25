@@ -11,6 +11,7 @@ from ..models import Blog,GatePass, GatePassProduct
 
 # Create your views here.
 
+@login_required
 def index(request):
   # if request.user.is_authenticated:
   myblog=Blog.objects.all()
@@ -137,13 +138,13 @@ def sign_in(request):
         if user is not None:
           login(request, user)
           messages.success(request, "You are successfuly Signin")
-          return HttpResponseRedirect("/dashboard/")
+          return HttpResponseRedirect("/")
     else:
       login_form = AuthenticationForm()
     mydata = {'form': login_form}
     return render(request, "signin.html", mydata)
   else:
-    return redirect("dashboard")
+    return redirect("index")
 
 @login_required
 # @permission_required('auth.change_user',login_url='/login/')

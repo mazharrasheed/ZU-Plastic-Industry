@@ -47,7 +47,7 @@
   <div class="col-lg-3">  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THQTXJ7" height="0" width="0"
     style="display: none; visibility: hidden"></iframe></noscript>
 
-<div style="">
+<div >
   <h1 class="text-center mt-2 " >
     <img style="height: 150px" src="{% static 'assets/default/img/monogram1.jpg' %}" alt="Monogram" />
 
@@ -57,14 +57,19 @@
   <div class="col-lg-9 mt-2">
 
 
-  <nav class="navbar navbar-expand-lg navbar-light" style="">
+  <nav class="navbar navbar-expand-lg navbar-light" >
     <div class="container-fluid">
+
+      {% if request.user.is_authenticated %}
       <a class="navbar-brand d-flex align-items-center px-5" href="/">
-        <i style="height: 30px" class="fa fa-home"></i>
-        <h4 class="fs-2 mb-0 s-2" style="margin-left: 10px; padding-top: 10px">
-          Home
-        </h4>
+      
+        <h5 class="fs-3 mb-0 s-2" style="margin-left: 10px; padding-top: 10px">
+         Dashboard
+        </h5>
       </a>
+        
+      {% endif %}
+     
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

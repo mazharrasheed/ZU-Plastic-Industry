@@ -10,8 +10,8 @@
   <div class="row">
     {% include 'accounts/accounts_menu.html' %}
 
-    <div class="col-3 ">
-      <h2 class="text-center  alert alert-info">Add {{account_type|title}} Account </h2>
+    <div class="col-5 ">
+      <h2 class="text-center  alert alert-info">{% if update %} Edit {{account_type|title}} {% else %} Add {% endif %} {{account_type|title}} Account </h2>
       <form method="post">
         {% csrf_token %}
         {{form|crispy}}
@@ -20,8 +20,9 @@
         <a class="btn btn-warning" href="/accounts/">Accounts</a>
       </form>
     </div>
+    </div>
 
-    <div class="col-6">
+    <div class="col-12">
       <h2 class="text-center  alert alert-info">{{account_type|title}} Accounts List</h2>
       <div class="table-responsive py-2">
         {% if mydata %}
@@ -48,17 +49,17 @@
             <tr>
               <td class="text-center fs-5">{{mydata.id}}</td>
               {% if mydata.name %}
-              <td class="text-center fs-5">{{mydata.name}}</td>
+              <td class=" fs-5">{{mydata.name}}</td>
               {% elif mydata.customer %}
-              <td class="text-center fs-5">{{mydata.customer}}</td>
+              <td class=" fs-5">{{mydata.customer}}</td>
               {% elif  mydata.supplier %}
-              <td class="text-center fs-5">{{mydata.supplier}}</td>
+              <td class=" fs-5">{{mydata.supplier}}</td>
               {% elif mydata.cheque %}
-              <td class="text-center fs-5">{{mydata.cheque}}</td>
+              <td class=" fs-5">{{mydata.cheque}}</td>
               {% else %}
-              <td class="text-center fs-5">-</td>
+              <td class=" fs-5">-</td>
               {% endif %}
-              <td class="text-center fs-5">{{mydata.account_type}}</td>
+              <td class=" fs-5">{{mydata.account_type}}</td>
             </tr>
             {% else %}
 
@@ -67,15 +68,15 @@
               <td class="text-center fs-5">{{forloop.counter}}</td>
 
               {% if data.name %}
-              <td class="text-center fs-5">{{data.name}}</td>
+              <td class=" fs-5">{{data.name}}</td>
               {% elif data.customer %}
-              <td class="text-center fs-5">{{data.customer}}</td>
+              <td class="fs-5">{{data.customer}}</td>
               {% elif  data.supplier %}
-              <td class="text-center fs-5">{{data.supplier}}</td>
+              <td class=" fs-5">{{data.supplier}}</td>
               {% elif data.cheque %}
-              <td class="text-center fs-5">{{data.cheque}}</td>
+              <td class=" fs-5">{{data.cheque}}</td>
               {% else %}
-              <td class="text-center fs-5">-</td>
+              <td class="fs-5">-</td>
               {% endif %}
 
               <td class="text-center fs-5">{{data.account_type}}</td>
