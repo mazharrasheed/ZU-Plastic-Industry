@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block title %}
-Create Sale Receipt
+Create Cash Sale Receipt
 {% endblock title %}
 
 
@@ -84,9 +84,9 @@ Create Sale Receipt
 
     <div class="col-lg-9">
     <div class="table-container">
-        <div class=" text-center  "><h3 class="  text-center bg-dark text-light p-3">Customer Sale Receipt</h3></div>
-        <form id="salereceipt-form" method="POST" {% if salereceipt.id %} action={% url 'create_salereceipt' salereceipt.id %} {%
-            else %} action={% url 'create_salereceipt' %}{% endif %}>
+        <div class=" text-center  "><h3 class="  text-center bg-dark text-light p-3">Cash Sale Receipt</h3></div>
+        <form id="salereceipt-form" method="POST" {% if salereceipt.id %} action={% url 'create_cash_salereceipt' salereceipt.id %} {%
+            else %} action={% url 'create_cash_salereceipt' %}{% endif %}>
 
             {% csrf_token %}
 
@@ -98,14 +98,10 @@ Create Sale Receipt
                     <h6 class="d-flex">Phone Number:0300-ooooooo</h6>
                 </div>
                 
-                <div style="margin-left:130px;width:150px">
+                <div style="margin-right:50px;width:250px">
                     <p><strong>Receipt No.</strong>ZU-0{{salereceipt.id}}</p>
                     <p><strong>Date:</strong> Auto</p>
-                    <p style="margin-top:20px"><strong>Customer Name:</strong></p>
-                    <p style="margin-top:25px"><strong>Phone. No:</strong></p>
-                </div>
-                <div style="width:230px">
-                    <p style="margin-top:85px"><span class="">{{ form_salereceipt.customer_name|as_crispy_field }}</span></p>
+                    <p style="margin-top:10px"><span class="">{{ form_salereceipt.customer|as_crispy_field }}</span></p>
                     <p><span class=""> {{form_salereceipt.phone_number|as_crispy_field }}</span></p>
                 </div>
             </div>
@@ -116,13 +112,13 @@ Create Sale Receipt
                         <td>Auto</td>
                         <td>{{ form.product|as_crispy_field }}</td>
                         <td>{{ form.quantity|as_crispy_field }}</td>
-                        <td>Unit Price Auto</td>
+                        <td>{{ form.unit_price|as_crispy_field }}</td>
                         <td>Amount Auto</td>
                         <th class="col-5 text-center">
                             <button class="btn btn-primary" type="submit" name="add_product">Add Product</button>
                         </th>
-
                     </tr>
+
                     <tr>
                         <th class="col-1 text-center">Sr#</th>
                         <th class="col-6 text-center">Description</th>
@@ -161,7 +157,7 @@ Create Sale Receipt
 
     </div>
     <div class="container mt-5 mb-5 text-center">
-        <a href="list-sales?customer=True" class="btn btn-success m-3">Finalize Sale Receipt</a>
+        <a href="/list-sales?cash=True" class="btn btn-success m-3">Finalize Sale Receipt</a>
         {% if salereceipt.id %}
         <a href="{% url 'cancel_salereceipt' salereceipt.id %}" class="btn btn-danger m-3">Cancel</a>
         {% endif %}
@@ -177,8 +173,8 @@ Create Sale Receipt
         $(document).ready(function () {
     
             $('#salereceipt-form').on('submit', function (event) {
+               
                 event.preventDefault();  // Prevent form submission
-    
                 $.ajax({
                     type: "POST",
                     url: $(this).attr('action'),
@@ -187,7 +183,6 @@ Create Sale Receipt
                         if (response.success) {
                             $('#product-list').html(response.rendered_products);
                             console.log(response.rendered_products);
-    
                             // Clear the form fields after successful submission
                             $('#salereceipt-form select[name="product"] option:first').prop('selected', true);
                             $('#salereceipt-form input[name="quantity"]').val('1');

@@ -139,17 +139,16 @@ class Sales_ReceiptForm(forms.ModelForm):
         queryset=Customer.objects.filter(is_deleted=False),
         empty_label="Select Customer"
     )
-
     class Meta:
         model = Sales_Receipt
         fields = ['customer_name', 'phone_number']
-
     def __init__(self, *args, **kwargs):
         super(Sales_ReceiptForm, self).__init__(*args, **kwargs)
         # Check if an instance is passed
         if self.instance and self.instance.pk:
             # Set the initial value of customer_name
             self.fields['customer_name'].initial = self.instance.customer_name
+
 
 class Sales_Receipt_ProductForm(forms.ModelForm):
     product = forms.ModelChoiceField(queryset=Product.objects.filter(is_deleted=False), empty_label="Select Product")
@@ -171,6 +170,42 @@ class Sales_Receipt_ProductForm(forms.ModelForm):
             if Sales_Receipt_Product.objects.filter(salereceipt=self.salereceipt, product=product).exists():
                 self.add_error('product', f'The product "{product}" has already been added to this gate pass.')
         return cleaned_data
+    
+
+class Sales_Cash_ReceiptForm(forms.ModelForm):
+    customer=forms.CharField(max_length=220 , required=True)
+    phone_number=forms.CharField(max_length=12 , required=True)
+    class Meta:
+        model = Sales_Receipt
+        fields = ['customer', 'phone_number']
+    def __init__(self, *args, **kwargs):
+        super(Sales_Cash_ReceiptForm, self).__init__(*args, **kwargs)
+        # Check if an instance is passed
+        if self.instance and self.instance.pk:
+            # Set the initial value of customer_name
+            self.fields['customer'].initial = self.instance.customer
+
+class Sales_Cash_Receipt_ProductForm(forms.ModelForm):
+    product = forms.ModelChoiceField(queryset=Product.objects.filter(is_deleted=False), empty_label="Select Product")
+    quantity = forms.IntegerField(min_value=1, initial=1, label='Quantity')
+    unit_price = forms.FloatField( label='Unit Price',required=True)
+    
+    class Meta:
+        model = Sales_Receipt_Product
+        fields = ['product', 'quantity','unit_price']
+
+    def __init__(self, *args, **kwargs):
+        self.salereceipt = kwargs.pop('salereceipt', None)
+        super(Sales_Cash_Receipt_ProductForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        product = cleaned_data.get('product')
+        if product and self.salereceipt:
+            if Sales_Receipt_Product.objects.filter(salereceipt=self.salereceipt, product=product).exists():
+                self.add_error('product', f'The product "{product}" has already been added to this gate pass.')
+        return cleaned_data
+    
 
 class Sign_Up(UserCreationForm):
 
