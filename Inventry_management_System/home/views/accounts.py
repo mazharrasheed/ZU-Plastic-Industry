@@ -216,7 +216,7 @@ def delete_transaction(request,id):
     pass
 
 # views.py
-
+from django.db.models import Q
 @login_required
 @permission_required('home.view_account', login_url='/login/')
 def account_report(request,id):
@@ -228,6 +228,9 @@ def account_report(request,id):
         account = get_object_or_404(Account, pk=id)
         debit_transactions = account.debit_transactions.all()
         credit_transactions = account.credit_transactions.all()
+        # transactions = account.debit_transactions.all().union(account.credit_transactions.all()).order_by('date')
+        transactions = Transaction.objects.filter(Q(debit_account=account) | Q(credit_account=account)).order_by('date')
+        print(transactions)
 
         for transaction in debit_transactions:
             debit_balance += transaction.amount  
@@ -256,6 +259,8 @@ def account_report(request,id):
         'debit_transactions': debit_transactions,
         'credit_transactions': credit_transactions,
         'balance':balance,
+         'transactions': transactions,
+        
         })
     else:
         return redirect('signin')

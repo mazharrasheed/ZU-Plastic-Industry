@@ -161,7 +161,7 @@ Create Sale Receipt
 
     </div>
     <div class="container mt-5 mb-5 text-center">
-        <a href="list-sales?customer=True" class="btn btn-success m-3">Finalize Sale Receipt</a>
+        <a href="/list-sales?customer=True" class="btn btn-success m-3">Finalize Sale Receipt</a>
         {% if salereceipt.id %}
         <a href="{% url 'cancel_salereceipt' salereceipt.id %}" class="btn btn-danger m-3">Cancel</a>
         {% endif %}

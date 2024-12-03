@@ -33,7 +33,10 @@
   <link rel="stylesheet" type="text/css" href="{% static 'assets/icon/icofont/css/icofont.css' %}">
   <!-- Style.css -->
   <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+
   <link rel="stylesheet" type="text/css" href="{% static 'assets/css/jquery.mCustomScrollbar.css' %}">
+
+
 </head>
 <body>
 
@@ -51,6 +54,7 @@
   <script type="text/javascript" src="{% static 'assets/js/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
   <!-- modernizr js -->
   <script type="text/javascript" src="{% static 'assets/js/modernizr/modernizr.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/modernizr/css-scrollbars.js' %}"></script>
   <!-- am chart -->
   <script src="{% static 'assets/pages/widget/amchart/amcharts.min.js' %}"></script>
   <script src="{% static 'assets/pages/widget/amchart/serial.min.js' %}"></script>
@@ -63,6 +67,7 @@
   <script src="{% static 'assets/js/pcoded.min.js' %}"></script>
   <script src="{% static 'assets/js/demo-12.js' %}"></script>
   <script src="{% static 'assets/js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'assets/js/common-pages.js' %}"></script>
   <script>
     var $window = $(window);
     var nav = $('.fixed-button');
@@ -75,6 +80,23 @@
       }
     });
   </script>
+
+  <script>
+    function selfCallingFunction() {
+      $(document).ready(function () {
+        // Wait for 4 seconds and then hide the element with id "msg"
+        setTimeout(function () {
+          $("#msg").hide();
+        }, 4000); // 10000 milliseconds = 10 seconds
+      });
+      // Call the function again after 5 seconds (5000 milliseconds)
+      setTimeout(selfCallingFunction, 4000);
+    }
+
+    // Initial call to start the loop
+    selfCallingFunction();
+  </script>
+
 </body>
 
 </html>

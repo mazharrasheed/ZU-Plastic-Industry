@@ -14,57 +14,85 @@
   <div class="col-lg-9">
  
     <h1 class="text-center alert alert-info ">Account Details</h1>
-    <h2>Account Name : {% if account.name %}
-      {{account.name|capitalize_after_space}}
-      {% elif account.customer %}
-      {{account.customer|capitalize_after_space}}
-      {% elif  account.supplier %}
-      {{account.supplier|capitalize_after_space}}
-      {% elif account.cheque %}
-      {{account.cheque|capitalize_after_space}}
-      {% else %}
-          -
-      {% endif %} 
-      <br>
-      Account Category:
-      {% if account.name %}
-      General
-      {% elif account.customer %}
-      Customer
-      {% elif  account.supplier %}
-      Supplier
-      {% elif account.cheque %}
-      Cheque/Receipt
-      {% endif %} 
-<br>
-      Type: {{ account.account_type }}</h2>
 
 
-    <h2>Debit Transactions</h2>
-    <ul>
-      {% for transaction in debit_transactions %}
-   
-        <li>{{ transaction.date }} - {{ transaction.description }} - Amount: {{ transaction.amount }}</li>
-      {% endfor %}
-    </ul>
-    
-    <h2>Credit Transactions</h2>
-    <ul>
-      {% for transaction in credit_transactions %}
-        <li>{{ transaction.date }} - {{ transaction.description }} - Amount: {{ transaction.amount }}</li>
-      {% endfor %}
-    </ul>
+<table class="table  table-striped">
+  <thead>
+    <tr>
+      <td>Account Name</td>
+      <td>Account Category</td>
+      <td>Balance</td>
+    </tr>
+  </thead>
 
-    <h2> Balance </h2>
-    <ul>
-      {{ balance }} 
-    </ul>
-    <h2> Initial Balance </h2>
-    <ul>
-      {{ account.balance }} 
-    </ul>
-  </div>
-</div>
-</div>
+  <tbody>
+    <tr>
+      <td>{% if account.name %}
+        {{account.name|capitalize_after_space}}
+        {% elif account.customer %}
+        {{account.customer|capitalize_after_space}}
+        {% elif  account.supplier %}
+        {{account.supplier|capitalize_after_space}}
+        {% elif account.cheque %}
+        {{account.cheque|capitalize_after_space}}
+        {% else %}
+            -
+        {% endif %} </td>
+      <td> {% if account.name %}
+        General
+        {% elif account.customer %}
+        Customer
+        {% elif  account.supplier %}
+        Supplier
+        {% elif account.cheque %}
+        Cheque/Receipt
+        {% endif %} </td>
+      <td>{{ balance }} </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<div class="col-12 mt-5">
+
+        <table class="table  table-striped table-bordered" id="datatable">
+          <thead class="thead-light">
+            <tr>
+              <th class="text-center">Date</th>
+              <th class="text-center">Description</th>
+              <th class="text-center">Debit Amount</th>
+              <th class="text-center">Credit Amount</th>
+            </tr>
+      
+          </thead>
+        
+          <tbody>
+            {% for transaction in transactions %}
+            <tr>
+              <td class="text-center">{{ transaction.date }}</td>
+              <td class="text-center">{{ transaction.description }}</td>
+              <td class="text-center">
+                {% if transaction.debit_account == account %}
+                  {{ transaction.amount }}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td class="text-center">
+                {% if transaction.credit_account == account %}
+                  {{ transaction.amount }}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+           
+          </tbody>
+        </table>
+      </div>
+      </div>
+  
 
 {% endblock content %}

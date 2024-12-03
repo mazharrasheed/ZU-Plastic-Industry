@@ -1,6 +1,12 @@
 <div class="col-lg-3">
     <h2 class="text-center alert alert-info">Accounts Menu</h2>
     <div class="list-group">
+        {% if perms.home.view_account %}
+        <h4
+            class="bg-primary bg-gradient alert-info rounded {% if request.path == '/accounts/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
+            <a class="text-light" href="/accounts/" class="list-group-item">Accounts</a>
+        </h4>
+        {% endif %} 
         {% if perms.home.add_account %}
         <h4
             class="bg-primary bg-gradient alert-info rounded {% if request.path == '/create_accounts/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
@@ -10,7 +16,7 @@
         
         {% if perms.home.add_transaction %}
         <h4
-            class="bg-primary bg-gradient alert-info rounded {% if request.path == '/transaction/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
+            class="bg-primary bg-gradient alert-info rounded {% if request.path == '/transaction/' or request.path == '/list_transactions/' %} bg-secondary bg-gradient text-light rounded {%endif%} p-3">
             <a class="text-light" href="/list_transactions/" class="list-group-item">Transactions</a>
         </h4>
         {% endif %}

@@ -115,11 +115,12 @@ def sign_up(request):
       user.groups.add(group)
       form = Sign_Up()
       messages.success(request,"account created succesfuly !!")
-      return redirect('signup')
+      return redirect('signin')
   else:
     form=Sign_Up()
   data={'form':form}
-  return render(request,'signup.html',data)
+  return render(request,'auth-sign-up.html',data)
+  # return render(request,'signup.html',data)
 
 def log_out(request):
 
@@ -142,7 +143,7 @@ def sign_in(request):
     else:
       login_form = AuthenticationForm()
     mydata = {'form': login_form}
-    return render(request, "signin.html", mydata)
+    return render(request, "auth-normal-sign-in.html", mydata)
   else:
     return redirect("index")
 

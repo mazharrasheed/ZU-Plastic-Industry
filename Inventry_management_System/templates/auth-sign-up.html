@@ -1,78 +1,64 @@
 {% extends 'css-js-links.html' %}
-{% load static %}
 {% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+    sign Up
+{% endblock title %}
+
 {% block body %}
-    
 
 <body class="fix-menu">
     <!-- Pre-loader start -->
-    <div class="theme-loader">
-    <div class="ball-scale">
-        <div class='contain'>
-            <div class="ring"><div class="frame"></div></div>
-            <div class="ring"><div class="frame"></div></div>
-            <div class="ring"><div class="frame"></div></div>
-            <div class="ring"><div class="frame"></div></div>
-            <div class="ring"><div class="frame"></div></div>
-            <div class="ring"><div class="frame"></div></div>
-            <div class="ring"><div class="frame"></div></div>
-            <div class="ring"><div class="frame"></div></div>
-            <div class="ring"><div class="frame"></div></div>
-            <div class="ring"><div class="frame"></div></div>
-        </div>
-    </div>
-</div>
-    <!-- Pre-loader end -->
 
-    <section class=" p-fixed d-flex common-img-bg">
+    <!-- Pre-loader end -->
+    <section class="common-img-bg">
         <!-- Container-fluid starts -->
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
                     <!-- Authentication card start -->
-                    <div class="login-card card-block auth-body mr-auto ml-auto">
+                    <div class="signup-card card-block auth-body mr-auto ml-auto ">
                        
-                            <div class="text-center">
-                                <img style="height:100px" src="{% static 'assets/default/img/monogram1.jpg' alt="monogram1.jpg" %}">
+                            <div class="text-center ">
+                                <img style="height:50px" src="{% static 'assets/default/img/monogram1.jpg' alt="monogram1.jpg" %}">
                             </div>
                             <div class="auth-box">
-                                <div class="row m-b-20">
+                                <div class="row ">
                                     <div class="col-md-12">
-                                        <h3 class="text-left txt-primary">Sign In</h3>
+                                        <h3 class="text-center txt-primary">Sign up. It is fast and easy.</h3>
                                     </div>
                                 </div>
-                                <hr/>
-                                <form action="/login/" method="POST" class=" mt-4">
+                                <hr />
+
+                                <form action="/signup/" method="POST" class=" mt-4">
                                     {% csrf_token %}
                                     {{form|crispy }}
                                    
-                                    <input class="btn btn-success mt-3" type="submit" value="SignIn">
+                                    <input class="btn btn-success mt-3" type="submit" value="Sign Up">
+                                    <span class="m-4" >Allready have an account!
+                                        <a class=" " href="/signin/">  Sign In </a></span>
                                 </form>
-                            
+                                    
                                 {% if messages %} {% for message in messages %}
-                                <small id="msg" class="m-5" {% if message.tags %} class="{{message.tags}} mt-3" {% endif %}>
+                                <p id="msg" {% if message.tags %} class="{{message.tags}} mt-3" {% endif %}>
                                     {{message}}
-                                </small>
+                                </p>
                                 {% endfor %} {% endif %}
+                                <hr />
                                 
-                                <hr/>
-                                <div class="color-info p-3">
-                                <h5 >Dont have an account ?</h5>
-                                <a href="/signup/">  Create Account</a>
-                                </div>
-                                <hr/>
-                                <div class="row">
+                                <div class="row ">
                                     <div class="col-md-10">
-                                        <p class="text-inverse text-left m-b-0">Thank you and enjoy our website.</p>
+                                        
+                                        <p class="text-inverse text-left m-b-0">Thank you and enjoy our website.</p> 
                                         <p class="text-inverse text-left"><b>Your Authentication Team</b></p>
                                     </div>
                                     <div class="col-md-2">
                                         <img style="height:40px" src="{% static 'assets/default/img/monogram1.jpg' alt="monogram1.jpg" %}">
                                     </div>
                                 </div>
-
                             </div>
-                       
+                      
                         <!-- end of form -->
                     </div>
                     <!-- Authentication card end -->
@@ -83,6 +69,7 @@
         </div>
         <!-- end of container-fluid -->
     </section>
+
     <!-- Warning Section Starts -->
     <!-- Older IE warning message -->
     <!--[if lt IE 9]>
@@ -128,7 +115,23 @@
 <![endif]-->
     <!-- Warning Section Ends -->
     <!-- Required Jquery -->
-
 </body>
-{% endblock body %}
 
+<script>
+    function selfCallingFunction() {
+      $(document).ready(function () {
+        // Wait for 4 seconds and then hide the element with id "msg"
+        setTimeout(function () {
+          $("#msg").hide();
+        }, 4000); // 10000 milliseconds = 10 seconds
+      });
+      // Call the function again after 5 seconds (5000 milliseconds)
+      setTimeout(selfCallingFunction, 4000);
+    }
+
+    // Initial call to start the loop
+    selfCallingFunction();
+  </script>
+
+
+{% endblock body %}

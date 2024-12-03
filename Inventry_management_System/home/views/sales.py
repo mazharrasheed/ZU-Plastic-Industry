@@ -14,18 +14,18 @@ from django.db.models import Avg,Min,Max,Count,Sum
 def list_sales(request):
     salereceipt_items_pro = {}
     total_amount = {}
-    cash_total_amount = {}
+    salereceipts=[]
     customer=(request.GET.get('customer'))
+    cash=(request.GET.get('cash'))
     if customer=="True":
         customer=True
-    cash=(request.GET.get('cash'))
-    if cash=="True":
+        salereceipts = Sales_Receipt.objects.filter(customer_name=True)
+    elif cash=="True":
         cash=True
-    print(customer)
-    salereceipts = Sales_Receipt.objects.filter(customer_name=True)
-    cash_salereceipts = Sales_Receipt.objects.filter(is_cash=True)
-    print(cash_salereceipts)
-
+        salereceipts = Sales_Receipt.objects.filter(is_cash=True)
+    else:
+        salereceipts = Sales_Receipt.objects.all()
+        
     for x in salereceipts:
         # Count the number of products for each sale receipt
         salereceipt_items_pro[x.id] = Sales_Receipt_Product.objects.filter(salereceipt=x).count()
@@ -33,29 +33,15 @@ def list_sales(request):
         salereceipt_products = Sales_Receipt_Product.objects.filter(salereceipt=x)
         total_amount[x.id] = salereceipt_products.aggregate(Sum('amount'))
 
-    for x in cash_salereceipts:
-        # Count the number of products for each sale receipt
-        salereceipt_items_pro[x.id] = Sales_Receipt_Product.objects.filter(salereceipt=x).count()
-        # Get products for the sale receipt and aggregate the amount
-        salereceipt_products = Sales_Receipt_Product.objects.filter(salereceipt=x)
-        cash_total_amount[x.id] = salereceipt_products.aggregate(Sum('amount'))
-
-    # Handle None values by using 0 if 'amount__sum' is None
-    total_customer_sale = sum(item['amount__sum'] or 0 for item in total_amount.values())
-    total_cash_sale = sum(item['amount__sum'] or 0 for item in cash_total_amount.values())
-    print(total_cash_sale)
+    total_sale = sum(item['amount__sum'] or 0 for item in total_amount.values())
 
     return render(request, 'sale/list_sales.html', {
         'salereceipts': salereceipts,
-        'cash_salereceipts': cash_salereceipts,
         'salereceipt_items_pro': salereceipt_items_pro,
         'total_amount': total_amount,
-        'cash_total_amount': cash_total_amount,
-        'total_customer_sale':total_customer_sale,
-        'total_cash_sale':total_cash_sale,
+        'total_sale':total_sale,
         'customer':customer,
         'cash':cash,
-
     })
 
 @login_required
