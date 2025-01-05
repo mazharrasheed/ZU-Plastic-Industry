@@ -1,165 +1,174 @@
-{% extends 'base.html' %}
+{% extends 'css-js-links.html' %}
 {% load custom_filters %}
 
 {% block title %}
-    Print Gatepass
+Print Gatepass
 {% endblock title %}
 
-{% block content %}
-    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+{% block context %}
+{% include 'navbar.html' %}
+{% endblock context %}
 
-        .table-container {
-            width: 60%;
-            margin: 0 auto;
-            border: 1px solid #000;
-            padding: 20px;
-        }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+{% block body %}
 
-        th, td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: left;
-        }
+<style>
+	body {
+		font-family: Arial, sans-serif;
+	}
 
-        .header-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
+	.table-container {
+		width: 60%;
+		margin: 0 auto;
+		border: 1px solid #000;
+		padding: 20px;
+	}
 
-        .footer-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 10px;
+	}
 
-        .col-1 {
-            width: 5%;
-        }
+	th,
+	td {
+		border: 1px solid #000;
+		padding: 8px;
+		text-align: left;
+	}
 
-        .col-2 {
-            width: 35%;
-        }
+	.header-section {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 10px;
+	}
 
-        .col-3 {
-            width: 10%;
-        }
+	.footer-section {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 20px;
+	}
 
-        .col-4 {
-            width: 10%;
-        }
+	.col-1 {
+		width: 5%;
+	}
 
-        .col-5 {
-            width: 15%;
-        }
+	.col-2 {
+		width: 35%;
+	}
 
-        .col-6 {
-            width: 25%;
-        }
+	.col-3 {
+		width: 10%;
+	}
 
-        /* Print-specific styles */
-    @media print {
-        body * {
-            visibility: hidden;
-        }
-        .printableArea, .printableArea * {
-            visibility: visible;
-        }
-        .printableArea {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            margin: 0;
-            padding: 5px;
-        }
-    }
-    </style>
-</head>
-<body>
-    <div class="table-container printableArea" id="printableArea">
-        <h1 class="text-center">Please Allow The Material Outside</h1>
+	.col-4 {
+		width: 10%;
+	}
 
-        <div class="header-section">
-            <div>
-                <p>
-                    Returnable 
-                    <input type="checkbox" value="True" {% if gatepass.returnable %}checked{% endif %} disabled> &nbsp; 
-                    Nonreturnable 
-                    <input type="checkbox" value="False" {% if not gatepass.returnable %}checked{% endif %} disabled>
-                  </p>
-                <p><strong>Date:</strong>  {{ gatepass.date_created|date:"d-m-Y" }}</p>
-                <p><strong>Vehicle:</strong> {{ gatepass.vehicle }}</p>
-                <p><strong>Time:</strong> {{ gatepass.date_created|time:"H:i" }}</p>
-            </div>
+	.col-5 {
+		width: 15%;
+	}
 
-            <div style="margin-right:50px">
-                <p><strong>Dispatch For:</strong> {{ gatepass.dispatch_for }}</p>
-                <p><strong>Name of Site:</strong> {{ gatepass.name_of_site }}</p>
-                <p><strong>Per. Name:</strong> {{ gatepass.person_name }}</p>
-                <p><strong>Ph. No:</strong> {{ gatepass.phone_number }}</p>
-            </div>
-        </div>
+	.col-6 {
+		width: 25%;
+	}
 
-        <table>
-            <thead>
-                <tr>
-                    <th class="col-1 text-center">Sr#</th>
-                    <th class="col-2 text-center">Description</th>
-                    <th class="col-3 text-center">Qty.</th>
-                    <th class="col-4 text-center">Unit</th>
-                    <th class="col-5 text-center">Weight (Kgs)</th>
-                    <th class="col-6 text-center">Remarks</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in gatepass_products %}
-                <tr>
-                    <td class=" text-center">{{ forloop.counter }}</td>
-                    <td>{{ item.product.productname }}</td>
-                    <td class=" text-center">{{ item.quantity }}</td>
-                    <td class=" text-center">{{ item.product.unit }}</td>
-                    <td class=" text-center">{{item.product.product_weight|multiply:item.quantity}}</td>
-                    <td class=" text-center">{{ item.remarks }}</td>
-                    
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    
+	/* Print-specific styles */
+	@media print {
+		body * {
+			visibility: hidden;
+		}
 
-        <div class="footer-section">
-            <div>
-                <p>Prepared By</p>
-                <p>Name: {{request.user}}</p>
-                <p>Sign: _______</p>
-            </div>
-            <div>
-                <p>Authorized By</p>
-                <p>Name: _______</p>
-                <p>Sign: _______</p>
-            </div>
-            <div>
-                <p>Received By</p>
-                <p>Name: _______</p>
-                <p>Sign: _______</p>
-            </div>
-        </div>
-    </div>
-    <div class="container mt-5 text-center mb-5">
-        <a href="#" onclick="window.print()" class="btn btn-success">Print</a>
-        <a href="{% url 'list_gatepasses' %}" class="btn btn-warning">Cancel</a>
-       
-    </div>
-    {% endblock content %}
+		.printableArea,
+		.printableArea * {
+			visibility: visible;
+		}
+
+		.printableArea {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			margin: 0;
+			padding: 5px;
+		}
+	}
+</style>
+
+<div class="pcoded-content">
+	<div class="pcoded-inner-content">
+		<div class="main-body">
+			<div class="page-wrapper">
+				<div class="page-body">
+					<div class="table-container printableArea" id="printableArea">
+						<h1 class="text-center">Please Allow The Material Outside</h1>
+						<div class="header-section">
+							<div>
+								<p>
+									Returnable
+									<input type="checkbox" value="True" {% if gatepass.returnable %}checked{% endif %} disabled> &nbsp;
+									Nonreturnable
+									<input type="checkbox" value="False" {% if not gatepass.returnable %}checked{% endif %} disabled>
+								</p>
+								<p><strong>Date:</strong> {{ gatepass.date_created|date:"d-m-Y" }}</p>
+								<p><strong>Vehicle:</strong> {{ gatepass.vehicle }}</p>
+								<p><strong>Time:</strong> {{ gatepass.date_created|time:"H:i" }}</p>
+							</div>
+							<div style="margin-right:50px">
+								<p><strong>Dispatch For:</strong> {{ gatepass.dispatch_for }}</p>
+								<p><strong>Name of Site:</strong> {{ gatepass.name_of_site }}</p>
+								<p><strong>Per. Name:</strong> {{ gatepass.person_name }}</p>
+								<p><strong>Ph. No:</strong> {{ gatepass.phone_number }}</p>
+							</div>
+						</div>
+						<table>
+							<thead>
+								<tr>
+									<th class="col-1 text-center">Sr#</th>
+									<th class="col-2 text-center">Description</th>
+									<th class="col-3 text-center">Qty.</th>
+									<th class="col-4 text-center">Unit</th>
+									<th class="col-5 text-center">Weight (Kgs)</th>
+									<th class="col-6 text-center">Remarks</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for item in gatepass_products %}
+								<tr>
+									<td class=" text-center">{{ forloop.counter }}</td>
+									<td>{{ item.product.productname }}</td>
+									<td class=" text-center">{{ item.quantity }}</td>
+									<td class=" text-center">{{ item.product.unit }}</td>
+									<td class=" text-center">{{item.product.product_weight|multiply:item.quantity}}</td>
+									<td class=" text-center">{{ item.remarks }}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						<div class="footer-section">
+							<div>
+								<p>Prepared By</p>
+								<p>Name: {{request.user}}</p>
+								<p>Sign: _______</p>
+							</div>
+							<div>
+								<p>Authorized By</p>
+								<p>Name: _______</p>
+								<p>Sign: _______</p>
+							</div>
+							<div>
+								<p>Received By</p>
+								<p>Name: _______</p>
+								<p>Sign: _______</p>
+							</div>
+						</div>
+					</div>
+					<div class="container mt-5 text-center mb-5">
+						<a href="#" onclick="window.print()" class="btn btn-success">Print</a>
+						<a href="{% url 'list_gatepasses' %}" class="btn btn-warning">Cancel</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endblock body %}

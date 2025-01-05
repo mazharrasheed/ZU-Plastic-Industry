@@ -1,16 +1,15 @@
-{% extends 'base.html' %} {% load custom_filters %}
+
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
 
 {% block title %}
- Sales
+  Sales-List
 {% endblock title %}
 
 {% block content %}
-
-<div class="container-fluid">
   <div class="row">
     {% include 'sale/sale_menu.html' %}
-
-
     <div class="col-9">
       <h2 class="text-center alert alert-info">
           {% if customer  %}
@@ -18,7 +17,7 @@
         {% elif cash %}
           Cash Sales List [ Total Amount Rs.={{total_sale}}]
         {% else %}
-         All Sales List [ Total Amount Rs.={{total_sale}}]
+        All Sales List [ Total Amount Rs.={{total_sale}}]
         {% endif %} 
       </h2>
 
@@ -28,80 +27,83 @@
       <a class="btn btn-primary mb-2" href="{% url 'create_salereceipt' %}">Create Customer Sale Receipt</a>
       {% endif %}
 
-      {% else %}
+      {% elif cash %}
+
       {% if perms.home.add_sale_receipt %}
       <a class="btn btn-primary mb-2" href="{% url 'create_cash_salereceipt' %}">Create Cash Sale Receipt</a>
-
+      {% endif %}
+      
       {% endif %}
 
-      {% endif %}
       <div class="card py">
         <div class="table-responsive py-2">
           {% if salereceipts%}
           <table class="table table-flush" id="datatable">
             <thead class="thead-light">
               <tr>
-                <th class="border-bottom fw-bolder text-center" scope="col">
+                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                   Sr#
                 </th>
-                <th class="border-bottom fw-bolder text-center" scope="col">
+                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                   Ref#
                 </th>
-                <th class="border-bottom fw-bolder text-center" scope="col">
+                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                   Date
                 </th>
-                <th class="border-bottom fw-bolder text-center" scope="col">
+                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                   Cutomer Name
                 </th>
-                <th class="border-bottom fw-bolder text-center" scope="col">
+                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                   Products Qty
                 </th>
-                <th class="border-bottom fw-bolder text-center" scope="col">
+                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                   Bill Amount
                 </th>
-                <th class="border-bottom fw-bolder text-center" scope="col">
+                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
                   Action
                 </th>
               </tr>
             </thead>
             <tbody>
               {% for salereceipt in salereceipts %}
-              <tr id="salereceipt-{{ salereceipt.id }}">
-                <td class="text-center">{{ forloop.counter }}</td>
-                <td class="text-center">{{ salereceipt.id }}</td>
-                <td class="text-center">{{ salereceipt.date_created }}</td>
-                <td class="text-center">
+              <tr id="salereceipt fs-5-{{ salereceipt.id }}">
+                <td class="text-center fs-5">{{ forloop.counter }}</td>
+                <td class="text-center fs-5">{{ salereceipt.id }}</td>
+                <td class="text-center fs-5">{{ salereceipt.date_created }}</td>
+                <td class="text-center fs-5">
+                  {% if salereceipt.customer_name %}
                   {{ salereceipt.customer_name|title }}
+                  {% else %}
+                  Cash Customer Name : {{ salereceipt.customer|title }}
+                  {% endif %}
+
                 </td>
-                <td class="text-center">
+                <td class="text-center fs-5">
                   {{ salereceipt_items_pro|get_item:salereceipt.id }}
                 </td>
-                <td class="text-center">
+                <td class="text-center fs-5">
                   {{ total_amount|get_amount:salereceipt.id}}
                 </td>
-                <td class="text-center">
-
+                <td class="text-center fs-5">
                   {% if customer %}
-
                   {% if perms.home.add_transaction %}
-
                   {% if salereceipt.make_transaction %}
                   <button class="btn alert-success" href="#" disabled>
                     Transacton Added
                   </button>
                   {% else %}
                   <a class="btn btn-info" href="{% url 'maketransaction' salereceipt.id %}">Make Transacton</a>
-
                   {% endif %}
-
                   {% endif %}
-
                   {% endif %}
-
-
                   <a class="btn btn-success" href="{% url 'print_salereceipt' salereceipt.id %}">Print</a>
                   {% if perms.home.change_sale_receipt %}
+                  {% if cash %}
+                  <a class="btn btn-warning" href="{% url 'edit_cashsale_receipt' salereceipt.id %}">Edit</a>
+                  {% else %}
                   <a class="btn btn-warning" href="{% url 'edit_salereceipt' salereceipt.id %}">Edit</a>
+                  {% endif %}
+                  
                   {% endif %}
                   <button class="btn btn-danger delete-salereceipt" data-salereceipt-id="{{ salereceipt.id }}">
                     Delete
@@ -120,10 +122,12 @@
   </div>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
   $(document).ready(function () {
     // Handle the delete button click
     $(".delete-salereceipt").on("click", function (event) {
+      console.log("delte form sale receipt")
       event.preventDefault();
       var salereceiptId = $(this).data("salereceipt-id");
       var url = "{% url 'delete_salereceipt' 0 %}".replace("0", salereceiptId);

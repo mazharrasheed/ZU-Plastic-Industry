@@ -21,6 +21,7 @@
     <tr>
       <td>Account Name</td>
       <td>Account Category</td>
+      <td>Account Type</td>
       <td>Balance</td>
     </tr>
   </thead>
@@ -47,6 +48,7 @@
         {% elif account.cheque %}
         Cheque/Receipt
         {% endif %} </td>
+      <td>{{ account.account_type }} </td>
       <td>{{ balance }} </td>
     </tr>
   </tbody>

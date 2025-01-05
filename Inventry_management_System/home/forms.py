@@ -141,7 +141,7 @@ class Sales_ReceiptForm(forms.ModelForm):
     )
     class Meta:
         model = Sales_Receipt
-        fields = ['customer_name', 'phone_number']
+        fields = ['customer_name',]
     def __init__(self, *args, **kwargs):
         super(Sales_ReceiptForm, self).__init__(*args, **kwargs)
         # Check if an instance is passed
