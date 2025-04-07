@@ -1,4 +1,4 @@
-{% extends 'css-js-links.html' %}
+{% extends 'base.html' %}
 {% load custom_filters %}
 {% load crispy_forms_tags %}
 {% load static %}
@@ -6,11 +6,8 @@
 Print Sale Receipt
 {% endblock title %}
 
-{% block context %}
-{% include 'navbar.html' %}
-{% endblock context %}
 
-{% block body %}
+{% block content %}
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -151,4 +148,4 @@ Print Sale Receipt
     <a href="{% url 'list_sales' %}" class="btn btn-success m-3">Cancel</a>
 </div>
 
-{% endblock body %}
+{% endblock content %}

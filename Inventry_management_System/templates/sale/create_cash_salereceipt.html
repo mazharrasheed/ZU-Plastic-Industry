@@ -1,4 +1,4 @@
-{% extends 'css-js-links.html' %}
+{% extends 'base.html' %}
 {% load custom_filters %}
 {% load crispy_forms_tags %}
 {% load static %}
@@ -7,11 +7,7 @@ Create Cash Sale Receipt
 {% endblock title %}
 
 
-{% block context %}
-{% include 'navbar.html' %}
-{% endblock context %}
-
-{% block body %}
+{% block content %}
 
 
 <style>
@@ -71,11 +67,8 @@ Create Cash Sale Receipt
     
 </style>
 
-<div class="pcoded-content">
-  <div class="pcoded-inner-content">
+
     <div class="main-body">
-      <div class="page-wrapper">
-        <div class="page-body">
           <div class="table-container">
             <h3 class="text-center bg-dark text-light p-3">Cash Sale Receipt</h3>
             <form id="salereceipt-form" method="POST">
@@ -97,7 +90,7 @@ Create Cash Sale Receipt
                 <thead>
                   <tr>
                     <td>{{ form.product|as_crispy_field }}</td>
-                    <td id="in_stock">In Stock</td>
+                  
                     <td>{{ form.quantity|as_crispy_field }}</td>
                     <td >{{ form.unit_price|as_crispy_field }}</td>
                     <td id="amount">Auto</td>
@@ -108,7 +101,7 @@ Create Cash Sale Receipt
                   </tr>
                   <tr>
                     <th>Product</th>
-                    <th>In_Stock</th>
+                
                     <th>Quantity</th>
                     <th>Unit Price</th>
                     <th>Amount</th>
@@ -123,34 +116,12 @@ Create Cash Sale Receipt
             </form>          
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function () {
 
-  $('#id_product').on('change',(e)=>{
-    console.log(e.target.value)
-    $.ajax({
-      url: `/get-stock/${e.target.value}`,
-      method: 'get',
-      success: function (data) {
-        if (data.success) {
-          console.log("response data",data)
-          $('#in_stock').text(`${data.stock}`)
-        } 
-        else {
-          alert('Failed to get stock.');
-        }
-      },
-      error: function (error) {
-        console.error('Error:', error);
-      }
-    });
-  })
 
     let productList = [];
   
@@ -197,7 +168,7 @@ Create Cash Sale Receipt
   
       const row = `<tr>
                     <td>${$('select[name="product"] option:selected').text()}</td>
-                    <td id="in_stcok">-</td>
+                  
                     <td>${quantity}</td>
                     <td>${unit_price}</td>
                     <td>${amount}</td>
@@ -265,4 +236,4 @@ Create Cash Sale Receipt
   
 </script>
 
-    {% endblock body %}
+    {% endblock content %}

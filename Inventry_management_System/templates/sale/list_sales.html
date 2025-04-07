@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% load static %}
 {% load custom_filters %}
@@ -8,113 +7,97 @@
 {% endblock title %}
 
 {% block content %}
+<div class="container-fluid">
   <div class="row">
     {% include 'sale/sale_menu.html' %}
     <div class="col-9">
       <h2 class="text-center alert alert-info">
-          {% if customer  %}
-          Customer Sales List [ Total Amount Rs.={{total_sale}} ]
+        {% if customer %}
+          Customer Sales List [ Total Amount Rs.={{ total_sale }} ]
         {% elif cash %}
-          Cash Sales List [ Total Amount Rs.={{total_sale}}]
+          Cash Sales List [ Total Amount Rs.={{ total_sale }} ]
         {% else %}
-        All Sales List [ Total Amount Rs.={{total_sale}}]
-        {% endif %} 
+          All Sales List [ Total Amount Rs.={{ total_sale }} ]
+        {% endif %}
       </h2>
 
       {% if customer %}
-
-      {% if perms.home.add_sale_receipt %}
-      <a class="btn btn-primary mb-2" href="{% url 'create_salereceipt' %}">Create Customer Sale Receipt</a>
-      {% endif %}
-
+        {% if perms.home.add_sale_receipt %}
+          <a class="btn btn-primary mb-2" href="{% url 'create_salereceipt' %}">Create Customer Sale Receipt</a>
+        {% endif %}
       {% elif cash %}
-
-      {% if perms.home.add_sale_receipt %}
-      <a class="btn btn-primary mb-2" href="{% url 'create_cash_salereceipt' %}">Create Cash Sale Receipt</a>
-      {% endif %}
-      
+        {% if perms.home.add_sale_receipt %}
+          <a class="btn btn-primary mb-2" href="{% url 'create_cash_salereceipt' %}">Create Cash Sale Receipt</a>
+        {% endif %}
       {% endif %}
 
       <div class="card py">
         <div class="table-responsive py-2">
-          {% if salereceipts%}
-          <table class="table table-flush" id="datatable">
-            <thead class="thead-light">
-              <tr>
-                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
-                  Sr#
-                </th>
-                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
-                  Ref#
-                </th>
-                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
-                  Date
-                </th>
-                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
-                  Cutomer Name
-                </th>
-                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
-                  Products Qty
-                </th>
-                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
-                  Bill Amount
-                </th>
-                <th class="border-bottom fw-bolder text-center fs-5" scope="col">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for salereceipt in salereceipts %}
-              <tr id="salereceipt fs-5-{{ salereceipt.id }}">
-                <td class="text-center fs-5">{{ forloop.counter }}</td>
-                <td class="text-center fs-5">{{ salereceipt.id }}</td>
-                <td class="text-center fs-5">{{ salereceipt.date_created }}</td>
-                <td class="text-center fs-5">
-                  {% if salereceipt.customer_name %}
-                  {{ salereceipt.customer_name|title }}
-                  {% else %}
-                  Cash Customer Name : {{ salereceipt.customer|title }}
-                  {% endif %}
+          {% if salereceipts %}
+            <table class="table table-flush" id="datatable">
+              <thead class="thead-light">
+                <tr>
+                  <th class="border-bottom fw-bolder text-center fs-5">Sr#</th>
+                  <th class="border-bottom fw-bolder text-center fs-5">Ref#</th>
+                  <th class="border-bottom fw-bolder text-center fs-5">Date</th>
+                  <th class="border-bottom fw-bolder text-center fs-5">Customer Name</th>
+                  <th class="border-bottom fw-bolder text-center fs-5">Products Qty</th>
+                  <th class="border-bottom fw-bolder text-center fs-5">Bill Amount</th>
+                  <th class="border-bottom fw-bolder text-center fs-5">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for salereceipt in salereceipts %}
+                  <tr id="salereceipt-{{ salereceipt.id }}">
+                    <td class="text-center fs-5">{{ forloop.counter }}</td>
+                    <td class="text-center fs-5">{{ salereceipt.id }}</td>
+                    <td class="text-center fs-5">{{ salereceipt.date_created }}</td>
+                    <td class="text-center fs-5">
+                      {% if salereceipt.customer_name %}
+                        {{ salereceipt.customer_name|title }}
+                      {% else %}
+                        Cash Customer Name : {{ salereceipt.customer|title }}
+                      {% endif %}
+                    </td>
+                    <td class="text-center fs-5">
+                      {{ salereceipt_items_pro|get_item:salereceipt.id }}
+                    </td>
+                    <td class="text-center fs-5">
+                      {{ total_amount|get_amount:salereceipt.id }}
+                    </td>
+                    <td class="text-center fs-5">
+                      {% if customer and perms.home.add_transaction %}
+                        {% if salereceipt.make_transaction %}
+                          <button class="btn alert-success" disabled>Transaction Added</button>
+                        {% else %}
+                          <a class="btn btn-info" href="{% url 'maketransaction' salereceipt.id %}">Make Transaction</a>
+                        {% endif %}
+                      {% endif %}
 
-                </td>
-                <td class="text-center fs-5">
-                  {{ salereceipt_items_pro|get_item:salereceipt.id }}
-                </td>
-                <td class="text-center fs-5">
-                  {{ total_amount|get_amount:salereceipt.id}}
-                </td>
-                <td class="text-center fs-5">
-                  {% if customer %}
-                  {% if perms.home.add_transaction %}
-                  {% if salereceipt.make_transaction %}
-                  <button class="btn alert-success" href="#" disabled>
-                    Transacton Added
-                  </button>
-                  {% else %}
-                  <a class="btn btn-info" href="{% url 'maketransaction' salereceipt.id %}">Make Transacton</a>
-                  {% endif %}
-                  {% endif %}
-                  {% endif %}
-                  <a class="btn btn-success" href="{% url 'print_salereceipt' salereceipt.id %}">Print</a>
-                  {% if perms.home.change_sale_receipt %}
-                  {% if cash %}
-                  <a class="btn btn-warning" href="{% url 'edit_cashsale_receipt' salereceipt.id %}">Edit</a>
-                  {% else %}
-                  <a class="btn btn-warning" href="{% url 'edit_salereceipt' salereceipt.id %}">Edit</a>
-                  {% endif %}
-                  
-                  {% endif %}
-                  <button class="btn btn-danger delete-salereceipt" data-salereceipt-id="{{ salereceipt.id }}">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+                      <a class="btn btn-success" href="{% url 'print_salereceipt' salereceipt.id %}">Print</a>
+
+                      {% if perms.home.change_sale_receipt %}
+                        {% if cash %}
+                          <a class="btn btn-warning" href="{% url 'edit_cashsale_receipt' salereceipt.id %}">Edit</a>
+                        {% else %}
+                          {% if not salereceipt.make_transaction %}
+                            <a class="btn btn-warning" href="{% url 'edit_salereceipt' salereceipt.id %}">Edit</a>
+                          {% endif %}
+                        {% endif %}
+                      {% endif %}
+
+                      {% if not salereceipt.make_transaction %}
+                        <button class="btn btn-danger delete-salereceipt" data-salereceipt-id="{{ salereceipt.id }}">
+                          Delete
+                        </button>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           {% else %}
-          <h4 class="text-center alert alert-warning">No Record Found</h4>
+            <h4 class="text-center alert alert-warning">No Record Found</h4>
           {% endif %}
         </div>
       </div>
@@ -127,7 +110,6 @@
   $(document).ready(function () {
     // Handle the delete button click
     $(".delete-salereceipt").on("click", function (event) {
-      console.log("delte form sale receipt")
       event.preventDefault();
       var salereceiptId = $(this).data("salereceipt-id");
       var url = "{% url 'delete_salereceipt' 0 %}".replace("0", salereceiptId);
@@ -140,14 +122,13 @@
           },
           success: function (response) {
             if (response.success) {
-              // Remove the gate pass row from the table
+              // Remove the sale receipt row from the table
               $("#salereceipt-" + salereceiptId).remove();
               $("#display-msg").html(
-                `<h5 id= 'msg' class='alert alert-success'> ${response.message} </h5> `
+                `<h5 id='msg' class='alert alert-success'>${response.message}</h5>`
               );
-              // alert(response.message);
             } else {
-              alert("Failed to delete the gate pass.");
+              alert("Failed to delete the sales receipt.");
             }
           },
           error: function () {

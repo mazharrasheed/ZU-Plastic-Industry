@@ -94,7 +94,7 @@ Create Sale Receipt
                                 <thead>
                                     <tr>
                                         <td>{{ form.product|as_crispy_field }}</td>
-                                        <td id="in_stock">In Stock</td>
+                                       
                                         <td>{{ form.quantity|as_crispy_field }}</td>
                                         <td>unit price auto</td>
                                         <td id="amount">Auto</td>
@@ -107,7 +107,7 @@ Create Sale Receipt
                                     </tr>
                                     <tr>
                                         <th>Product</th>
-                                        <th>In_Stock</th>
+                                       
                                         <th>Quantity</th>
                                         <th>Unit Price</th>
                                         <th>Amount</th>
@@ -194,13 +194,13 @@ Create Sale Receipt
                     <td>${$(
                 'select[name="product"] option:selected'
             ).text()}</td>
-                    <td id="in_stcok">-</td>
+                    
                     <td>${quantity}</td>
                     <td>Auto</td>
                     <td>Auto</td>
                     <td><button class="delete-product btn btn-danger" data-index="${productList.length - 1
                 }">Delete</button></td>
-                   </tr>`;
+                </tr>`;
 
             $("#product-list").append(row);
         });
@@ -255,10 +255,16 @@ Create Sale Receipt
                     "X-Requested-With": "XMLHttpRequest",
                 },
                 success: function (data) {
+                    console.log(data)
                     if (data.success) {
                         window.location.href = data.redirect_url;
                     } else {
-                        alert("Failed to finalize customer sale receipt.");
+                        if (data.price === false){
+                            alert(data.errors);
+                        }
+                        else{
+                            alert("Failed to finalize customer sale receipt.");
+                        }
                     }
                 },
                 error: function (error) {

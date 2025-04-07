@@ -94,7 +94,7 @@ Edit Sale Receipt
 								<thead>
 									<tr>
 										<td>{{ form.product|as_crispy_field }}</td>
-										<td id="in_stock">In_Stock</td>
+										
 										<td>{{ form.quantity|as_crispy_field }}</td>
 										<td>auto</td>
 										<td id="amount">Auto</td>
@@ -106,7 +106,7 @@ Edit Sale Receipt
 									<tr>
 										<th>Product</th>
 
-										<th>In_stock</th>
+										
 										<th>Quantity</th>
 										<th>Unit Price</th>
 										<th>Amount</th>
@@ -117,7 +117,7 @@ Edit Sale Receipt
 									{% for product in products %}
 									<tr>
 										<td>{{ product.product }}</td>
-										<td>-</td>
+										
 										<td>{{ product.quantity }}</td>
 										<td>{{ product.unit_price }}</td>
 										<td>{{ product.amount }}</td>
@@ -208,7 +208,7 @@ Edit Sale Receipt
         <tr>
             <td>${$('select[name="product"] option:selected').text()}</td>
 
-            <td id="in_stock">-</td>
+            
             <td>${quantity}</td>
             <td>auto</td>
             <td>auto</td>
